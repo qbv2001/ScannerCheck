@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dsmhlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".DetailMathang">
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/topAppBar1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/topAppBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:title="Thông tin mặt hàng"
+                    app:navigationIcon="@drawable/ic_baseline_menu_24"
+                    android:background="@color/white" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+            <LinearLayout
+                android:layout_below="@id/topAppBar1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/top_mh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="15dp"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/imgMH"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/mon1"
+                        android:visibility="visible"/>
+                    <TextView
+                        android:id="@+id/tvTenMH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bánh quy"
+                        android:textColor="@color/pink"
+                        android:textSize="20sp"
+                        android:layout_marginTop="8dp"
+                        android:textStyle="bold"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/pink"
+                        android:layout_marginTop="10dp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên mặt hàng"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvTenMH2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên mặt hàng"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="25dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nhà cung cấp"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvTenNCC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tên nhà cung cấp"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="25dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn vị tính"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvDonvitinhMH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn vị tính"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="51dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Số lượng"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvSoluongMH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Số lượng"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="68dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn giá"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvDongiaMH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn giá"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="80dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mô tả"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="5dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/tvMotaMH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mô tả"
+                        android:textColor="@color/bgblack"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="97dp"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="10dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:visibility="visible"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/my_navigation_items" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

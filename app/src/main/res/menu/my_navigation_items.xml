@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_baseline_home_24"
+            android:title="Home" />
+    <item
+        android:id="@+id/nav_scanner"
+        android:icon="@drawable/outline_qr_code_scanner_24"
+        android:title="Quét mã" />
+    <item
+        android:id="@+id/nav_thanhtoan"
+        android:icon="@drawable/outline_paid_24"
+        android:title="Thanh toán" />
+    <item
+        android:id="@+id/nav_dsmh"
+        android:icon="@drawable/outline_list_alt_24"
+        android:title="Danh sách mặt hàng" />
+    <item
+        android:id="@+id/nav_dsncc"
+        android:icon="@drawable/outline_groups_24"
+        android:title="Danh sách nhà cung cấp" />
+    <item
+        android:id="@+id/nav_dshd"
+        android:icon="@drawable/outline_receipt_long_24"
+        android:title="Danh sách hóa đơn" />
+    <item
+        android:id="@+id/nav_thongke"
+        android:icon="@drawable/outline_leaderboard_24"
+        android:title="Thống kê" />
+
+
+    <item android:title="Tài khoản">
+        <menu>
+            <item
+                android:id="@+id/nav_ttcn"
+                android:icon="@drawable/outline_account_circle_24"
+                android:title="Thông tin tài khoản" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/outline_logout_20"
+                android:title="Đăng xuất" />
+        </menu>
+    </item>
+
+    <item android:title="Ứng dụng">
+        <menu>
+            <item
+                android:id="@+id/nav_hotro"
+                android:icon="@drawable/outline_support_agent_24"
+                android:title="Hỗ trợ" />
+            <item
+                android:id="@+id/nav_ttud"
+                android:icon="@drawable/outline_info_24"
+                android:title="Thông tin ứng dụng" />
+        </menu>
+    </item>
+</menu>

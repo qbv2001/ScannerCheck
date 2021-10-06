@@ -1,0 +1,69 @@
+package com.example.scannercheck;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRecyclerViewCreateNCC.DataViewHolder> {
+
+    private List<Nhacungcap> nhacungcaps;
+    private Context context;
+
+    public AdapterRecyclerViewCreateNCC(Context context, List<Nhacungcap> nhacungcaps) {
+        this.context = context;
+        this.nhacungcaps = nhacungcaps;
+    }
+
+    @Override
+    public int getItemCount() {
+        return nhacungcaps == null ? 0 : nhacungcaps.size();
+    }
+
+    @Override
+    public AdapterRecyclerViewCreateNCC.DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView;
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_dsncc, parent, false);
+
+
+        return new DataViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(DataViewHolder holder, int position) {
+        String id = nhacungcaps.get(position).getId();
+//        holder.tvTenMH.setText(id);
+        String tenncc = nhacungcaps.get(position).getName();
+        holder.tvTenNCC.setText(tenncc);
+        String diachi = nhacungcaps.get(position).getDiachi();
+        String textDiachi = "Địa chỉ: "+diachi;
+        holder.tvdiachi.setText(textDiachi);
+        int image = nhacungcaps.get(position).getImage();
+        holder.imgNCC.setImageResource(image);
+        holder.imgNCC.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Data ViewHolder class.
+     */
+    public static class DataViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvTenNCC;
+        private TextView tvdiachi;
+        private CircleImageView imgNCC;
+        public DataViewHolder(View itemView) {
+            super(itemView);
+
+            tvTenNCC =  itemView.findViewById(R.id.tvTenNCC);
+            tvdiachi =  itemView.findViewById(R.id.tvDiachiNCC);
+            imgNCC   = itemView.findViewById(R.id.imgNCC);
+        }
+    }
+}
