@@ -12,10 +12,6 @@
         android:icon="@drawable/outline_qr_code_scanner_24"
         android:title="Quét mã" />
     <item
-        android:id="@+id/nav_thanhtoan"
-        android:icon="@drawable/outline_paid_24"
-        android:title="Thanh toán" />
-    <item
         android:id="@+id/nav_dsmh"
         android:icon="@drawable/outline_list_alt_24"
         android:title="Danh sách mặt hàng" />
@@ -23,10 +19,6 @@
         android:id="@+id/nav_dsncc"
         android:icon="@drawable/outline_groups_24"
         android:title="Danh sách nhà cung cấp" />
-    <item
-        android:id="@+id/nav_dshd"
-        android:icon="@drawable/outline_receipt_long_24"
-        android:title="Danh sách hóa đơn" />
     <item
         android:id="@+id/nav_thongke"
         android:icon="@drawable/outline_leaderboard_24"
