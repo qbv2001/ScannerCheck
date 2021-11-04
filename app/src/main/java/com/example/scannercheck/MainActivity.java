@@ -16,6 +16,10 @@ import com.huawei.hms.support.account.result.AuthAccount;
 import com.huawei.hms.support.account.service.AccountAuthService;
 
 public class MainActivity extends AppCompatActivity {
+    //Button sign_in;
+
+    //AccountAuthParams authParams;
+    //AccountAuthService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,3 +46,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
+
+
+
+//mai hi
