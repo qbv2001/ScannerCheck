@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             Task<AuthAccount> authAccountTask = AccountAuthManager.parseAuthResultFromIntent(data);
             if (authAccountTask.isSuccessful()) {
                 AuthAccount authAccount = authAccountTask.getResult();
+                startActivity(new Intent(MainActivity.this,HomeActivity.class));
                 Log.i("truong", "idToken:" + authAccount.getIdToken());
             } else {
                 // The sign-in failed. No processing is required. Logs are recorded for fault locating.
