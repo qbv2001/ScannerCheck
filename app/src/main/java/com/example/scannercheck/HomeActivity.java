@@ -42,6 +42,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
+
         //homeview
         scanner     = findViewById(R.id.scanner_card);
         dsmh     = findViewById(R.id.dsmh_card);
@@ -186,22 +189,4 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /**
-     * sign Out by signOut
-     */
-    public void signOut() {
-        Task<Void> signOutTask = mAuthManager.signOut();
-        signOutTask.addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Log.i(TAG, "signOut Success");
-                startActivity(new Intent(HomeActivity.this,MainActivity.class));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(Exception e) {
-                Log.i(TAG, "signOut fail");
-            }
-        });
-    }
 }
