@@ -3,6 +3,7 @@ package com.example.scannercheck;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +19,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
+
+    private EditText edtEmail;
+    private EditText edtPassword;
+    private EditText edtConfirmPassword;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +58,21 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createUI() {
-        EditText edtEmail = findViewById(R.id.inputEmail);
-        EditText edtPassword = findViewById(R.id.inputPassword);
-        EditText edtConfirmPassword = findViewById(R.id.inputConfirmPassword);
+        edtEmail = findViewById(R.id.inputEmail);
+        edtPassword = findViewById(R.id.inputPassword);
+        edtConfirmPassword = findViewById(R.id.inputConfirmPassword);
 
         String strEmail = edtEmail.getText().toString().trim();
         String strPassword = edtPassword.getText().toString().trim();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
         auth.createUserWithEmailAndPassword(strEmail, strPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             startActivity(new Intent(RegisterActivity.this,HomeActivity.class));
