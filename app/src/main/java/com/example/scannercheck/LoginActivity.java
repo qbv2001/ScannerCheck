@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signinclick() {
-        Button btnlogin   =findViewById(R.id.btnlogin);
+        Button btnlogin = findViewById(R.id.btnlogin);
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signupclick() {
-        TextView btn        =findViewById(R.id.textViewSignUp);
+        TextView btn = findViewById(R.id.textViewSignUp);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

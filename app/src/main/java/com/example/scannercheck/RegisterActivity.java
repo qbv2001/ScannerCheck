@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        createUser();
+        registerclick();
         signinclick();
 
     }
@@ -38,7 +39,18 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void createUser() {
+    private void registerclick() {
+        Button btnRegister = findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createUI();
+            }
+        });
+
+    }
+
+    private void createUI() {
         EditText edtEmail = findViewById(R.id.inputEmail);
         EditText edtPassword = findViewById(R.id.inputPassword);
         EditText edtConfirmPassword = findViewById(R.id.inputConfirmPassword);
@@ -63,6 +75,5 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 }
