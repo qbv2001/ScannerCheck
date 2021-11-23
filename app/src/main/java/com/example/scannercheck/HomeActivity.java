@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -17,15 +18,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.huawei.hmf.tasks.OnFailureListener;
+import com.huawei.hmf.tasks.OnSuccessListener;
+import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
+import com.huawei.hms.support.account.request.AccountAuthParams;
+import com.huawei.hms.support.account.service.AccountAuthService;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final int DEFAULT_VIEW = 0x22;
 
     private static final int REQUEST_CODE_SCAN = 0X01;
+
+    public static final String TAG = "HuaweiIdActivity";
+    private AccountAuthService mAuthManager;
+    private AccountAuthParams mAuthParam;
 
     private CardView scanner,dsmh,dsncc,thongke,profile,logout,thongtin,hotro;
     @Override
@@ -125,12 +135,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.thongtin_card:
                 i = new Intent(this, ThongtinungdungActivity.class);startActivity(i);
                 break;
-            case R.id.logout_card:
-                startActivity(new Intent(HomeActivity.this,LoginActivity.class));
-                Toast.makeText(HomeActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
-                break;
             case R.id.hotro_card:
                 i = new Intent(this, HotroActivity.class);startActivity(i);
+                break;
+            case R.id.logout_card:
+                i = new Intent(this, LoginActivity.class);startActivity(i);
                 break;
             default: break;
         }
@@ -177,4 +186,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * sign Out by signOut
+     */
+    public void signOut() {
+        Task<Void> signOutTask = mAuthManager.signOut();
+        signOutTask.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.i(TAG, "signOut Success");
+                startActivity(new Intent(HomeActivity.this,MainActivity.class));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception e) {
+                Log.i(TAG, "signOut fail");
+            }
+        });
+    }
 }

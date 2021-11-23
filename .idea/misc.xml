@@ -24,6 +24,7 @@
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable-v24/white_outline_qr_code_scanner_24.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable-v24/white_outline_receipt_long_24.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable-v24/white_outline_support_agent_24.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/bg_blue_circle.xml" value="0.2078125" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/bg_blue_corner_10.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/bg_pink_border_corner_80.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/bg_pink_corner_16.xml" value="0.19583333333333333" />
@@ -54,6 +55,7 @@
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/outline_qr_code_scanner_24.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/outline_receipt_long_24.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable/outline_support_agent_24.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/layout/activity_account.xml" value="0.15463917525773196" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/layout/activity_danhsachhoadon.xml" value="0.165625" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/layout/activity_danhsachmathang.xml" value="0.22" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/layout/activity_danhsachnhacungcap.xml" value="0.1796875" />

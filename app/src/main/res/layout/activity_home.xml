@@ -278,6 +278,7 @@
                         android:layout_width="160dp"
                         android:layout_height="150dp"
                         android:layout_margin="10dp"
+                        android:onClick="signOut"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground">

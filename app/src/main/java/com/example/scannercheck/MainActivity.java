@@ -26,30 +26,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AccountAuthParams authParams = new AccountAuthParamsHelper(AccountAuthParams.DEFAULT_AUTH_REQUEST_PARAM).setIdToken().createParams();
-        AccountAuthService service = AccountAuthManager.getService(MainActivity.this, authParams);
-        startActivityForResult(service.getSignInIntent(), 8888);
-
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 8888) {
-            Task<AuthAccount> authAccountTask = AccountAuthManager.parseAuthResultFromIntent(data);
-            if (authAccountTask.isSuccessful()) {
-                AuthAccount authAccount = authAccountTask.getResult();
-                startActivity(new Intent(MainActivity.this,HomeActivity.class));
-                Log.i("truong", "idToken:" + authAccount.getIdToken());
-            } else {
-                // The sign-in failed. No processing is required. Logs are recorded for fault locating.
-                Log.e("truong", "sign in failed : " +((ApiException) authAccountTask.getException()).getStatusCode());
-            }
-        }
     }
 }
-
-
-
-
-
-//mai hi
