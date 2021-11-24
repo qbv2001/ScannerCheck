@@ -45,6 +45,8 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
         }else{
             tvName1.setVisibility(View.VISIBLE);
             tvName2.setVisibility(View.VISIBLE);
+            tvName1.setText(name);
+            tvName2.setText(name);
         }
 
         tvEmail.setText(email);
