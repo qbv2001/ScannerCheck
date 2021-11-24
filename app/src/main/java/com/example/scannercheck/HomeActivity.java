@@ -230,7 +230,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.ic_person).into(imgprofilepic);
+        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
     }
 
