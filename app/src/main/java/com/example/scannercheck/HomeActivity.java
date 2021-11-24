@@ -44,6 +44,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private CardView scanner,dsmh,dsncc,thongke,profile,logout,thongtin,hotro;
 
+    NavigationView mNavigationView;
+
     CircleImageView imgprofilepic;
     TextView tvname;
     TextView tvuseremail;
@@ -54,7 +56,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_home);
 
         initUI();
-        showUserInfo();
         //homeview
         scanner     = findViewById(R.id.scanner_card);
         dsmh     = findViewById(R.id.dsmh_card);
@@ -78,7 +79,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         // sidebar
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +87,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        navigationView.setNavigationItemSelectedListener(item -> {
+
+        showUserInfo();
+
+        mNavigationView.setNavigationItemSelectedListener(item -> {
             Intent i1;
             int id = item.getItemId();
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -205,9 +208,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initUI(){
-        imgprofilepic = findViewById(R.id.profilepic);
-        tvname = findViewById(R.id.name);
-        tvuseremail = findViewById(R.id.useremail);
+        mNavigationView = findViewById(R.id.navigation_view);
+        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
+        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
+        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
     }
     private void showUserInfo(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
