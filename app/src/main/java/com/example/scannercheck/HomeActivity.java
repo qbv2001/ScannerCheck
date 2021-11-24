@@ -4,11 +4,13 @@ package com.example.scannercheck;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,8 +18,11 @@ import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hmf.tasks.Task;
@@ -27,6 +32,8 @@ import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 import com.huawei.hms.support.account.request.AccountAuthParams;
 import com.huawei.hms.support.account.service.AccountAuthService;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final int DEFAULT_VIEW = 0x22;
@@ -34,17 +41,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static final int REQUEST_CODE_SCAN = 0X01;
 
     public static final String TAG = "HuaweiIdActivity";
-    private AccountAuthService mAuthManager;
-    private AccountAuthParams mAuthParam;
 
     private CardView scanner,dsmh,dsncc,thongke,profile,logout,thongtin,hotro;
+
+    CircleImageView imgprofilepic;
+    TextView tvname;
+    TextView tvuseremail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
+        initUI();
+        showUserInfo();
         //homeview
         scanner     = findViewById(R.id.scanner_card);
         dsmh     = findViewById(R.id.dsmh_card);
@@ -95,8 +105,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
                     break;
                 case R.id.nav_logout:
+                    FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(HomeActivity.this,LoginActivity.class));
                     Toast.makeText(HomeActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
                 case R.id.nav_hotro:
                     i1 = new Intent(this, HotroActivity.class);startActivity(i1);
@@ -142,7 +154,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 i = new Intent(this, HotroActivity.class);startActivity(i);
                 break;
             case R.id.logout_card:
+                FirebaseAuth.getInstance().signOut();
                 i = new Intent(this, LoginActivity.class);startActivity(i);
+                Toast.makeText(HomeActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
+                finish();
                 break;
             default: break;
         }
@@ -187,6 +202,32 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
         }
+    }
+
+    private void initUI(){
+        imgprofilepic = findViewById(R.id.profilepic);
+        tvname = findViewById(R.id.name);
+        tvuseremail = findViewById(R.id.useremail);
+    }
+    private void showUserInfo(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user==null){
+            return;
+        }
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+
+        if (name == null){
+            tvname.setVisibility(View.GONE);
+        }else{
+            tvname.setVisibility(View.VISIBLE);
+            tvname.setText(name);
+        }
+
+        tvuseremail.setText(email);
+        Glide.with(this).load(photoUrl).error(R.drawable.ic_person).into(imgprofilepic);
+
     }
 
 }
