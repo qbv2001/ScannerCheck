@@ -18,15 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScannerCheck">
         <activity
-            android:name=".RealTime"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".DetailMathang"
             android:exported="true" />
         <activity
@@ -62,6 +53,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
