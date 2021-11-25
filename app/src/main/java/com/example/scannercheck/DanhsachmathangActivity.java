@@ -14,6 +14,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -161,7 +162,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onClickPushData();
-                Toast.makeText(DanhsachmathangActivity.this, "Đã gửi",Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
@@ -171,6 +171,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("test2");
         myRef.setValue("Hello, World!");
+        Toast.makeText(DanhsachmathangActivity.this, database.toString()+" ,"+ myRef.toString(),Toast.LENGTH_SHORT).show();
+
 
     }
     private void readDatabase(){
@@ -180,7 +182,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
