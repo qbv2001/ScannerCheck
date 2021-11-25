@@ -192,10 +192,7 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
         String email = user.getEmail();
         Uri photoUrl = user.getPhotoUrl();
 
-        if (name == null){
-            edtName.setVisibility(View.GONE);
-        }else{
-            edtName.setVisibility(View.VISIBLE);
+        if (name != null) {
             edtName.setText(name);
         }
 
