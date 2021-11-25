@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +23,18 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DanhsachmathangActivity extends AppCompatActivity {
     private RecyclerView rvItems;
+    private SearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         mathangs.add(new Mathang("8","Mì omachi",R.drawable.mon8));
 
 
+        initUi();
         rvItems = findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvItems.setLayoutManager(layoutManager);
@@ -152,9 +160,43 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onClickPushData();
                 Toast.makeText(DanhsachmathangActivity.this, "Đã gửi",Toast.LENGTH_SHORT).show();
             }
         });
         dialog.show();
+    }
+
+    private void onClickPushData() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("test2");
+        myRef.setValue("Hello, World!");
+
+    }
+    private void readDatabase(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("test2");
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+
+                Toast.makeText(DanhsachmathangActivity.this, "Value is: " + value, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initUi(){
+        searchView = findViewById(R.id.search_view);
     }
 }
