@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DanhsachmathangActivity extends AppCompatActivity {
@@ -53,14 +54,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
         // list view
         mathangs = new ArrayList<>();
-//        mathangs.add(new Mathang("1","Bánh quy",22,date,R.drawable.mon1));
-//        mathangs.add(new Mathang("2","Coca",R.drawable.mon2));
-//        mathangs.add(new Mathang("3","Pepsi",33,date,R.drawable.mon3));
-//        mathangs.add(new Mathang("4","Bia Ha Noi",44,date,R.drawable.mon4));
-//        mathangs.add(new Mathang("5","Bia 333",R.drawable.mon5));
-//        mathangs.add(new Mathang("6","Bim bim Swing",R.drawable.mon6));
-//        mathangs.add(new Mathang("7","Mì hảo hảo",R.drawable.mon7));
-//        mathangs.add(new Mathang("8","Mì omachi",R.drawable.mon8));
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
@@ -189,7 +182,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
         int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
         String NhaccMH = etNhaccMH.getText().toString().trim();
-        String datetime = "30/01/2001";
+        Date date = new Date();
+        String datetime = ""+date;
         String mota = etMotaMH.getText().toString().trim();
         int image = 1;
 
@@ -200,9 +194,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     }
     private void readDatabase(){
-
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("test2");
 
         // Read from the database
         datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -218,8 +209,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
-                
-                Toast.makeText(DanhsachmathangActivity.this, "Value is: " + value.toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

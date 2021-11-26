@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".DetailMathang">
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -31,232 +30,264 @@
                     android:background="@color/white" />
 
             </com.google.android.material.appbar.AppBarLayout>
-            <LinearLayout
-                android:layout_below="@id/topAppBar1"
+
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_below="@id/topAppBar1">
                 <LinearLayout
-                    android:id="@+id/top_mh"
+                    android:layout_below="@id/topAppBar1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingTop="15dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imgMH"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:layout_margin="10dp"
-                        android:src="@drawable/mon1"
-                        android:visibility="visible"/>
-                    <TextView
-                        android:id="@+id/tvTenMH"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/top_mh"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Bánh quy"
-                        android:textColor="@color/pink"
-                        android:textSize="20sp"
-                        android:layout_marginTop="8dp"
-                        android:textStyle="bold"/>
+                        android:gravity="center"
+                        android:paddingTop="15dp"
+                        android:orientation="vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/imgMH"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/mon1"
+                            android:visibility="visible"/>
+                        <TextView
+                            android:id="@+id/tvTenMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bánh quy"
+                            android:textColor="@color/pink"
+                            android:textSize="20sp"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/pink"
+                            android:layout_marginTop="10dp"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tên mặt hàng"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtTenMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Tên mặt hàng"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="25dp"/>
+
+                    </LinearLayout>
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/pink"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginTop="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nhà cung cấp"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtTenNCC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Tên nhà cung cấp"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="25dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="10dp"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đơn vị tính"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtDonvitinhMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Đơn vị tính"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="51dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginTop="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Số lượng"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtSoluongMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Số lượng"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="68dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginTop="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đơn giá"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtDongiaMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Đơn giá"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="80dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginTop="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mô tả"
+                            android:textColor="@android:color/black"
+                            android:textSize="20sp"
+                            android:layout_marginLeft="5dp"
+                            android:textStyle="bold"/>
+                        <EditText
+                            android:id="@+id/edtMotaMH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Mô tả"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="97dp"/>
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginTop="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/suamathang"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="Sửa mặt hàng"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/bg_yellow_corner_10"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/xoamathang"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="Xóa mặt hàng"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_grey_corner_10" />
+
+                    </LinearLayout>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tên mặt hàng"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvTenMH2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tên mặt hàng"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="25dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nhà cung cấp"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvTenNCC"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Tên nhà cung cấp"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="25dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Đơn vị tính"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvDonvitinhMH"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Đơn vị tính"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="51dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Số lượng"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvSoluongMH"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Số lượng"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="68dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Đơn giá"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvDongiaMH"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Đơn giá"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="80dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mô tả"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="5dp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        android:id="@+id/tvMotaMH"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mô tả"
-                        android:textColor="@color/bgblack"
-                        android:textSize="18sp"
-                        android:layout_marginLeft="97dp"/>
-
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginTop="10dp"/>
-            </LinearLayout>
-
+            </ScrollView>
         </RelativeLayout>
 
 
