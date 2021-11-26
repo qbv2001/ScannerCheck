@@ -5,33 +5,26 @@ import java.io.Serializable;
 
 public class Mathang implements Serializable {
     private String id;
-    private String tenmh;
-    private int image,soluong;
+    private String tenmh, dvt, mota, nhacc;
+    private int soluong, image;
     private String datetime;
-    public Mathang(String id, String name, int soluong,String datetime,int image){
+    private float dongia;
+    public Mathang(){
+
+    }
+
+    public Mathang(String id, String name, int soluong, float dongia, String datetime, int image, String dvt, String mota, String nhacc){
         this.id = id;
         this.tenmh = name;
         this.image = image;
         this.soluong = soluong;
         this.datetime = datetime;
+        this.dvt = dvt;
+        this.mota = mota;
+        this.nhacc = nhacc;
+        this.dongia = dongia;
     }
 
-    public Mathang(String id, String tenmh,int image){
-        this.id = id;
-        this.tenmh = tenmh;
-        this.image = image;
-        this.soluong = 0;
-        this.datetime = null;
-
-    }
-
-    public Mathang(String id, String tenmh,int soluong,int image){
-        this.id = id;
-        this.tenmh = tenmh;
-        this.image = image;
-        this.soluong = soluong;
-        this.datetime = null;
-    }
 
     public String getId() {
         return id;
@@ -73,4 +66,50 @@ public class Mathang implements Serializable {
         this.datetime = datetime;
     }
 
+    public String getDvt() {
+        return dvt;
+    }
+
+    public void setDvt(String dvt) {
+        this.dvt = dvt;
+    }
+
+    public String getMota() {
+        return mota;
+    }
+
+    public void setMota(String mota) {
+        this.mota = mota;
+    }
+
+    public String getNhacc() {
+        return nhacc;
+    }
+
+    public void setNhacc(String nhacc) {
+        this.nhacc = nhacc;
+    }
+
+    public float getDongia() {
+        return dongia;
+    }
+
+    public void setDongia(float dongia) {
+        this.dongia = dongia;
+    }
+
+    @Override
+    public String toString() {
+        return "Mathang{" +
+                "id='" + id + '\'' +
+                ", tenmh='" + tenmh + '\'' +
+                ", dvt='" + dvt + '\'' +
+                ", mota='" + mota + '\'' +
+                ", nhacc='" + nhacc + '\'' +
+                ", soluong=" + soluong +
+                ", image=" + image +
+                ", datetime='" + datetime + '\'' +
+                ", dongia=" + dongia +
+                '}';
+    }
 }
