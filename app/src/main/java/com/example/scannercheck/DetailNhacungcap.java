@@ -44,6 +44,7 @@ public class DetailNhacungcap extends AppCompatActivity {
             return;
         }
         nhacungcap = (Nhacungcap) bundle.get("object_nhacungcap");
+        tvTenNCC.setText(nhacungcap.getName());
         edtTenNCC.setText(nhacungcap.getName());
         edtDiachiNCC.setText(nhacungcap.getDiachi());
         edtSdtNCC.setText(""+nhacungcap.getSdt());

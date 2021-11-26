@@ -209,7 +209,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="Sửa mặt hàng"
+                            android:text="Sửa NCC"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/bg_yellow_corner_10"/>
                         <androidx.appcompat.widget.AppCompatButton
@@ -217,7 +217,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="Xóa mặt hàng"
+                            android:text="Xóa NCC"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/bg_grey_corner_10" />
 

@@ -43,13 +43,16 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
     public void onBindViewHolder(DataViewHolder holder, int position) {
         Nhacungcap nhacungcap = nhacungcaps.get(position);
 
-        String id = nhacungcaps.get(position).getId();
-//        holder.tvTenMH.setText(id);
         String tenncc = nhacungcaps.get(position).getName();
         holder.tvTenNCC.setText(tenncc);
         String diachi = nhacungcaps.get(position).getDiachi();
         String textDiachi = "Địa chỉ: "+diachi;
         holder.tvdiachi.setText(textDiachi);
+
+        String sdt = nhacungcaps.get(position).getDiachi();
+        String textSDT = "Số điện thoại: "+sdt;
+        holder.tvSDT.setText(textSDT);
+
         int image = nhacungcaps.get(position).getImage();
         holder.imgNCC.setImageResource(image);
         holder.imgNCC.setVisibility(View.VISIBLE);
@@ -64,7 +67,7 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
     }
 
     private void onClickGoToDetail(Nhacungcap nhacungcap){
-        Intent intent = new Intent(context,DetailMathang.class);
+        Intent intent = new Intent(context,DetailNhacungcap.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("object_nhacungcap", nhacungcap);
         intent.putExtras(bundle);
@@ -76,7 +79,7 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
      */
     public static class DataViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvTenNCC;
+        private TextView tvTenNCC, tvSDT;
         private TextView tvdiachi;
         private CircleImageView imgNCC;
         private LinearLayout layoutItem;
@@ -87,8 +90,8 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
             tvTenNCC =  itemView.findViewById(R.id.tvTenNCC);
             tvdiachi =  itemView.findViewById(R.id.tvDiachiNCC);
             imgNCC   = itemView.findViewById(R.id.imgNCC);
-
-            layoutItem = itemView.findViewById(R.id.layoutMathang);
+            tvSDT = itemView.findViewById(R.id.tvSDT);
+            layoutItem = itemView.findViewById(R.id.layoutNhacungcap);
 
         }
     }

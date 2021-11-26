@@ -53,6 +53,7 @@ public class DetailMathang extends AppCompatActivity {
         edtDongiaMH.setText(""+mathang.getDongia());
         edtMotaMH.setText(mathang.getMota());
 
+
         onclickUpdateMH();
         onclickDeleteMH();
 
@@ -85,7 +86,7 @@ public class DetailMathang extends AppCompatActivity {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-
+                tvTenMH.setText(TenMH);
             }
         });
 
