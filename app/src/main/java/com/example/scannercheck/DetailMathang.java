@@ -45,8 +45,13 @@ public class DetailMathang extends AppCompatActivity {
             return;
         }
         mathang = (Mathang) bundle.get("object_mathang");
-
-        readDatabase();
+        tvTenMH.setText(mathang.getName());
+        edtTenMH.setText(mathang.getName());
+        edtTenNCC.setText(mathang.getNhacc());
+        edtDonvitinhMH.setText(mathang.getDvt());
+        edtSoluongMH.setText(""+mathang.getSoluong());
+        edtDongiaMH.setText(""+mathang.getDongia());
+        edtMotaMH.setText(mathang.getMota());
 
         onclickUpdateMH();
         onclickDeleteMH();
@@ -58,32 +63,6 @@ public class DetailMathang extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 UpdateData();
-            }
-        });
-    }
-
-    private void readDatabase(){
-
-        // Read from the database
-        datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Mathang value = dataSnapshot.getValue(Mathang.class);
-                tvTenMH.setText(value.getName());
-                edtTenMH.setText(value.getName());
-                edtTenNCC.setText(value.getNhacc());
-                edtDonvitinhMH.setText(value.getDvt());
-                edtSoluongMH.setText(""+value.getSoluong());
-                edtDongiaMH.setText(""+value.getDongia());
-                edtMotaMH.setText(value.getMota());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(DetailMathang.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
     }

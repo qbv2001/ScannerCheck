@@ -1,27 +1,25 @@
 package com.example.scannercheck;
 
 
-public class Nhacungcap {
+import java.io.Serializable;
+
+public class Nhacungcap implements Serializable {
     private String id;
     private String tenncc;
     private int image;
-    private String diachi,mota;
+    private String diachi,mota,sdt;
 
-    public Nhacungcap(String id, String tenncc,int image){
-        this.id = id;
-        this.tenncc = tenncc;
-        this.image = image;
-        this.mota = null;
-        this.diachi = null;
-
+    public Nhacungcap(){
     }
 
-    public Nhacungcap(String id, String tenncc,String diachi,String mota,int image){
+    public Nhacungcap(String id, String tenncc, String mota, String diachi, String sdt,int image){
         this.id = id;
         this.tenncc = tenncc;
         this.image = image;
         this.mota = mota;
         this.diachi = diachi;
+        this.sdt = sdt;
+
     }
 
     public String getId() {
@@ -64,4 +62,23 @@ public class Nhacungcap {
         this.diachi = diachi;
     }
 
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    @Override
+    public String toString() {
+        return "Nhacungcap{" +
+                "id='" + id + '\'' +
+                ", tenncc='" + tenncc + '\'' +
+                ", image=" + image +
+                ", diachi='" + diachi + '\'' +
+                ", mota='" + mota + '\'' +
+                ", sdt='" + sdt + '\'' +
+                '}';
+    }
 }

@@ -1,9 +1,12 @@
 package com.example.scannercheck;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +41,8 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
 
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position) {
+        Nhacungcap nhacungcap = nhacungcaps.get(position);
+
         String id = nhacungcaps.get(position).getId();
 //        holder.tvTenMH.setText(id);
         String tenncc = nhacungcaps.get(position).getName();
@@ -48,6 +53,22 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
         int image = nhacungcaps.get(position).getImage();
         holder.imgNCC.setImageResource(image);
         holder.imgNCC.setVisibility(View.VISIBLE);
+
+        holder.layoutItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickGoToDetail(nhacungcap);
+            }
+        });
+
+    }
+
+    private void onClickGoToDetail(Nhacungcap nhacungcap){
+        Intent intent = new Intent(context,DetailMathang.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("object_nhacungcap", nhacungcap);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
     }
 
     /**
@@ -58,12 +79,17 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
         private TextView tvTenNCC;
         private TextView tvdiachi;
         private CircleImageView imgNCC;
+        private LinearLayout layoutItem;
+
         public DataViewHolder(View itemView) {
             super(itemView);
 
             tvTenNCC =  itemView.findViewById(R.id.tvTenNCC);
             tvdiachi =  itemView.findViewById(R.id.tvDiachiNCC);
             imgNCC   = itemView.findViewById(R.id.imgNCC);
+
+            layoutItem = itemView.findViewById(R.id.layoutMathang);
+
         }
     }
 }

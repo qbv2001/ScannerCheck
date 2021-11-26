@@ -1,10 +1,14 @@
 package com.example.scannercheck;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,12 +37,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.huawei.hms.hmsscankit.ScanUtil;
+import com.huawei.hms.ml.scan.HmsScan;
+import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class DanhsachmathangActivity extends AppCompatActivity {
+    public static final int DEFAULT_VIEW = 0x22;
+
+    private static final int REQUEST_CODE_SCAN = 0X01;
+
+    public static final String TAG = "HuaweiIdActivity";
+
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
@@ -65,10 +79,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         rvItems.setLayoutManager(layoutManager);
         rvItems.setHasFixedSize(true);
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
-
-        readDatabase();
-        //set onclick on item
-
 
         // createmh
         FloatingActionButton floating = findViewById(R.id.fabBtnCreateMH);
@@ -160,6 +170,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
         initUiDialog();
+        clickquetma();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,8 +200,13 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
         Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, R.drawable.mon1, DonvitinhMH, NhaccMH, mota);
 
-        datamathang.child("MatHang").child(user.getUid()).child(etMaMH.getText().toString()).setValue(mathang);
-        Toast.makeText(DanhsachmathangActivity.this, "Thanh cong", Toast.LENGTH_SHORT).show();
+        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                dialog.dismiss();
+                Toast.makeText(DanhsachmathangActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
     private void readDatabase(){
@@ -217,6 +233,58 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void clickquetma(){
+        Button    quetma   = dialog.findViewById(R.id.quetma_createmh);
+        quetma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newViewBtnClick();
+            }
+        });
+    }
+
+    private void newViewBtnClick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    DEFAULT_VIEW);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissions == null || grantResults == null || grantResults.length < 2 || grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        if (requestCode == DEFAULT_VIEW) {
+            //start ScankitActivity for scanning barcode
+            ScanUtil.startScan(DanhsachmathangActivity.this, REQUEST_CODE_SCAN, new HmsScanAnalyzerOptions.Creator().setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create());
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //receive result after your activity finished scanning
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        // Obtain the return value of HmsScan from the value returned by the onActivityResult method by using ScanUtil.RESULT as the key value.
+        if (requestCode == REQUEST_CODE_SCAN) {
+            Object obj = data.getParcelableExtra(ScanUtil.RESULT);
+            if (obj instanceof HmsScan) {
+                if (!TextUtils.isEmpty(((HmsScan) obj).getOriginalValue())) {
+                    etMaMH.setText(((HmsScan) obj).getOriginalValue());
+                    Toast.makeText(this, ((HmsScan) obj).getOriginalValue(), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     private void initUi(){

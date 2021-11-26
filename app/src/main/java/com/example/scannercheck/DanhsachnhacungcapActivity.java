@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -22,29 +26,39 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DanhsachnhacungcapActivity extends AppCompatActivity {
+    private SearchView searchView;
     private RecyclerView rvItems;
+    private Dialog dialog;
+    private DatabaseReference datanhacungap;
+    private FirebaseUser user;
+    private List<Nhacungcap> nhacungcaps;
+    private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachnhacungcap);
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        datanhacungap = FirebaseDatabase.getInstance().getReference();
         // list view
+        nhacungcaps = new ArrayList<>();
 
-        List<Nhacungcap> nhacungcaps = new ArrayList<>();
-        nhacungcaps.add(new Nhacungcap("1","Công ty A","Hà Nội","22",R.drawable.mon1));
-        nhacungcaps.add(new Nhacungcap("3","Công ty B","Hà Nội","a",R.drawable.mon3));
-        nhacungcaps.add(new Nhacungcap("2","Công ty C","Ba Vì","b",R.drawable.mon2));
-        nhacungcaps.add(new Nhacungcap("4","Công ty D","Vĩnh Phúc","c",R.drawable.mon4));
-        nhacungcaps.add(new Nhacungcap("5","Công ty E",R.drawable.mon5));
-        nhacungcaps.add(new Nhacungcap("6","Công ty F","Ba Vì","b",R.drawable.mon6));
-        nhacungcaps.add(new Nhacungcap("7","Công ty G",R.drawable.mon7));
-        nhacungcaps.add(new Nhacungcap("8","Công ty H",R.drawable.mon8));
-
+        initUi();
+        readDatabase();
 
         rvItems = findViewById(R.id.recycler_viewNCC);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -117,7 +131,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     }
 
     private void openFeedbackDialog(int gravity){
-        final Dialog dialog = new Dialog(this);
+        dialog = new Dialog(DanhsachnhacungcapActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dsncc_createncc);
 
@@ -140,6 +154,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
+        initUiDialog();
+
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,9 +165,67 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DanhsachnhacungcapActivity.this, "Đã gửi",Toast.LENGTH_SHORT).show();
-            }
+                onClickPushData();            }
         });
         dialog.show();
     }
+
+
+    private void onClickPushData() {
+        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+        String MaNCC = timeStamp;
+        String TenNCC = etTenNCC.getText().toString().trim();
+        String DiachiNCC = etDiachiNCC.getText().toString().trim();
+        String SdtNCC = etSdtNCC.getText().toString().trim();
+        String mota = etMota.getText().toString().trim();
+        int image = 1;
+
+        Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, R.drawable.mon3);
+
+        datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                dialog.dismiss();
+                Toast.makeText(DanhsachnhacungcapActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void readDatabase(){
+
+        // Read from the database
+        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Nhacungcap value = new Nhacungcap();
+                nhacungcaps.clear();
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Nhacungcap.class);
+                    nhacungcaps.add(value);
+                }
+
+                rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DanhsachnhacungcapActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void initUi(){
+        searchView = findViewById(R.id.search_view);
+    }
+    private void initUiDialog(){
+        etTenNCC = dialog.findViewById(R.id.etTenNCC);
+        etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
+        etSdtNCC = dialog.findViewById(R.id.etSdtNCC);
+        etMota = dialog.findViewById(R.id.etMotaNCC);
+
+    }
+
 }
