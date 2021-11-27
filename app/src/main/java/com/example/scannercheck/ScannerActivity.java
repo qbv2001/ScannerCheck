@@ -81,6 +81,7 @@ public class ScannerActivity extends AppCompatActivity {
         //receive result after your activity finished scanning
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK || data == null) {
+            super.onBackPressed();
             return;
         }
         // Obtain the return value of HmsScan from the value returned by the onActivityResult method by using ScanUtil.RESULT as the key value.
