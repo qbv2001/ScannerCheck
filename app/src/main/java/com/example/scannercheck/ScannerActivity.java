@@ -103,6 +103,7 @@ public class ScannerActivity extends AppCompatActivity {
                                     bundle.putSerializable("object_mathang", value);
                                     intent.putExtras(bundle);
                                     ScannerActivity.this.startActivity(intent);
+                                    finish();
                                 }
                             }
                             openFeedbackDialog(Gravity.CENTER,((HmsScan) obj).getOriginalValue());
