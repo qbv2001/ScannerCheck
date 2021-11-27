@@ -32,8 +32,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -216,6 +219,7 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
 
     private void onclickUpdateProfile(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference datacheck = FirebaseDatabase.getInstance().getReference();;
 
         if (user == null){
             return;
@@ -235,6 +239,7 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             Toast.makeText(ThongtintaikhoanActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                            datacheck.child(user.getUid()).setValue(String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())));
                             showUserInfo();
                         }
                     }

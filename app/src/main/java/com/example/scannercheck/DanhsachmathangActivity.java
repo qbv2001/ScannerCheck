@@ -196,7 +196,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         String mota = etMotaMH.getText().toString().trim();
         int image = 1;
 
-        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, R.drawable.mon1, DonvitinhMH, NhaccMH, mota);
+        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, R.drawable.mon1, DonvitinhMH, mota, NhaccMH);
 
         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
             @Override

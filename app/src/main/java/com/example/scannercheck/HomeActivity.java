@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
@@ -18,6 +19,11 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,11 +37,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView tvname;
     TextView tvuseremail;
 
+    private FirebaseUser user;
+    private DatabaseReference dataUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        dataUser = FirebaseDatabase.getInstance().getReference();
         initUI();
         //homeview
         scanner     = findViewById(R.id.scanner_card);
@@ -70,6 +81,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         showUserInfo();
+        readDatabase();
 
         mNavigationView.setNavigationItemSelectedListener(item -> {
             Intent i1;
@@ -153,8 +165,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
     }
+
+    private void readDatabase() {
+        // Read from the database
+        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                showUserInfo();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
+    }
+
     private void showUserInfo(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user==null){
             return;
         }

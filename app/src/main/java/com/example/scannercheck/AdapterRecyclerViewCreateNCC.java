@@ -49,7 +49,7 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
         String textDiachi = "Địa chỉ: "+diachi;
         holder.tvdiachi.setText(textDiachi);
 
-        String sdt = nhacungcaps.get(position).getDiachi();
+        String sdt = nhacungcaps.get(position).getSdt();
         String textSDT = "Số điện thoại: "+sdt;
         holder.tvSDT.setText(textSDT);
 
