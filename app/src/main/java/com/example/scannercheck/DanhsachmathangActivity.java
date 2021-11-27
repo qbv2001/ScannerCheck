@@ -50,8 +50,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_SCAN = 0X01;
 
-    public static final String TAG = "HuaweiIdActivity";
-
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
