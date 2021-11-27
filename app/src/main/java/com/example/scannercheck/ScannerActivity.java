@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
@@ -88,31 +89,40 @@ public class ScannerActivity extends AppCompatActivity {
             if (obj instanceof HmsScan) {
                 if (!TextUtils.isEmpty(((HmsScan) obj).getOriginalValue())) {
                     // Read from the database
-                    datamathang.child("MatHang").child(user.getUid()).child(((HmsScan) obj).getOriginalValue()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+//                        child()
                         @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(ScannerActivity.this, "Đọc dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            // This method is called once with the initial value and again
+                            Mathang value = new Mathang();
+                            for (DataSnapshot unit : dataSnapshot.getChildren()){
+                                if (((HmsScan) obj).getOriginalValue().equalsIgnoreCase(unit.getValue(Mathang.class).getId())){
+                                    value = unit.getValue(Mathang.class);
+                                    Intent intent = new Intent(ScannerActivity.this,DetailMathang.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("object_mathang", value);
+                                    intent.putExtras(bundle);
+                                    ScannerActivity.this.startActivity(intent);
+                                }
                             }
-                            else {
-                                Toast.makeText(ScannerActivity.this, ((HmsScan) obj).getOriginalValue(), Toast.LENGTH_SHORT).show();
-//                                Mathang value = new Mathang();
-//                                for (DataSnapshot unit : task.getResult().getChildren()){
-//                                    value = unit.getValue(Mathang.class);
-//                                    if(value.getId()==((HmsScan) obj).getOriginalValue()){
-//                                    }
-//                                }
-                            }
+                            openFeedbackDialog(Gravity.CENTER,((HmsScan) obj).getOriginalValue());
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                            // Failed to read value
+                            Toast.makeText(ScannerActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
                         }
                     });
-//                    Toast.makeText(ScannerActivity.this, ((HmsScan) obj).getOriginalValue(), Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
         }
     }
 
-    private void openFeedbackDialog(int gravity){
+    private void openFeedbackDialog(int gravity,String mamh){
         dialog = new Dialog(ScannerActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dsmh_createmh);
@@ -138,6 +148,7 @@ public class ScannerActivity extends AppCompatActivity {
         Button dongy      = dialog.findViewById(R.id.dongy);
 
         initUiDialog();
+        etMaMH.setText(mamh);
         clickquetma();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
