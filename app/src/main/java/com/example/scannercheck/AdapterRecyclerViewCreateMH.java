@@ -52,9 +52,9 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
         int soluongmh = mathangs.get(position).getSoluong();
         String textSoluong = "Số lượng: "+soluongmh;
         holder.tvSoluongMH.setText(textSoluong);
-        String image = mathangs.get(position).getImage();
-        // Dung picasso để load ảnh
 
+        // Dung picasso để load ảnh
+        String image = mathangs.get(position).getImage();
         Picasso.with(context).load(image).into(holder.imgMH);
         holder.imgMH.setVisibility(View.VISIBLE);
 

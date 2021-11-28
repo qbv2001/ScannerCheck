@@ -6,10 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -53,8 +56,8 @@ public class AdapterRecyclerViewCreateNCC extends RecyclerView.Adapter<AdapterRe
         String textSDT = "Số điện thoại: "+sdt;
         holder.tvSDT.setText(textSDT);
 
-        int image = nhacungcaps.get(position).getImage();
-        holder.imgNCC.setImageResource(image);
+        String image = nhacungcaps.get(position).getImage();
+        Picasso.with(context).load(image).into(holder.imgNCC);
         holder.imgNCC.setVisibility(View.VISIBLE);
 
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {

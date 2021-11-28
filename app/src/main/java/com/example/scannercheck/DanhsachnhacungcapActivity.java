@@ -1,20 +1,34 @@
 package com.example.scannercheck;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +37,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -33,13 +50,33 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.huawei.hms.hmsscankit.ScanUtil;
+import com.huawei.hms.ml.scan.HmsScan;
+import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DanhsachnhacungcapActivity extends AppCompatActivity {
+    public static final int ANHNCC_VIEW = 0x23;
+
+    ProgressDialog progressDialog;
+
+    private CircleImageView edtAnhNCC;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private Uri uri;
+
     private SearchView searchView;
     private RecyclerView rvItems;
     private Dialog dialog;
@@ -48,12 +85,40 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
 
+    final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK){
+                Intent intent = result.getData();
+                if (intent == null){
+                    return;
+                }
+                uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                    setBitmapImageView(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+    public void setBitmapImageView(Bitmap bitmapImageView){
+        edtAnhNCC.setImageBitmap(bitmapImageView);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachnhacungcap);
         user = FirebaseAuth.getInstance().getCurrentUser();
         datanhacungap = FirebaseDatabase.getInstance().getReference();
+
+        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storageRef = storage.getReference();
+
+        progressDialog = new ProgressDialog(this);
+
         // list view
         nhacungcaps = new ArrayList<>();
 
@@ -155,6 +220,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
         initUiDialog();
+        clickchonanh();
 
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,27 +236,115 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-    private void onClickPushData() {
-        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-        String MaNCC = timeStamp;
-        String TenNCC = etTenNCC.getText().toString().trim();
-        String DiachiNCC = etDiachiNCC.getText().toString().trim();
-        String SdtNCC = etSdtNCC.getText().toString().trim();
-        String mota = etMota.getText().toString().trim();
-        int image = 1;
-
-        Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, R.drawable.mon3);
-
-        datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
+    private void clickchonanh(){
+        CircleImageView    chonanh   = dialog.findViewById(R.id.etAnhNCC);
+        chonanh.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                dialog.dismiss();
-                Toast.makeText(DanhsachnhacungcapActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                newViewchonanhclick();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissions == null || grantResults == null || grantResults.length < 2 || grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        if (requestCode == ANHNCC_VIEW) {
+            openGallery();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //receive result after your activity finished scanning
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        // Xu ly anh MH
+        if (requestCode == ANHNCC_VIEW && resultCode == RESULT_OK && data != null) {
+            return;
+        }
+    }
+
+    public void openGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        mActivityResultLauncher.launch(Intent.createChooser(intent,"Select Piture"));
 
     }
+
+    private void newViewchonanhclick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    ANHNCC_VIEW);
+        }
+    }
+
+
+    private void onClickPushData() {
+        progressDialog.show();
+        // Get the data from an ImageView as bytes
+        edtAnhNCC.setDrawingCacheEnabled(true);
+        edtAnhNCC.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) edtAnhNCC.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        Calendar calendar = Calendar.getInstance();
+        StorageReference mountainsRef = storageRef.child("image"+calendar.getTimeInMillis()+".jpg");
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                progressDialog.dismiss();
+                Toast.makeText(DanhsachnhacungcapActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                // Khi upload ảnh thành công
+                Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // khi upload ảnh thành công
+                        String imageUrl = uri.toString();
+
+                        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+                        String MaNCC = timeStamp;
+                        String TenNCC = etTenNCC.getText().toString().trim();
+                        String DiachiNCC = etDiachiNCC.getText().toString().trim();
+                        String SdtNCC = etSdtNCC.getText().toString().trim();
+                        String mota = etMota.getText().toString().trim();
+                        String image = "image"+calendar.getTimeInMillis()+".jpg";
+                        Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl, image);
+                        datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                progressDialog.dismiss();
+                                dialog.dismiss();
+                                Toast.makeText(DanhsachnhacungcapActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+    }
+
     private void readDatabase(){
 
         // Read from the database
@@ -221,6 +375,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_view);
     }
     private void initUiDialog(){
+        edtAnhNCC = dialog.findViewById(R.id.etAnhNCC);
         etTenNCC = dialog.findViewById(R.id.etTenNCC);
         etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
         etSdtNCC = dialog.findViewById(R.id.etSdtNCC);

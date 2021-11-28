@@ -5,20 +5,20 @@ import java.io.Serializable;
 
 public class Nhacungcap implements Serializable {
     private String id;
-    private String tenncc;
-    private int image;
-    private String diachi,mota,sdt;
+    private String tenncc,image;
+    private String diachi,mota,sdt,tenimage;
 
     public Nhacungcap(){
     }
 
-    public Nhacungcap(String id, String tenncc, String mota, String diachi, String sdt,int image){
+    public Nhacungcap(String id, String tenncc, String mota, String diachi, String sdt,String image,String tenimage){
         this.id = id;
         this.tenncc = tenncc;
         this.image = image;
         this.mota = mota;
         this.diachi = diachi;
         this.sdt = sdt;
+        this.tenimage = tenimage;
 
     }
 
@@ -46,12 +46,20 @@ public class Nhacungcap implements Serializable {
         this.mota = mota;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getTenimage() {
+        return tenimage;
+    }
+
+    public void setTenimage(String tenimage) {
+        this.tenimage = tenimage;
     }
 
     public String getDiachi() {
