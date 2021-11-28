@@ -4,11 +4,16 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +24,10 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +36,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -37,33 +49,68 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DanhsachmathangActivity extends AppCompatActivity {
     public static final int DEFAULT_VIEW = 0x22;
-
+    public static final int ANHMH_VIEW = 0x23;
     private static final int REQUEST_CODE_SCAN = 0X01;
 
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
-
     private Dialog dialog;
     private DatabaseReference datamathang;
     private FirebaseUser user;
     List<Mathang> mathangs;
+    private CircleImageView edtAnhMH;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private Uri uri;
+
+    final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK){
+                Intent intent = result.getData();
+                if (intent == null){
+                    return;
+                }
+                uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                    setBitmapImageView(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+    public void setBitmapImageView(Bitmap bitmapImageView){
+        edtAnhMH.setImageBitmap(bitmapImageView);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachmathang);
-
+        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storageRef = storage.getReference();
         // list view
         mathangs = new ArrayList<>();
 
@@ -169,6 +216,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
         initUiDialog();
         clickquetma();
+        clickchonanh();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,26 +233,60 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
-        String MaMH = etMaMH.getText().toString().trim();
-        String TenMH = etTenMH.getText().toString().trim();
-        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
-        String NhaccMH = etNhaccMH.getText().toString().trim();
-        Date date = new Date();
-        String datetime = ""+date;
-        String mota = etMotaMH.getText().toString().trim();
-        int image = 1;
+        // Get the data from an ImageView as bytes
+        edtAnhMH.setDrawingCacheEnabled(true);
+        edtAnhMH.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) edtAnhMH.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
 
-        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, R.drawable.mon1, DonvitinhMH, mota, NhaccMH);
+        Calendar calendar = Calendar.getInstance();
+        StorageReference mountainsRef = storageRef.child("image"+calendar.getTimeInMillis()+".jpg");
 
-        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                dialog.dismiss();
-                Toast.makeText(DanhsachmathangActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(DanhsachmathangActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                // Khi upload ảnh thành công
+                Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // khi upload ảnh thành công
+                        String imageUrl = uri.toString();
+
+                        String MaMH = etMaMH.getText().toString().trim();
+                        String TenMH = etTenMH.getText().toString().trim();
+                        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
+                        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
+                        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
+                        String NhaccMH = etNhaccMH.getText().toString().trim();
+                        Date date = new Date();
+                        String datetime = ""+date;
+                        String mota = etMotaMH.getText().toString().trim();
+
+                        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
+                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                dialog.dismiss();
+                                Toast.makeText(DanhsachmathangActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
             }
         });
+
 
     }
     private void readDatabase(){
@@ -243,11 +325,29 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
     }
 
+    private void clickchonanh(){
+        CircleImageView    chonanh   = dialog.findViewById(R.id.etAnhMH);
+        chonanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newViewchonanhclick();
+            }
+        });
+    }
+
     private void newViewBtnClick() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
                     DEFAULT_VIEW);
+        }
+    }
+
+    private void newViewchonanhclick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    ANHMH_VIEW);
         }
     }
 
@@ -263,6 +363,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             ScanUtil.startScan(DanhsachmathangActivity.this, REQUEST_CODE_SCAN, new HmsScanAnalyzerOptions.Creator().setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create());
         }
 
+        if (requestCode == ANHMH_VIEW) {
+            openGallery();
+        }
     }
 
     @Override
@@ -283,12 +386,27 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 return;
             }
         }
+
+        // Xu ly anh MH
+        if (requestCode == ANHMH_VIEW && resultCode == RESULT_OK && data != null) {
+            return;
+        }
     }
+
+    public void openGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        mActivityResultLauncher.launch(Intent.createChooser(intent,"Select Piture"));
+
+    }
+
 
     private void initUi(){
         searchView = findViewById(R.id.search_view);
     }
     private void initUiDialog(){
+        edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);

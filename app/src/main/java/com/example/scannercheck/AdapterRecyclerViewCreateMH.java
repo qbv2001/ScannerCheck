@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,8 +52,10 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
         int soluongmh = mathangs.get(position).getSoluong();
         String textSoluong = "Số lượng: "+soluongmh;
         holder.tvSoluongMH.setText(textSoluong);
-        int image = mathangs.get(position).getImage();
-        holder.imgMH.setImageResource(image);
+        String image = mathangs.get(position).getImage();
+        // Dung picasso để load ảnh
+
+        Picasso.with(context).load(image).into(holder.imgMH);
         holder.imgMH.setVisibility(View.VISIBLE);
 
         String datetime = mathangs.get(position).getDateTime();

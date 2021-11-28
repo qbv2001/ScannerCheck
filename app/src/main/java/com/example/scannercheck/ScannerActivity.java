@@ -1,5 +1,9 @@
 package com.example.scannercheck;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,10 +12,14 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -19,10 +27,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,10 +42,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ScannerActivity extends AppCompatActivity {
@@ -44,9 +60,36 @@ public class ScannerActivity extends AppCompatActivity {
 
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
 
+    private ImageView edtAnhMH;
     private Dialog dialog;
     private DatabaseReference datamathang;
     private FirebaseUser user;
+
+    private StorageReference storageRef;
+    private Uri uri;
+
+    final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == RESULT_OK){
+                Intent intent = result.getData();
+                if (intent == null){
+                    return;
+                }
+                uri = intent.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
+                    setBitmapImageView(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+    public void setBitmapImageView(Bitmap bitmapImageView){
+        edtAnhMH.setImageBitmap(bitmapImageView);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,27 +229,59 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
-        String MaMH = etMaMH.getText().toString().trim();
-        String TenMH = etTenMH.getText().toString().trim();
-        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
-        String NhaccMH = etNhaccMH.getText().toString().trim();
-        Date date = new Date();
-        String datetime = ""+date;
-        String mota = etMotaMH.getText().toString().trim();
-        int image = 1;
+        // Get the data from an ImageView as bytes
+        edtAnhMH.setDrawingCacheEnabled(true);
+        edtAnhMH.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) edtAnhMH.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] data = baos.toByteArray();
 
-        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, R.drawable.mon1, DonvitinhMH, NhaccMH, mota);
+        Calendar calendar = Calendar.getInstance();
+        StorageReference mountainsRef = storageRef.child("image" + calendar.getTimeInMillis() + ".jpg");
 
-        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                dialog.dismiss();
-                Toast.makeText(ScannerActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Toast.makeText(ScannerActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                // Khi upload ảnh thành công
+                Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
+                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // khi upload ảnh thành công
+                        String imageUrl = uri.toString();
+
+                        String MaMH = etMaMH.getText().toString().trim();
+                        String TenMH = etTenMH.getText().toString().trim();
+                        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
+                        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
+                        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
+                        String NhaccMH = etNhaccMH.getText().toString().trim();
+                        Date date = new Date();
+                        String datetime = "" + date;
+                        String mota = etMotaMH.getText().toString().trim();
+
+                        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl, "image" + calendar.getTimeInMillis() + ".jpg", DonvitinhMH, mota, NhaccMH);
+                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                dialog.dismiss();
+                                Toast.makeText(ScannerActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
             }
         });
-
     }
 
     private void initUiDialog(){
