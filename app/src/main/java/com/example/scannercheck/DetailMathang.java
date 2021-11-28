@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,9 +39,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.huawei.hms.hmsscankit.ScanUtil;
-import com.huawei.hms.ml.scan.HmsScan;
-import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -59,7 +55,6 @@ public class DetailMathang extends AppCompatActivity {
     ImageView imgMH;
 
     ProgressDialog progressDialog;
-
 
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -137,6 +132,7 @@ public class DetailMathang extends AppCompatActivity {
 
     private void UpdateData() {
         progressDialog.show();
+
         // Get the data from an ImageView as bytes
         imgMH.setDrawingCacheEnabled(true);
         imgMH.buildDrawingCache();
@@ -182,15 +178,16 @@ public class DetailMathang extends AppCompatActivity {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 //Xóa ảnh cũ
-                                progressDialog.dismiss();
                                 storageRef.child(mathang.getTenimage()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        progressDialog.dismiss();
                                         // File deleted successfully
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception exception) {
+                                        progressDialog.dismiss();
                                         // Uh-oh, an error occurred!
                                     }
                                 });
@@ -206,10 +203,10 @@ public class DetailMathang extends AppCompatActivity {
     }
 
     private void onclickDeleteMH(){
-        progressDialog.show();
         btnxoaMH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog.show();
                 datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).removeValue(new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
@@ -219,15 +216,16 @@ public class DetailMathang extends AppCompatActivity {
                         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                progressDialog.dismiss();
                                 // File deleted successfully
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
+                                progressDialog.dismiss();
                                 // Uh-oh, an error occurred!
                             }
                         });
-                        progressDialog.dismiss();
                         Intent intent = new Intent(DetailMathang.this,DanhsachmathangActivity.class);
                         finish();
                     }

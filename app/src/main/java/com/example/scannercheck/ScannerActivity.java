@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.huawei.hms.hmsscankit.ScanUtil;
@@ -54,10 +55,13 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ScannerActivity extends AppCompatActivity {
     public static final int DEFAULT_VIEW = 0x22;
-
+    public static final int ANHMH_VIEW = 0x23;
     private static final int REQUEST_CODE_SCAN = 0X01;
+
     ProgressDialog progressDialog;
 
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
@@ -67,6 +71,7 @@ public class ScannerActivity extends AppCompatActivity {
     private DatabaseReference datamathang;
     private FirebaseUser user;
 
+    private FirebaseStorage storage;
     private StorageReference storageRef;
     private Uri uri;
 
@@ -99,8 +104,11 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
+
         progressDialog = new ProgressDialog(this);
 
+        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storageRef = storage.getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
@@ -120,6 +128,17 @@ public class ScannerActivity extends AppCompatActivity {
             //start ScankitActivity for scanning barcode
             ScanUtil.startScan(ScannerActivity.this, REQUEST_CODE_SCAN, new HmsScanAnalyzerOptions.Creator().setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create());
         }
+
+        if (requestCode == ANHMH_VIEW) {
+            openGallery();
+        }
+    }
+
+    public void openGallery(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        mActivityResultLauncher.launch(Intent.createChooser(intent,"Select Piture"));
 
     }
 
@@ -199,6 +218,7 @@ public class ScannerActivity extends AppCompatActivity {
         initUiDialog();
         etMaMH.setText(mamh);
         clickquetma();
+        clickchonanh();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,6 +244,17 @@ public class ScannerActivity extends AppCompatActivity {
         });
     }
 
+
+    private void clickchonanh(){
+        CircleImageView chonanh   = dialog.findViewById(R.id.etAnhMH);
+        chonanh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newViewchonanhclick();
+            }
+        });
+    }
+
     private void newViewBtnClick() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
@@ -232,8 +263,17 @@ public class ScannerActivity extends AppCompatActivity {
         }
     }
 
+    private void newViewchonanhclick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    ANHMH_VIEW);
+        }
+    }
+
     private void onClickPushData() {
         progressDialog.show();
+
         // Get the data from an ImageView as bytes
         edtAnhMH.setDrawingCacheEnabled(true);
         edtAnhMH.buildDrawingCache();
@@ -249,8 +289,8 @@ public class ScannerActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                progressDialog.dismiss();
                 // Handle unsuccessful uploads
+                progressDialog.dismiss();
                 Toast.makeText(ScannerActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -279,7 +319,6 @@ public class ScannerActivity extends AppCompatActivity {
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                progressDialog.dismiss();
                                 dialog.dismiss();
                                 Toast.makeText(ScannerActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
                             }
@@ -292,6 +331,7 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void initUiDialog(){
+        edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
