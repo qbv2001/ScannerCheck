@@ -2,6 +2,7 @@ package com.example.scannercheck;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -70,6 +71,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     public static final int ANHMH_VIEW = 0x23;
     private static final int REQUEST_CODE_SCAN = 0X01;
 
+    ProgressDialog progressDialog;
+
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
@@ -111,6 +114,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         setContentView(R.layout.activity_danhsachmathang);
         storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
         storageRef = storage.getReference();
+
+        progressDialog = new ProgressDialog(this);
         // list view
         mathangs = new ArrayList<>();
 
@@ -233,6 +238,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
+        progressDialog.show();
         // Get the data from an ImageView as bytes
         edtAnhMH.setDrawingCacheEnabled(true);
         edtAnhMH.buildDrawingCache();
@@ -249,6 +255,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
+                progressDialog.dismiss();
                 Toast.makeText(DanhsachmathangActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -277,6 +284,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                progressDialog.dismiss();
                                 dialog.dismiss();
                                 Toast.makeText(DanhsachmathangActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
                             }

@@ -2,6 +2,7 @@ package com.example.scannercheck;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -57,6 +58,9 @@ public class DetailMathang extends AppCompatActivity {
     Mathang mathang;
     ImageView imgMH;
 
+    ProgressDialog progressDialog;
+
+
     private FirebaseStorage storage;
     private StorageReference storageRef;
 
@@ -96,6 +100,8 @@ public class DetailMathang extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
 
+        progressDialog = new ProgressDialog(this);
+
         storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
         storageRef = storage.getReference();
 
@@ -130,6 +136,7 @@ public class DetailMathang extends AppCompatActivity {
     }
 
     private void UpdateData() {
+        progressDialog.show();
         // Get the data from an ImageView as bytes
         imgMH.setDrawingCacheEnabled(true);
         imgMH.buildDrawingCache();
@@ -146,6 +153,7 @@ public class DetailMathang extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
+                progressDialog.dismiss();
                 Toast.makeText(DetailMathang.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -157,7 +165,6 @@ public class DetailMathang extends AppCompatActivity {
                 result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        // khi upload ảnh thành công
                         String imageUrl = uri.toString();
                         String MaMH = mathang.getId();
                         String TenMH = edtTenMH.getText().toString().trim();
@@ -175,6 +182,7 @@ public class DetailMathang extends AppCompatActivity {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 //Xóa ảnh cũ
+                                progressDialog.dismiss();
                                 storageRef.child(mathang.getTenimage()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -198,6 +206,7 @@ public class DetailMathang extends AppCompatActivity {
     }
 
     private void onclickDeleteMH(){
+        progressDialog.show();
         btnxoaMH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +227,7 @@ public class DetailMathang extends AppCompatActivity {
                                 // Uh-oh, an error occurred!
                             }
                         });
+                        progressDialog.dismiss();
                         Intent intent = new Intent(DetailMathang.this,DanhsachmathangActivity.class);
                         finish();
                     }

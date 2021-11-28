@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -57,6 +58,7 @@ public class ScannerActivity extends AppCompatActivity {
     public static final int DEFAULT_VIEW = 0x22;
 
     private static final int REQUEST_CODE_SCAN = 0X01;
+    ProgressDialog progressDialog;
 
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
 
@@ -97,6 +99,8 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
+        progressDialog = new ProgressDialog(this);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
@@ -229,6 +233,7 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
+        progressDialog.show();
         // Get the data from an ImageView as bytes
         edtAnhMH.setDrawingCacheEnabled(true);
         edtAnhMH.buildDrawingCache();
@@ -244,6 +249,7 @@ public class ScannerActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                progressDialog.dismiss();
                 // Handle unsuccessful uploads
                 Toast.makeText(ScannerActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
             }
@@ -273,6 +279,7 @@ public class ScannerActivity extends AppCompatActivity {
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                progressDialog.dismiss();
                                 dialog.dismiss();
                                 Toast.makeText(ScannerActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
                             }
