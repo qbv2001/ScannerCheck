@@ -54,6 +54,7 @@ public class DetailMathang extends AppCompatActivity {
     Mathang mathang;
     ImageView imgMH;
 
+    private String tenanh;
     ProgressDialog progressDialog;
 
     private FirebaseStorage storage;
@@ -115,6 +116,7 @@ public class DetailMathang extends AppCompatActivity {
         edtMotaMH.setText(mathang.getMota());
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
+        tenanh = mathang.getName();
         onclickUpdateAnh();
         onclickUpdateMH();
         onclickDeleteMH();
@@ -178,9 +180,10 @@ public class DetailMathang extends AppCompatActivity {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 //Xóa ảnh cũ
-                                storageRef.child(mathang.getTenimage()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                storageRef.child(tenanh).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        tenanh = suamathang.getTenimage();
                                         tvTenMH.setText(TenMH);
                                         progressDialog.dismiss();
                                         Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
@@ -214,7 +217,7 @@ public class DetailMathang extends AppCompatActivity {
                     public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                         // Xóa ảnh trên db
                         storageRef = storage.getReference();
-                        StorageReference desertRef = storageRef.child(mathang.getTenimage());
+                        StorageReference desertRef = storageRef.child(tenanh);
                         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
