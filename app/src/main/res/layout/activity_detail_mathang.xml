@@ -53,13 +53,13 @@
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             android:layout_margin="10dp"
-                            android:src="@drawable/mon1"
+                            android:src="@drawable/no_image"
                             android:visibility="visible"/>
                         <TextView
                             android:id="@+id/tvTenMH"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Bánh quy"
+                            android:text="Tên mặt hàng"
                             android:textColor="@color/pink"
                             android:textSize="20sp"
                             android:layout_marginTop="8dp"
