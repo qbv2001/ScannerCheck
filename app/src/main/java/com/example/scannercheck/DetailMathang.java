@@ -181,7 +181,9 @@ public class DetailMathang extends AppCompatActivity {
                                 storageRef.child(mathang.getTenimage()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        tvTenMH.setText(TenMH);
                                         progressDialog.dismiss();
+                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                                         // File deleted successfully
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
