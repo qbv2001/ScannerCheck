@@ -103,15 +103,19 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
             {
                 case R.id.nav_home:
                     i1 = new Intent(this, HomeActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_dsmh:
                     i1 = new Intent(this, DanhsachmathangActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_dsncc:
                     i1 = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_thongke:
                     i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_logout:
                     FirebaseAuth.getInstance().signOut();
@@ -121,12 +125,14 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_hotro:
                     i1 = new Intent(this, HotroActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_ttud:
                     i1 = new Intent(this, ThongtinungdungActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_ttcn:
-                    i1 = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i1);
+                    finish();
                     break;
                 default:
                     return true;
