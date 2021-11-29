@@ -213,6 +213,43 @@ public class DetailMathang extends AppCompatActivity {
     }
 
     private void UpdateData() {
+
+        String TenMH = edtTenMH.getText().toString().trim();
+        String DonvitinhMH = edtDonvitinhMH.getText().toString().trim();
+        String NhaccMH = edtTenNCC.getText().toString().trim();
+        Date now = new Date();
+        String datetime = ""+now;
+        String mota = edtMotaMH.getText().toString().trim();
+
+        // Check mh
+        if(TenMH.equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập tên mặt hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(DonvitinhMH.equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập đơn vị tính", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(edtDongiaMH.getText().toString().trim().equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập đơn giá", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(edtSoluongMH.getText().toString().trim().equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(NhaccMH.equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập nhà cung cấp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(mota.equalsIgnoreCase("")){
+            Toast.makeText(DetailMathang.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        float DongiaMH = Float.parseFloat(edtDongiaMH.getText().toString().trim());
+        int SoluongMH = Integer.parseInt(edtSoluongMH.getText().toString().trim());
+
         progressDialog.show();
 
         // Get the data from an ImageView as bytes
@@ -245,15 +282,6 @@ public class DetailMathang extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String imageUrl = uri.toString();
                         String MaMH = mathang.getId();
-                        String TenMH = edtTenMH.getText().toString().trim();
-                        String DonvitinhMH = edtDonvitinhMH.getText().toString().trim();
-                        float DongiaMH = Float.parseFloat(edtDongiaMH.getText().toString().trim());
-                        int SoluongMH = Integer.parseInt(edtSoluongMH.getText().toString().trim());
-                        String NhaccMH = edtTenNCC.getText().toString().trim();
-                        Date now = new Date();
-                        String datetime = ""+now;
-                        String mota = edtMotaMH.getText().toString().trim();
-
 
                         Mathang suamathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(suamathang, new DatabaseReference.CompletionListener() {

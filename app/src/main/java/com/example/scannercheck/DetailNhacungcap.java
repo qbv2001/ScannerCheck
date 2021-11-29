@@ -209,6 +209,29 @@ public class DetailNhacungcap extends AppCompatActivity {
     }
 
     private void UpdateData() {
+
+        String TenNCC = edtTenNCC.getText().toString().trim();
+        String DiachiNCC = edtDiachiNCC.getText().toString().trim();
+        String SdtNCC = edtSdtNCC.getText().toString().trim();
+        String mota = edtMotaNCC.getText().toString().trim();
+        // Check ncc
+        if(TenNCC.equalsIgnoreCase("")){
+            Toast.makeText(DetailNhacungcap.this, "Vui lòng nhập tên nhà cung cấp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(DiachiNCC.equalsIgnoreCase("")){
+            Toast.makeText(DetailNhacungcap.this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(SdtNCC.equalsIgnoreCase("")){
+            Toast.makeText(DetailNhacungcap.this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(mota.equalsIgnoreCase("")){
+            Toast.makeText(DetailNhacungcap.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog.show();
 
         // Get the data from an ImageView as bytes
@@ -241,10 +264,6 @@ public class DetailNhacungcap extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String imageUrl = uri.toString();
                         String MaNCC = nhacungcap.getId();
-                        String TenNCC = edtTenNCC.getText().toString().trim();
-                        String DiachiNCC = edtDiachiNCC.getText().toString().trim();
-                        String SdtNCC = edtSdtNCC.getText().toString().trim();
-                        String mota = edtMotaNCC.getText().toString().trim();
 
                         Nhacungcap suanhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl,"image"+calendar.getTimeInMillis()+".jpg");
                         datanhacungcap.child("MatHang").child(user.getUid()).child(MaNCC).setValue(suanhacungcap, new DatabaseReference.CompletionListener() {

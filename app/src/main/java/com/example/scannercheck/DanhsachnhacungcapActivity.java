@@ -309,6 +309,29 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
 
     private void onClickPushData() {
+
+        String TenNCC = etTenNCC.getText().toString().trim();
+        String DiachiNCC = etDiachiNCC.getText().toString().trim();
+        String SdtNCC = etSdtNCC.getText().toString().trim();
+        String mota = etMota.getText().toString().trim();
+        // Check NCC
+        if(TenNCC.equalsIgnoreCase("")){
+            Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập tên nhà cung cấp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(DiachiNCC.equalsIgnoreCase("")){
+            Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(SdtNCC.equalsIgnoreCase("")){
+            Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(mota.equalsIgnoreCase("")){
+            Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog.show();
         // Get the data from an ImageView as bytes
         edtAnhNCC.setDrawingCacheEnabled(true);
@@ -340,14 +363,9 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
-
+                        String image = "image"+calendar.getTimeInMillis()+".jpg";
                         String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
                         String MaNCC = timeStamp;
-                        String TenNCC = etTenNCC.getText().toString().trim();
-                        String DiachiNCC = etDiachiNCC.getText().toString().trim();
-                        String SdtNCC = etSdtNCC.getText().toString().trim();
-                        String mota = etMota.getText().toString().trim();
-                        String image = "image"+calendar.getTimeInMillis()+".jpg";
                         Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl, image);
                         datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
                             @Override
