@@ -59,7 +59,7 @@ public class ThongkeActivity extends AppCompatActivity {
         readDatabaseMH();
 
         thongkeMH.setText("Tổng số mặt hàng đã hết: "+tongMH);
-        thongkeMH.setText("Tổng số nhà cung cấp: "+tongNCC);
+        thongkeNCC.setText("Tổng số nhà cung cấp: "+tongNCC);
         // sidebar
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
