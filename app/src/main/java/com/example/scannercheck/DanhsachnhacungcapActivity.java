@@ -132,9 +132,23 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         nhacungcaps = new ArrayList<>();
 
         initUi();
-        readDatabase();
         showUserInfo();
         readDatabaseUser();
+
+        readDatabase("");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                readDatabase(s);
+                return false;
+            }
+        });
 
         rvItems = findViewById(R.id.recycler_viewNCC);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -382,7 +396,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         });
     }
 
-    private void readDatabase(){
+    private void readDatabase(String keyword){
 
         // Read from the database
         datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -394,7 +408,10 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                 nhacungcaps.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Nhacungcap.class);
-                    nhacungcaps.add(value);
+                    if(value.getName().contains(keyword)){
+                        nhacungcaps.add(value);
+
+                    }
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));

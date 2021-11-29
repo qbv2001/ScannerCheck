@@ -122,6 +122,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         edtAnhMH.setImageBitmap(bitmapImageView);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,9 +139,22 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         datamathang = FirebaseDatabase.getInstance().getReference();
 
         initUi();
-        readDatabase();
         showUserInfo();
         readDatabaseUser();
+        readDatabase("");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                readDatabase(s);
+                return false;
+            }
+        });
 
         rvItems = findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -393,7 +407,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
     }
-    private void readDatabase(){
+    private void readDatabase(String keyword){
 
         // Read from the database
         datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
@@ -405,7 +419,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Mathang.class);
-                    mathangs.add(value);
+                    if(value.getName().contains(keyword)){
+                        mathangs.add(value);
+                    }
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
