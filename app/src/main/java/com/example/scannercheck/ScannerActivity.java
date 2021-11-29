@@ -272,6 +272,48 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
+
+        String MaMH = etMaMH.getText().toString().trim();
+        String TenMH = etTenMH.getText().toString().trim();
+        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
+        String NhaccMH = etNhaccMH.getText().toString().trim();
+        Date date = new Date();
+        String datetime = "" + date;
+        String mota = etMotaMH.getText().toString().trim();
+        // Check mh
+        //Check them mat hang
+        if(MaMH.equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập mã mặt hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TenMH.equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập tên mặt hàng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(DonvitinhMH.equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập đơn vị tính", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(etDongiaMH.getText().toString().trim().equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập đơn giá", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(etSoluongMH.getText().toString().trim().equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(NhaccMH.equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập nhà cung cấp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(mota.equalsIgnoreCase("")){
+            Toast.makeText(ScannerActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
+        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
+
         progressDialog.show();
 
         // Get the data from an ImageView as bytes
@@ -304,16 +346,6 @@ public class ScannerActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
-
-                        String MaMH = etMaMH.getText().toString().trim();
-                        String TenMH = etTenMH.getText().toString().trim();
-                        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-                        float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-                        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
-                        String NhaccMH = etNhaccMH.getText().toString().trim();
-                        Date date = new Date();
-                        String datetime = "" + date;
-                        String mota = etMotaMH.getText().toString().trim();
 
                         Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl, "image" + calendar.getTimeInMillis() + ".jpg", DonvitinhMH, mota, NhaccMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
