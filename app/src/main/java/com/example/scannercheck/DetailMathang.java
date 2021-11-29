@@ -12,9 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,21 +50,27 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DetailMathang extends AppCompatActivity {
     public static final int ANHMH_VIEW = 0x23;
     TextView tvTenMH;
-    EditText edtTenMH,edtTenNCC,edtDonvitinhMH,edtSoluongMH,edtDongiaMH,edtMotaMH;
+    EditText edtTenMH,edtDonvitinhMH,edtSoluongMH,edtDongiaMH,edtMotaMH;
     Button btnsuaMH,btnxoaMH;
     Mathang mathang;
     ImageView imgMH;
 
     private String tenanh;
     ProgressDialog progressDialog;
+    private String idnccdau;
+
+    private Spinner spnCategory;
+    private CategoryAdapter categoryAdapter;
 
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -123,7 +131,6 @@ public class DetailMathang extends AppCompatActivity {
         mathang = (Mathang) bundle.get("object_mathang");
         tvTenMH.setText(mathang.getName());
         edtTenMH.setText(mathang.getName());
-        edtTenNCC.setText(mathang.getNhacc());
         edtDonvitinhMH.setText(mathang.getDvt());
         edtSoluongMH.setText(""+mathang.getSoluong());
         edtDongiaMH.setText(""+mathang.getDongia());
@@ -131,6 +138,9 @@ public class DetailMathang extends AppCompatActivity {
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
         tenanh = mathang.getName();
+        idnccdau = mathang.getNhacc();
+
+        getNCC();
         showUserInfo();
         readDatabaseUser();
         onclickUpdateAnh();
@@ -216,7 +226,7 @@ public class DetailMathang extends AppCompatActivity {
 
         String TenMH = edtTenMH.getText().toString().trim();
         String DonvitinhMH = edtDonvitinhMH.getText().toString().trim();
-        String NhaccMH = edtTenNCC.getText().toString().trim();
+        String NhaccMH = idnccdau;
         Date now = new Date();
         String datetime = ""+now;
         String mota = edtMotaMH.getText().toString().trim();
@@ -238,8 +248,8 @@ public class DetailMathang extends AppCompatActivity {
             Toast.makeText(DetailMathang.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(NhaccMH.equalsIgnoreCase("")){
-            Toast.makeText(DetailMathang.this, "Vui lòng nhập nhà cung cấp", Toast.LENGTH_SHORT).show();
+        if(NhaccMH.equalsIgnoreCase("")||NhaccMH.equalsIgnoreCase("1")){
+            Toast.makeText(DetailMathang.this, "Vui lòng chọn nhà cung cấp", Toast.LENGTH_SHORT).show();
             return;
         }
         if(mota.equalsIgnoreCase("")){
@@ -359,7 +369,6 @@ public class DetailMathang extends AppCompatActivity {
 
         tvTenMH = findViewById(R.id.tvTenMH);
         edtTenMH = findViewById(R.id.edtTenMH);
-        edtTenNCC = findViewById(R.id.edtTenNCC);
         edtDonvitinhMH = findViewById(R.id.edtDonvitinhMH);
         edtSoluongMH = findViewById(R.id.edtSoluongMH);
         edtDongiaMH = findViewById(R.id.edtDongiaMH);
@@ -381,6 +390,60 @@ public class DetailMathang extends AppCompatActivity {
             }
         });
     }
+
+    private void getNCC() {
+
+        List<Category> list = new ArrayList<>();
+
+        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+        // Read from the database
+        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Nhacungcap value = new Nhacungcap();
+                int dem = 0;
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Nhacungcap.class);
+                    if(value.getId().equalsIgnoreCase(idnccdau)){
+                        dem=1;
+                        list.add(new Category(value.getId(),value.getName()));
+                    }
+                }
+                if(dem==0){
+                    list.add(new Category("1","Chọn nhà cung cấp"));
+                }
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Nhacungcap.class);
+                    if(!value.getId().equalsIgnoreCase(idnccdau)){
+                        list.add(new Category(value.getId(),value.getName()));
+                    }
+                }
+                spnCategory = findViewById(R.id.spn_category);
+                categoryAdapter = new CategoryAdapter(DetailMathang.this,R.layout.item_selected,list);
+                spnCategory.setAdapter(categoryAdapter);
+                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        idnccdau = categoryAdapter.getItem(i).getId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DetailMathang.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     private void showUserInfo(){
         if(user==null){
             return;
@@ -447,6 +510,5 @@ public class DetailMathang extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
         mActivityResultLauncher.launch(Intent.createChooser(intent,"Select Piture"));
-
     }
 }

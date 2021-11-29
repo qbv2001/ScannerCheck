@@ -19,9 +19,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +78,11 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     private RecyclerView rvItems;
     private SearchView searchView;
-    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etNhaccMH,etMotaMH;
+    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etMotaMH;
+    private String tenncc;
+    private Spinner spnCategory;
+    private CategoryAdapter categoryAdapter;
+
     private Dialog dialog;
     private DatabaseReference datamathang;
     private FirebaseUser user;
@@ -240,6 +246,44 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
+        List<Category> list = new ArrayList<>();
+        list.add(new Category("1","Chọn nhà cung cấp"));
+
+        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+        // Read from the database
+        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Nhacungcap value = new Nhacungcap();
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Nhacungcap.class);
+                    list.add(new Category(value.getId(),value.getName()));
+                }
+                spnCategory = dialog.findViewById(R.id.spn_category);
+                categoryAdapter = new CategoryAdapter(DanhsachmathangActivity.this,R.layout.item_selected,list);
+                spnCategory.setAdapter(categoryAdapter);
+                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        tenncc = categoryAdapter.getItem(i).getId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         initUiDialog();
         clickquetma();
         clickchonanh();
@@ -263,7 +307,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        String NhaccMH = etNhaccMH.getText().toString().trim();
+        String NhaccMH = tenncc;
         Date date = new Date();
         String datetime = ""+date;
         String mota = etMotaMH.getText().toString().trim();
@@ -289,8 +333,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(NhaccMH.equalsIgnoreCase("")){
-            Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập nhà cung cấp", Toast.LENGTH_SHORT).show();
+        if(NhaccMH.equalsIgnoreCase("")||NhaccMH.equalsIgnoreCase("1")){
+            Toast.makeText(DanhsachmathangActivity.this, "Vui lòng chọn nhà cung cấp", Toast.LENGTH_SHORT).show();
             return;
         }
         if(mota.equalsIgnoreCase("")){
@@ -477,7 +521,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
         etSoluongMH = dialog.findViewById(R.id.etSoluongMH);
-        etNhaccMH = dialog.findViewById(R.id.etNhaccMH);
         etMotaMH = dialog.findViewById(R.id.etMotaMH);
 
     }

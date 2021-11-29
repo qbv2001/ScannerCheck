@@ -164,14 +164,12 @@
                         android:textColor="@color/colorBlack"
                         android:gravity="left"/>
 
-                    <EditText
-                        android:id="@+id/etNhaccMH"
-                        android:background="@drawable/bg_white_corner_border_grey"
+                    <Spinner
+                        android:id="@+id/spn_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="Chọn nhà cung cấp:"/>
+                        android:background="@android:color/transparent"
+                        />
 
                     <TextView
                         android:layout_marginTop="5dp"

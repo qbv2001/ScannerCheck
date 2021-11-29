@@ -115,17 +115,15 @@
                             android:layout_height="wrap_content"
                             android:text="Nhà cung cấp"
                             android:textColor="@android:color/black"
-                            android:textSize="20sp"
+                            android:textSize="17sp"
                             android:layout_marginLeft="5dp"
                             android:textStyle="bold"/>
-                        <EditText
-                            android:id="@+id/edtTenNCC"
+                        <Spinner
+                            android:id="@+id/spn_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Tên nhà cung cấp"
-                            android:textColor="@color/bgblack"
-                            android:textSize="18sp"
-                            android:layout_marginLeft="25dp"/>
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="28dp"/>
 
                     </LinearLayout>
                     <View
