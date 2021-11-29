@@ -56,6 +56,17 @@ public class LoginActivity extends AppCompatActivity {
         String strEmail = edtEmail.getText().toString().trim();
         String strPassword = edtPassword.getText().toString().trim();
 
+        // Check gia tri
+        if(strEmail.equalsIgnoreCase("")){
+            Toast.makeText(LoginActivity.this, "Vui lòng nhập Email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(strPassword.equalsIgnoreCase("")){
+            Toast.makeText(LoginActivity.this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog.show();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInWithEmailAndPassword(strEmail, strPassword)

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.huawei.hms.ml.scan.HmsScan;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -64,6 +65,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         String strEmail = edtEmail.getText().toString().trim();
         String strPassword = edtPassword.getText().toString().trim();
+        String strConfirmPassword = edtConfirmPassword.getText().toString().trim();
+
+        // Check gia tri
+        if(strEmail.equalsIgnoreCase("")){
+            Toast.makeText(RegisterActivity.this, "Vui lòng nhập Email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(strPassword.equalsIgnoreCase("")){
+            Toast.makeText(RegisterActivity.this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(!strPassword.equalsIgnoreCase(strConfirmPassword)){
+            Toast.makeText(RegisterActivity.this, "Mật khẩu xác nhận không chính xác", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
