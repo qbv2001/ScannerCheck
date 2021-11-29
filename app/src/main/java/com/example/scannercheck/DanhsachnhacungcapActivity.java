@@ -37,6 +37,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +83,12 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     private Dialog dialog;
     private DatabaseReference datanhacungap;
     private FirebaseUser user;
+    private DatabaseReference dataUser;
+
+    NavigationView mNavigationView;
+    CircleImageView imgprofilepic;
+    TextView tvname;
+    TextView tvuseremail;
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
 
@@ -111,6 +118,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachnhacungcap);
+
+        dataUser = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         datanhacungap = FirebaseDatabase.getInstance().getReference();
 
@@ -124,6 +133,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
         initUi();
         readDatabase();
+        showUserInfo();
+        readDatabaseUser();
 
         rvItems = findViewById(R.id.recycler_viewNCC);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -160,30 +171,38 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             {
                 case R.id.nav_home:
                     i1 = new Intent(this, HomeActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_dsmh:
                     i1 = new Intent(this, DanhsachmathangActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_dsncc:
                     break;
                 case R.id.nav_thongke:
                     i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_logout:
+                    FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(DanhsachnhacungcapActivity.this,LoginActivity.class));
                     Toast.makeText(DanhsachnhacungcapActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
                 case R.id.nav_hotro:
                     i1 = new Intent(this, HotroActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_ttud:
                     i1 = new Intent(this, ThongtinungdungActivity.class);startActivity(i1);
+                    finish();
                     break;
                 case R.id.nav_scanner:
                     i1 = new Intent(this, ScannerActivity.class);startActivity(i1);
                     break;
                 case R.id.nav_ttcn:
                     i1 = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i1);
+                    finish();
                     break;
                 default:
                     return true;
@@ -372,6 +391,11 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     }
 
     private void initUi(){
+        mNavigationView = findViewById(R.id.navigation_view);
+        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
+        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
+        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
+
         searchView = findViewById(R.id.search_view);
     }
     private void initUiDialog(){
@@ -380,6 +404,39 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
         etSdtNCC = dialog.findViewById(R.id.etSdtNCC);
         etMota = dialog.findViewById(R.id.etMotaNCC);
+    }
+
+    private void readDatabaseUser() {
+        // Read from the database
+        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                showUserInfo();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
+    }
+    private void showUserInfo(){
+        if(user==null){
+            return;
+        }
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+
+        if (name == null){
+            tvname.setVisibility(View.GONE);
+        }else{
+            tvname.setVisibility(View.VISIBLE);
+            tvname.setText(name);
+        }
+
+        tvuseremail.setText(email);
+        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
     }
 

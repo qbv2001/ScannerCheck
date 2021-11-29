@@ -25,10 +25,15 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +51,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DetailMathang extends AppCompatActivity {
     public static final int ANHMH_VIEW = 0x23;
     TextView tvTenMH;
@@ -62,6 +69,12 @@ public class DetailMathang extends AppCompatActivity {
 
     private DatabaseReference datamathang;
     private FirebaseUser user;
+    private DatabaseReference dataUser;
+
+    NavigationView mNavigationView;
+    CircleImageView imgprofilepic;
+    TextView tvname;
+    TextView tvuseremail;
 
     private Uri uri;
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -93,6 +106,7 @@ public class DetailMathang extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_mathang);
 
+        dataUser = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
 
@@ -117,9 +131,75 @@ public class DetailMathang extends AppCompatActivity {
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
         tenanh = mathang.getName();
+        showUserInfo();
+        readDatabaseUser();
         onclickUpdateAnh();
         onclickUpdateMH();
         onclickDeleteMH();
+
+
+        // sidebar
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                drawerLayout.openDrawer(GravityCompat.START);
+
+            }
+        });
+        navigationView.setNavigationItemSelectedListener(item -> {
+            Intent i1;
+            int id = item.getItemId();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            switch (id)
+            {
+                case R.id.nav_home:
+                    i1 = new Intent(this, HomeActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_dsmh:
+                    i1 = new Intent(this, DanhsachmathangActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_dsncc:
+                    i1 = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_thongke:
+                    i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_logout:
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(DetailMathang.this,LoginActivity.class));
+                    Toast.makeText(DetailMathang.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                case R.id.nav_hotro:
+                    i1 = new Intent(this, HotroActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_ttud:
+                    i1 = new Intent(this, ThongtinungdungActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_scanner:
+                    i1 = new Intent(this, ScannerActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                case R.id.nav_ttcn:
+                    i1 = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i1);
+                    finish();
+                    break;
+                default:
+                    return true;
+
+            }
+            return true;
+        });
 
     }
 
@@ -241,6 +321,11 @@ public class DetailMathang extends AppCompatActivity {
     }
 
     private void initUi(){
+        mNavigationView = findViewById(R.id.navigation_view);
+        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
+        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
+        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
+
         btnsuaMH = findViewById(R.id.suamathang);
         btnxoaMH = findViewById(R.id.xoamathang);
 
@@ -253,6 +338,41 @@ public class DetailMathang extends AppCompatActivity {
         edtMotaMH = findViewById(R.id.edtMotaMH);
         imgMH = findViewById(R.id.imgMH);
     }
+
+    private void readDatabaseUser() {
+        // Read from the database
+        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                showUserInfo();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
+    }
+    private void showUserInfo(){
+        if(user==null){
+            return;
+        }
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+
+        if (name == null){
+            tvname.setVisibility(View.GONE);
+        }else{
+            tvname.setVisibility(View.VISIBLE);
+            tvname.setText(name);
+        }
+
+        tvuseremail.setText(email);
+        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
+
+    }
+
     private void onclickUpdateAnh(){
         imgMH.setOnClickListener(new View.OnClickListener() {
             @Override
