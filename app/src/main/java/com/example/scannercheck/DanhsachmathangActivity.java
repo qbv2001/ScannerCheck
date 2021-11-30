@@ -83,7 +83,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
 
-    private Dialog dialog;
+    private Dialog dialog,dialog_xacnhan;
     private DatabaseReference datamathang;
     private FirebaseUser user;
     private DatabaseReference dataUser;
@@ -317,6 +317,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     }
 
     private void onClickPushData() {
+        openxacnhan(Gravity.CENTER);
 
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
@@ -407,6 +408,46 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
     }
+
+    private void openxacnhan(int gravity) {
+        dialog_xacnhan = new Dialog(DanhsachmathangActivity.this);
+        dialog_xacnhan.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_xacnhan.setContentView(R.layout.dialog_xacnhan);
+
+        Window window = dialog_xacnhan.getWindow();
+        if(window==null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = gravity;
+        window.setAttributes(windowAttributes);
+
+        if( Gravity.BOTTOM == gravity){
+            dialog_xacnhan.setCancelable(true);
+        }else {
+            dialog_xacnhan.setCancelable(false);
+        }
+
+        Button    dongy   = dialog_xacnhan.findViewById(R.id.codongy);
+        Button      khongdongy      = dialog_xacnhan.findViewById(R.id.khongdongy);
+
+        khongdongy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_xacnhan.dismiss();
+            }
+        });
+        dongy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickPushData();
+            }
+        });
+    }
+
     private void readDatabase(String keyword){
 
         // Read from the database
@@ -419,7 +460,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Mathang.class);
-                    if(value.getName().contains(keyword)){
+                    if(value.getName().contains(keyword)&&value.getSoluong()>0){
                         mathangs.add(value);
                     }
                 }
