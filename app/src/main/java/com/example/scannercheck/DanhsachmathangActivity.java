@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -310,15 +311,40 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickPushData();
+                // Read from the database
+                datamathang.child("MatHang").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("firebase", "Error getting data", task.getException());
+                        }
+                        else {
+                            Mathang value = new Mathang();
+                            String checkmamh = etMaMH.getText().toString().trim();
+                            Toast.makeText(DanhsachmathangActivity.this, checkmamh, Toast.LENGTH_SHORT).show();
+                            int dem = 0;
+                            int soluongcu = 0;
+                            for (DataSnapshot unit : task.getResult().getChildren()){
+                                value = unit.getValue(Mathang.class);
+                                if(value.getId().equalsIgnoreCase(checkmamh)){
+                                    dem = 1;
+                                    soluongcu = value.getSoluong();
+                                }
+                            }
+                            if(dem==1){
+                                openxacnhan(Gravity.CENTER,soluongcu);
+                            }else{
+                                onClickPushData(soluongcu);
+                            }
+                        }
+                    }
+                });
             }
         });
         dialog.show();
     }
 
-    private void onClickPushData() {
-        openxacnhan(Gravity.CENTER);
-
+    private void onClickPushData(int soluongcu) {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
@@ -358,7 +384,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         }
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
+        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim())+soluongcu;
 
         progressDialog.show();
         // Get the data from an ImageView as bytes
@@ -409,7 +435,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     }
 
-    private void openxacnhan(int gravity) {
+    private void openxacnhan(int gravity,int soluongcu) {
         dialog_xacnhan = new Dialog(DanhsachmathangActivity.this);
         dialog_xacnhan.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog_xacnhan.setContentView(R.layout.dialog_xacnhan);
@@ -437,15 +463,19 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         khongdongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onClickPushData(0);
                 dialog_xacnhan.dismiss();
             }
         });
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickPushData();
+                onClickPushData(soluongcu);
+                dialog_xacnhan.dismiss();
             }
         });
+
+        dialog_xacnhan.show();
     }
 
     private void readDatabase(String keyword){
