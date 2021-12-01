@@ -50,10 +50,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+
+            <Button
+                android:id="@+id/sapxep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sắp xếp theo tên"
+                android:layout_below="@id/search_view"
+                />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/search_view">
+                android:layout_below="@id/sapxep">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"

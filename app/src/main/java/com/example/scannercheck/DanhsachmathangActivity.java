@@ -82,6 +82,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private String tenncc;
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
+    private Button buttonsapxep;
+
 
     private Dialog dialog;
     private DatabaseReference datamathang;
@@ -157,7 +159,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
         rvItems = findViewById(R.id.recycler_view);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rvItems.setLayoutManager(layoutManager);
         rvItems.setHasFixedSize(true);
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
@@ -410,6 +412,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private void readDatabase(String keyword){
 
         // Read from the database
+        String finalKeyword = keyword;
         datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -419,9 +422,14 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Mathang.class);
-                    if(value.getName().contains(keyword)){
+                    if("".equalsIgnoreCase(finalKeyword)){
                         mathangs.add(value);
+                    }else{
+                        if(value.getDongia() == Integer.parseInt(finalKeyword)){
+                            mathangs.add(value);
+                        }
                     }
+
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
@@ -529,6 +537,41 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
+
+        buttonsapxep = findViewById(R.id.sapxep);
+        buttonsapxep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                readSapxep();
+            }
+        });
+
+    }
+    private void readSapxep(){
+
+        // Read from the database
+        datamathang.child("MatHang").child(user.getUid()).orderByChild("name").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Mathang value = new Mathang();
+                mathangs.clear();
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Mathang.class);
+                    mathangs.add(value);
+                }
+
+                rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     private void initUiDialog(){
         edtAnhMH = dialog.findViewById(R.id.etAnhMH);
