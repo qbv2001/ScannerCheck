@@ -50,10 +50,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <Button
+                android:id="@+id/btnsapxepncc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/search_view"
+                android:layout_marginLeft="10.00dp"
+                android:layout_marginTop="2dp"
+
+                android:layout_marginEnd="10.00dp"
+                android:layout_marginRight="10.00dp"
+                android:layout_marginBottom="10.00dp"
+                android:background="@drawable/black_bg"
+                android:queryHint="Tìm kiếm nhà cung cấp"
+                android:text="sắp xếp nhà cung cấp"
+                android:textColor="@color/white"
+                android:theme="@style/ThemeOverlay.search" />
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/search_view">
+                android:layout_below="@id/btnsapxepncc">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_viewNCC"

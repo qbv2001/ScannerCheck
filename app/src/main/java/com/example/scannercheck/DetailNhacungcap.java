@@ -266,7 +266,7 @@ public class DetailNhacungcap extends AppCompatActivity {
                         String MaNCC = nhacungcap.getId();
 
                         Nhacungcap suanhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl,"image"+calendar.getTimeInMillis()+".jpg");
-                        datanhacungcap.child("MatHang").child(user.getUid()).child(MaNCC).setValue(suanhacungcap, new DatabaseReference.CompletionListener() {
+                        datanhacungcap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(suanhacungcap, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 //Xóa ảnh cũ

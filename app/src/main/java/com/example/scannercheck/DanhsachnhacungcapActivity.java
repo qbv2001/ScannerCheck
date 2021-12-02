@@ -70,6 +70,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DanhsachnhacungcapActivity extends AppCompatActivity {
     public static final int ANHNCC_VIEW = 0x23;
+    public static final int DEFAULT_VIEW = 0x22;
+    private static final int REQUEST_CODE_SCAN = 0X01;
 
     ProgressDialog progressDialog;
 
@@ -91,6 +93,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     TextView tvuseremail;
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
+    private Button buttonsapxep;
 
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -228,6 +231,9 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
     }
 
+    private void readDatabaseUser() {
+    }
+
     private void openFeedbackDialog(int gravity){
         dialog = new Dialog(DanhsachnhacungcapActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -252,6 +258,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
+        Button quetma =dialog.findViewById(R.id.quetma_createnncc);
+
         initUiDialog();
         clickchonanh();
 
@@ -266,8 +274,17 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             public void onClick(View v) {
                 onClickPushData();            }
         });
+
+        quetma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newViewBtnClick();
+            }
+        });
+
         dialog.show();
     }
+
 
     private void clickchonanh(){
         CircleImageView    chonanh   = dialog.findViewById(R.id.etAnhNCC);
@@ -279,11 +296,27 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         });
     }
 
+    private void newViewBtnClick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    DEFAULT_VIEW);
+        }
+    }
+
+
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (permissions == null || grantResults == null || grantResults.length < 2 || grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
             return;
+        }
+
+        if (requestCode == DEFAULT_VIEW) {
+            //start ScankitActivity for scanning barcode
+            ScanUtil.startScan(DanhsachnhacungcapActivity.this, REQUEST_CODE_SCAN, new HmsScanAnalyzerOptions.Creator().setHmsScanTypes(HmsScan.ALL_SCAN_TYPE).create());
         }
 
         if (requestCode == ANHNCC_VIEW) {
@@ -299,6 +332,19 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK || data == null) {
             return;
         }
+
+        // Obtain the return value of HmsScan from the value returned by the onActivityResult method by using ScanUtil.RESULT as the key value.
+        if (requestCode == REQUEST_CODE_SCAN) {
+            Object obj = data.getParcelableExtra(ScanUtil.RESULT);
+            if (obj instanceof HmsScan) {
+                if (!TextUtils.isEmpty(((HmsScan) obj).getOriginalValue())) {
+                    etMaNCC.setText(((HmsScan) obj).getOriginalValue());
+                    Toast.makeText(this, ((HmsScan) obj).getOriginalValue(), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+
         // Xu ly anh MH
         if (requestCode == ANHNCC_VIEW && resultCode == RESULT_OK && data != null) {
             return;
@@ -328,6 +374,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         String DiachiNCC = etDiachiNCC.getText().toString().trim();
         String SdtNCC = etSdtNCC.getText().toString().trim();
         String mota = etMota.getText().toString().trim();
+        String mancc = etMaNCC.getText().toString().trim();
         // Check NCC
         if(TenNCC.equalsIgnoreCase("")){
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập tên nhà cung cấp", Toast.LENGTH_SHORT).show();
@@ -341,10 +388,18 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập số điện thoại", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if(SdtNCC.length()!=10){
+            Toast.makeText(DanhsachnhacungcapActivity.this, "Số điện thoại phải 10 cs", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if(mota.equalsIgnoreCase("")){
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
             return;
         }
+
+
 
         progressDialog.show();
         // Get the data from an ImageView as bytes
@@ -378,8 +433,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
                         String image = "image"+calendar.getTimeInMillis()+".jpg";
-                        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
-                        String MaNCC = timeStamp;
+                        String MaNCC = mancc;
                         Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl, image);
                         datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
                             @Override
@@ -425,24 +479,63 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         });
     }
 
-    private void initUi(){
+    private void initUi() {
         mNavigationView = findViewById(R.id.navigation_view);
         imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
         tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
+        buttonsapxep = findViewById(R.id.btnsapxepncc);
+
+        buttonsapxep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                readsapxep();
+            }
+        });
     }
+        public void readsapxep(){
+
+                // Read from the database
+                datanhacungap.child("NhaCungCap").child(user.getUid()).orderByChild("name").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        Nhacungcap value = new Nhacungcap();
+                        nhacungcaps.clear();
+                        for (DataSnapshot unit : dataSnapshot.getChildren()){
+                            value = unit.getValue(Nhacungcap.class);
+                            nhacungcaps.add(value);
+                        }
+
+                        rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Toast.makeText(DanhsachnhacungcapActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
+
     private void initUiDialog(){
         edtAnhNCC = dialog.findViewById(R.id.etAnhNCC);
         etTenNCC = dialog.findViewById(R.id.etTenNCC);
         etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
         etSdtNCC = dialog.findViewById(R.id.etSdtNCC);
         etMota = dialog.findViewById(R.id.etMotaNCC);
+        etMaNCC = dialog.findViewById(R.id.etMaNCC);
     }
 
-    private void readDatabaseUser() {
+    private void readDatabaseUser(String sapxep) {
         // Read from the database
+        //String sapxep=
         dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
