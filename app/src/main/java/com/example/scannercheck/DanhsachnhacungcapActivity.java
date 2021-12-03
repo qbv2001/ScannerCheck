@@ -231,9 +231,6 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
     }
 
-    private void readDatabaseUser() {
-    }
-
     private void openFeedbackDialog(int gravity){
         dialog = new Dialog(DanhsachnhacungcapActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -486,6 +483,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
+
         buttonsapxep = findViewById(R.id.btnsapxepncc);
 
         buttonsapxep.setOnClickListener(new View.OnClickListener() {
@@ -533,9 +531,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         etMaNCC = dialog.findViewById(R.id.etMaNCC);
     }
 
-    private void readDatabaseUser(String sapxep) {
+    private void readDatabaseUser() {
         // Read from the database
-        //String sapxep=
         dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
