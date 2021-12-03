@@ -94,6 +94,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
     private Button buttonsapxep;
+    String duplicate = "";
 
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -377,6 +378,26 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập tên nhà cung cấp", Toast.LENGTH_SHORT).show();
             return;
         }
+
+
+        for (Nhacungcap aa : nhacungcaps){
+            if (mancc.equalsIgnoreCase(aa.getId())){
+                duplicate = "mã nhà cung cấp bị trùng";
+                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+        for (Nhacungcap aa : nhacungcaps){
+            if (TenNCC.equalsIgnoreCase(aa.getName())){
+                duplicate = "tên nhà cung cấp bị trùng";
+                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+
+
         if(DiachiNCC.equalsIgnoreCase("")){
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
             return;

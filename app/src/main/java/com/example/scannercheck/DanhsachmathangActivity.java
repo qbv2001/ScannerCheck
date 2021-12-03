@@ -79,6 +79,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etMotaMH;
+    private EditText dongiaa,dongiab;
+    private Button loc;
+
     private String tenncc;
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
@@ -99,6 +102,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private Uri uri;
 
+    String duplicate = "";
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -331,6 +335,16 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập mã mặt hàng", Toast.LENGTH_SHORT).show();
             return;
         }
+
+//        for (Mathang aa : mathangs){
+//            if (MaMH.equalsIgnoreCase(aa.getId())){
+//                duplicate = "ten nhà cung cấp bị trùng";
+//                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//        }
+
+
         if(TenMH.equalsIgnoreCase("")){
             Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập tên mặt hàng", Toast.LENGTH_SHORT).show();
             return;
@@ -419,9 +433,15 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Mathang.class);
-                    if(value.getName().contains(keyword)){
+                    if(keyword.equalsIgnoreCase("")){
                         mathangs.add(value);
+                    }else{
+                        if(value.getDongia()== Integer.parseInt(keyword)){
+
+                            mathangs.add(value);
+                        }
                     }
+
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
@@ -529,7 +549,39 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
+        dongiaa = findViewById(R.id.dongiaa);
+        dongiab = findViewById(R.id.dongiab);
+        loc = findViewById(R.id.loc);
+
+        loc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loctheogia();
+            }
+        });
+
     }
+
+    private void loctheogia() {
+        List<Mathang> sapxep = new ArrayList<Mathang>();
+        float dongiatua = 0;
+        float dongiatub = 0;
+        if(!dongiaa.getText().toString().trim().equalsIgnoreCase("")){
+            dongiatua = Float.parseFloat(dongiaa.getText().toString().trim());
+        }
+        if(!dongiab.getText().toString().trim().equalsIgnoreCase("")){
+            dongiatub = Float.parseFloat(dongiab.getText().toString().trim());
+        }
+        sapxep.clear();
+        for (Mathang unit : mathangs){
+            if(unit.getDongia()<=dongiatub && unit.getDongia()>=dongiatua){
+                sapxep.add(unit);
+            }
+        }
+        rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,sapxep));
+
+    }
+
     private void initUiDialog(){
         edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
