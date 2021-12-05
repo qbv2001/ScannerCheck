@@ -484,6 +484,13 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                         nhacungcaps.add(value);
 
                     }
+
+//                    if(value.getDiachi().contains(keyword)){
+//                        nhacungcaps.add(value);
+//
+//                    }
+//
+
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));

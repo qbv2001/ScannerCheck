@@ -73,6 +73,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        //check trung email
+
+
+
+
         if(strPassword.equalsIgnoreCase("")){
             Toast.makeText(RegisterActivity.this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
             return;

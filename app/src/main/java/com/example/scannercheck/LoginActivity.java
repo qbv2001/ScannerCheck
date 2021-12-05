@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +22,10 @@ public class LoginActivity extends AppCompatActivity {
     Button btnlogin;
     TextView btn;
     EditText edtEmail,edtPassword;
-
     ProgressDialog progressDialog;
+    int dem =0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         initUI();
         signupclick();
         signinclick();
+
 
     }
 
@@ -51,8 +55,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void checkdangnhap() {
 
+    private void checkdangnhap() {
+//        if (dem>=3){
+//            Toast.makeText(LoginActivity.this, "bạn đã nhập sai 3 lần", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         String strEmail = edtEmail.getText().toString().trim();
         String strPassword = edtPassword.getText().toString().trim();
 
@@ -79,8 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(LoginActivity.this,HomeActivity.class));
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công.",
                                     Toast.LENGTH_SHORT).show();
+                            dem = 0;
                             finishAffinity();
                         } else {
+                            dem++;
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, "Đăng nhập thất bại.",
                                     Toast.LENGTH_SHORT).show();

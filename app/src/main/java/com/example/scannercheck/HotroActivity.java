@@ -24,11 +24,11 @@ public class HotroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotro);
-        
-        initUi();
 
-        
+              initUi();
+
     }
+
 
     private void initUi() {
         edtCode = findViewById(R.id.edtCode);

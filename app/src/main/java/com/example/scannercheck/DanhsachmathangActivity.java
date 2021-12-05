@@ -102,6 +102,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private Uri uri;
 
+    private Button buttonsapxepmh;
+
     String duplicate = "";
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -336,13 +338,22 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             return;
         }
 
-//        for (Mathang aa : mathangs){
-//            if (MaMH.equalsIgnoreCase(aa.getId())){
-//                duplicate = "ten nhà cung cấp bị trùng";
-//                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
-//                return;
-//            }
-//        }
+        for (Mathang unit : mathangs){
+            if (MaMH.equalsIgnoreCase(unit.getId())){
+                duplicate = "mã mặt hàng bị trùng";
+                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+
+
+        for (Mathang unit : mathangs){
+            if (TenMH.equalsIgnoreCase(unit.getName())){
+                duplicate = "tên mặt hàng bị trùng";
+                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
 
 
         if(TenMH.equalsIgnoreCase("")){
@@ -436,10 +447,24 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                     if(keyword.equalsIgnoreCase("")){
                         mathangs.add(value);
                     }else{
-                        if(value.getDongia()== Integer.parseInt(keyword)){
 
+//                        if(value.getDongia()== Integer.parseInt(keyword)){
+//
+//                            mathangs.add(value);
+//                        }
+//                        tìm kiếm theo doen giá
+
+                        if(value.getName().contains(keyword)){
                             mathangs.add(value);
+
                         }
+//
+//                        if(value.getSoluong()== Integer.parseInt(keyword)){
+//
+//                            mathangs.add(value);
+//                        }
+
+
                     }
 
                 }
@@ -454,6 +479,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     private void clickquetma(){
         Button    quetma   = dialog.findViewById(R.id.quetma_createmh);
@@ -549,6 +577,16 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
+        buttonsapxepmh = findViewById(R.id.btnsapxepmh);
+
+        buttonsapxepmh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                readsapxepmh();
+            }
+        });
+
         dongiaa = findViewById(R.id.dongiaa);
         dongiab = findViewById(R.id.dongiab);
         loc = findViewById(R.id.loc);
@@ -561,6 +599,34 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
     }
+
+
+    private void readsapxepmh(){
+
+        // Read from the database
+        datamathang.child("MatHang").child(user.getUid()).orderByChild("dateTime").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Mathang value = new Mathang();
+                mathangs.clear();
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Mathang.class);
+                        mathangs.add(value);
+                    }
+
+                rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void loctheogia() {
         List<Mathang> sapxep = new ArrayList<Mathang>();
@@ -581,6 +647,11 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,sapxep));
 
     }
+
+
+
+
+
 
     private void initUiDialog(){
         edtAnhMH = dialog.findViewById(R.id.etAnhMH);
