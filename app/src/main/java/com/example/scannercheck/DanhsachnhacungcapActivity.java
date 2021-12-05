@@ -93,8 +93,8 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     TextView tvuseremail;
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
-    private Button buttonsapxep;
-    String duplicate = "";
+   // private Button buttonsapxep;
+   // String duplicate = "";
 
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -140,19 +140,19 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         readDatabaseUser();
 
         readDatabase("");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                readDatabase(s);
-                return false;
-            }
-        });
+// timf kieems
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                readDatabase(s);
+//                return false;
+//            }
+//        });
 
         rvItems = findViewById(R.id.recycler_viewNCC);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -256,7 +256,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
-        Button quetma =dialog.findViewById(R.id.quetma_createnncc);
+//        Button quetma =dialog.findViewById(R.id.quetma_createnncc);
 
         initUiDialog();
         clickchonanh();
@@ -273,12 +273,12 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                 onClickPushData();            }
         });
 
-        quetma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newViewBtnClick();
-            }
-        });
+//        quetma.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                newViewBtnClick();
+//            }
+//        });
 
         dialog.show();
     }
@@ -294,13 +294,13 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         });
     }
 
-    private void newViewBtnClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            this.requestPermissions(
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
-                    DEFAULT_VIEW);
-        }
-    }
+//    private void newViewBtnClick() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            this.requestPermissions(
+//                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
+//                    DEFAULT_VIEW);
+//        }
+//    }
 
 
 
@@ -372,7 +372,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         String DiachiNCC = etDiachiNCC.getText().toString().trim();
         String SdtNCC = etSdtNCC.getText().toString().trim();
         String mota = etMota.getText().toString().trim();
-        String mancc = etMaNCC.getText().toString().trim();
+   //     String mancc = etMaNCC.getText().toString().trim();
         // Check NCC
         if(TenNCC.equalsIgnoreCase("")){
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập tên nhà cung cấp", Toast.LENGTH_SHORT).show();
@@ -380,21 +380,21 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         }
 
 
-        for (Nhacungcap aa : nhacungcaps){
-            if (mancc.equalsIgnoreCase(aa.getId())){
-                duplicate = "mã nhà cung cấp bị trùng";
-                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
-        for (Nhacungcap aa : nhacungcaps){
-            if (TenNCC.equalsIgnoreCase(aa.getName())){
-                duplicate = "tên nhà cung cấp bị trùng";
-                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
+//        for (Nhacungcap aa : nhacungcaps){
+//            if (mancc.equalsIgnoreCase(aa.getId())){
+//                duplicate = "mã nhà cung cấp bị trùng";
+//                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//        }
+//
+//        for (Nhacungcap aa : nhacungcaps){
+//            if (TenNCC.equalsIgnoreCase(aa.getName())){
+//                duplicate = "tên nhà cung cấp bị trùng";
+//                Toast.makeText(DanhsachnhacungcapActivity.this, duplicate, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//        }
 
 
 
@@ -407,10 +407,10 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             return;
         }
 
-        if(SdtNCC.length()!=10){
-            Toast.makeText(DanhsachnhacungcapActivity.this, "Số điện thoại phải 10 cs", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(SdtNCC.length()!=10){
+//            Toast.makeText(DanhsachnhacungcapActivity.this, "Số điện thoại phải 10 cs", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if(mota.equalsIgnoreCase("")){
             Toast.makeText(DanhsachnhacungcapActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
@@ -451,7 +451,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
                         String image = "image"+calendar.getTimeInMillis()+".jpg";
-                        String MaNCC = mancc;
+                        String MaNCC = calendar.getTimeInMillis()+"";
                         Nhacungcap nhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl, image);
                         datanhacungap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(nhacungcap, new DatabaseReference.CompletionListener() {
                             @Override
@@ -512,42 +512,42 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
         searchView = findViewById(R.id.search_view);
 
-        buttonsapxep = findViewById(R.id.btnsapxepncc);
-
-        buttonsapxep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                readsapxep();
-            }
-        });
+//        buttonsapxep = findViewById(R.id.btnsapxepncc);
+//
+//        buttonsapxep.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                readsapxep();
+//            }
+//        });
     }
-        public void readsapxep(){
-
-                // Read from the database
-                datanhacungap.child("NhaCungCap").child(user.getUid()).orderByChild("name").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and again
-                        // whenever data at this location is updated.
-                        Nhacungcap value = new Nhacungcap();
-                        nhacungcaps.clear();
-                        for (DataSnapshot unit : dataSnapshot.getChildren()){
-                            value = unit.getValue(Nhacungcap.class);
-                            nhacungcaps.add(value);
-                        }
-
-                        rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Toast.makeText(DanhsachnhacungcapActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
+//        public void readsapxep(){
+//
+//                // Read from the database
+//                datanhacungap.child("NhaCungCap").child(user.getUid()).orderByChild("name").addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        // This method is called once with the initial value and again
+//                        // whenever data at this location is updated.
+//                        Nhacungcap value = new Nhacungcap();
+//                        nhacungcaps.clear();
+//                        for (DataSnapshot unit : dataSnapshot.getChildren()){
+//                            value = unit.getValue(Nhacungcap.class);
+//                            nhacungcaps.add(value);
+//                        }
+//
+//                        rvItems.setAdapter(new AdapterRecyclerViewCreateNCC(DanhsachnhacungcapActivity.this,nhacungcaps));
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError error) {
+//                        // Failed to read value
+//                        Toast.makeText(DanhsachnhacungcapActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//
 
 
     private void initUiDialog(){
@@ -556,7 +556,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
         etSdtNCC = dialog.findViewById(R.id.etSdtNCC);
         etMota = dialog.findViewById(R.id.etMotaNCC);
-        etMaNCC = dialog.findViewById(R.id.etMaNCC);
+ //       etMaNCC = dialog.findViewById(R.id.etMaNCC);
     }
 
     private void readDatabaseUser() {

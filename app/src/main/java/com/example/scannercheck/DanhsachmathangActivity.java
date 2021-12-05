@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -79,14 +80,14 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etMotaMH;
-    private EditText dongiaa,dongiab;
-    private Button loc;
+  //  private EditText dongiaa,dongiab;
+  //  private Button loc;
 
     private String tenncc;
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
 
-    private Dialog dialog;
+    private Dialog dialog,dialog_xacnhan;
     private DatabaseReference datamathang;
     private FirebaseUser user;
     private DatabaseReference dataUser;
@@ -102,9 +103,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private Uri uri;
 
-    private Button buttonsapxepmh;
+   // private Button buttonsapxepmh;
 
-    String duplicate = "";
+   // String duplicate = "";
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -149,18 +150,20 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         readDatabaseUser();
         readDatabase("");
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
+  //timf kieems
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                readDatabase(s);
-                return false;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                readDatabase(s);
+//                return false;
+//            }
+//        });
 
         rvItems = findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -316,14 +319,41 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickPushData();
+                onClickPushData(0);
+                // Read from the database
+//                datamathang.child("MatHang").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.e("firebase", "Error getting data", task.getException());
+//                        }
+//                        else {
+//                            Mathang value = new Mathang();
+//                            String checkmamh = etMaMH.getText().toString().trim();
+//                            Toast.makeText(DanhsachmathangActivity.this, checkmamh, Toast.LENGTH_SHORT).show();
+//                            int dem = 0;
+//                            int soluongcu = 0;
+//                            for (DataSnapshot unit : task.getResult().getChildren()){
+//                                value = unit.getValue(Mathang.class);
+//                                if(value.getId().equalsIgnoreCase(checkmamh)){
+//                                    dem = 1;
+//                                    soluongcu = value.getSoluong();
+//                                }
+//                            }
+//                            if(dem==1){
+//                                openxacnhan(Gravity.CENTER,soluongcu);
+//                            }else{
+//                                onClickPushData(soluongcu);
+//                            }
+//                        }
+//                    }
+//                });
             }
         });
         dialog.show();
     }
 
-    private void onClickPushData() {
-
+    private void onClickPushData(int soluongcu) {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
@@ -338,22 +368,22 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             return;
         }
 
-        for (Mathang unit : mathangs){
-            if (MaMH.equalsIgnoreCase(unit.getId())){
-                duplicate = "mã mặt hàng bị trùng";
-                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
-
-
-        for (Mathang unit : mathangs){
-            if (TenMH.equalsIgnoreCase(unit.getName())){
-                duplicate = "tên mặt hàng bị trùng";
-                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
-                return;
-            }
-        }
+//        for (Mathang unit : mathangs){
+//            if (MaMH.equalsIgnoreCase(unit.getId())){
+//                duplicate = "mã mặt hàng bị trùng";
+//                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//        }
+//
+//
+//        for (Mathang unit : mathangs){
+//            if (TenMH.equalsIgnoreCase(unit.getName())){
+//                duplicate = "tên mặt hàng bị trùng";
+//                Toast.makeText(DanhsachmathangActivity.this, duplicate, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//        }
 
 
         if(TenMH.equalsIgnoreCase("")){
@@ -382,7 +412,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         }
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
+        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim())+soluongcu;
 
         progressDialog.show();
         // Get the data from an ImageView as bytes
@@ -414,6 +444,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         // khi upload ảnh thành công
+
                         String imageUrl = uri.toString();
 
                         Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
@@ -432,6 +463,50 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
     }
+
+    private void openxacnhan(int gravity,int soluongcu) {
+        dialog_xacnhan = new Dialog(DanhsachmathangActivity.this);
+        dialog_xacnhan.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_xacnhan.setContentView(R.layout.dialog_xacnhan);
+
+        Window window = dialog_xacnhan.getWindow();
+        if(window==null){
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = gravity;
+        window.setAttributes(windowAttributes);
+
+        if( Gravity.BOTTOM == gravity){
+            dialog_xacnhan.setCancelable(true);
+        }else {
+            dialog_xacnhan.setCancelable(false);
+        }
+
+        Button    dongy   = dialog_xacnhan.findViewById(R.id.codongy);
+        Button      khongdongy      = dialog_xacnhan.findViewById(R.id.khongdongy);
+
+        khongdongy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickPushData(0);
+                dialog_xacnhan.dismiss();
+            }
+        });
+        dongy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickPushData(soluongcu);
+                dialog_xacnhan.dismiss();
+            }
+        });
+
+        dialog_xacnhan.show();
+    }
+
     private void readDatabase(String keyword){
 
         // Read from the database
@@ -444,16 +519,18 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     value = unit.getValue(Mathang.class);
-                    if(keyword.equalsIgnoreCase("")){
-                        mathangs.add(value);
-                    }else{
 
+       //             if(value.getName().contains(keyword)&&value.getSoluong()>0){
+       //                 mathangs.add(value);
+       //         }
+//                    else{
+//
 //                        if(value.getDongia()== Integer.parseInt(keyword)){
 //
 //                            mathangs.add(value);
 //                        }
 //                        tìm kiếm theo doen giá
-
+//
                         if(value.getName().contains(keyword)){
                             mathangs.add(value);
 
@@ -463,9 +540,9 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 //
 //                            mathangs.add(value);
 //                        }
-
-
-                    }
+//
+//
+//                    }
 
                 }
 
@@ -577,76 +654,76 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
-        buttonsapxepmh = findViewById(R.id.btnsapxepmh);
+//        buttonsapxepmh = findViewById(R.id.btnsapxepmh);
+//
+//        buttonsapxepmh.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                readsapxepmh();
+//            }
+//        });
 
-        buttonsapxepmh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                readsapxepmh();
-            }
-        });
-
-        dongiaa = findViewById(R.id.dongiaa);
-        dongiab = findViewById(R.id.dongiab);
-        loc = findViewById(R.id.loc);
-
-        loc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loctheogia();
-            }
-        });
-
-    }
-
-
-    private void readsapxepmh(){
-
-        // Read from the database
-        datamathang.child("MatHang").child(user.getUid()).orderByChild("dateTime").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Mathang value = new Mathang();
-                mathangs.clear();
-                for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Mathang.class);
-                        mathangs.add(value);
-                    }
-
-                rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    private void loctheogia() {
-        List<Mathang> sapxep = new ArrayList<Mathang>();
-        float dongiatua = 0;
-        float dongiatub = 0;
-        if(!dongiaa.getText().toString().trim().equalsIgnoreCase("")){
-            dongiatua = Float.parseFloat(dongiaa.getText().toString().trim());
-        }
-        if(!dongiab.getText().toString().trim().equalsIgnoreCase("")){
-            dongiatub = Float.parseFloat(dongiab.getText().toString().trim());
-        }
-        sapxep.clear();
-        for (Mathang unit : mathangs){
-            if(unit.getDongia()<=dongiatub && unit.getDongia()>=dongiatua){
-                sapxep.add(unit);
-            }
-        }
-        rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,sapxep));
+//        dongiaa = findViewById(R.id.dongiaa);
+//        dongiab = findViewById(R.id.dongiab);
+//        loc = findViewById(R.id.loc);
+//
+//        loc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loctheogia();
+//            }
+//        });
 
     }
+
+
+//    private void readsapxepmh(){
+//
+//        // Read from the database
+//        datamathang.child("MatHang").child(user.getUid()).orderByChild("dateTime").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                Mathang value = new Mathang();
+//                mathangs.clear();
+//                for (DataSnapshot unit : dataSnapshot.getChildren()){
+//                    value = unit.getValue(Mathang.class);
+//                        mathangs.add(value);
+//                    }
+//
+//                rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+
+//    private void loctheogia() {
+//        List<Mathang> sapxep = new ArrayList<Mathang>();
+//        float dongiatua = 0;
+//        float dongiatub = 0;
+//        if(!dongiaa.getText().toString().trim().equalsIgnoreCase("")){
+//            dongiatua = Float.parseFloat(dongiaa.getText().toString().trim());
+//        }
+//        if(!dongiab.getText().toString().trim().equalsIgnoreCase("")){
+//            dongiatub = Float.parseFloat(dongiab.getText().toString().trim());
+//        }
+//        sapxep.clear();
+//        for (Mathang unit : mathangs){
+//            if(unit.getDongia()<=dongiatub && unit.getDongia()>=dongiatua){
+//                sapxep.add(unit);
+//            }
+//        }
+//        rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,sapxep));
+//
+//    }
 
 
 

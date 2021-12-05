@@ -2,7 +2,10 @@ package com.example.scannercheck;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -67,6 +70,8 @@ public class DetailMathang extends AppCompatActivity {
 
     private String tenanh;
     ProgressDialog progressDialog;
+    AlertDialog alertDialog;
+    AlertDialog.Builder builder;
     private String idnccdau;
 
     private Spinner spnCategory;
@@ -117,8 +122,6 @@ public class DetailMathang extends AppCompatActivity {
         dataUser = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         datamathang = FirebaseDatabase.getInstance().getReference();
-
-        progressDialog = new ProgressDialog(this);
 
         storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
         storageRef = storage.getReference();
@@ -212,6 +215,56 @@ public class DetailMathang extends AppCompatActivity {
         });
 
     }
+
+    private void xacnhan(){
+        progressDialog = new ProgressDialog(this);
+
+        builder = new AlertDialog.Builder(DetailMathang.this);
+        // Set Title and Message:
+        builder.setTitle("Xác nhận").setMessage("Bạn có muốn xóa?");
+
+        builder.setCancelable(true);
+        builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                progressDialog.show();
+                datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        // Xóa ảnh trên db
+                        storageRef = storage.getReference();
+                        StorageReference desertRef = storageRef.child(tenanh);
+                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                progressDialog.dismiss();
+                                // File deleted successfully
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                progressDialog.dismiss();
+                                // Uh-oh, an error occurred!
+                            }
+                        });
+                        Intent intent = new Intent(DetailMathang.this,DanhsachmathangActivity.class);
+                        finish();
+                    }
+                });
+            }
+        });
+        // Create "No" button with OnClickListener.
+        builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(DetailMathang.this,"Bạn chọn không đồng ý",
+                        Toast.LENGTH_SHORT).show();
+                //  Cancel
+                dialog.cancel();
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 
     private void onclickUpdateMH(){
         btnsuaMH.setOnClickListener(new View.OnClickListener() {
@@ -329,30 +382,7 @@ public class DetailMathang extends AppCompatActivity {
         btnxoaMH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog.show();
-                datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).removeValue(new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        // Xóa ảnh trên db
-                        storageRef = storage.getReference();
-                        StorageReference desertRef = storageRef.child(tenanh);
-                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                progressDialog.dismiss();
-                                // File deleted successfully
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                progressDialog.dismiss();
-                                // Uh-oh, an error occurred!
-                            }
-                        });
-                        Intent intent = new Intent(DetailMathang.this,DanhsachmathangActivity.class);
-                        finish();
-                    }
-                });
+                xacnhan();
             }
         });
 

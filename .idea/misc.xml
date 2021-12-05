@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_danhsachmathang.xml" value="0.22" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_danhsachnhacungcap.xml" value="0.2755681818181818" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_detail_mathang.xml" value="0.15416666666666667" />
@@ -20,10 +21,17 @@
 =======
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_danhsachmathang.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
+=======
+        <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_danhsachmathang.xml" value="0.25416666666666665" />
+        <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/activity_login.xml" value="0.25416666666666665" />
+>>>>>>> b3866dea1b4967d2be1db28f419cc517d1689b23
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/dialog_xacnhan.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/dsncc_createncc.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/item_category.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/ScannerCheck/app/src/main/res/layout/item_selected.xml" value="0.25416666666666665" />
+<<<<<<< HEAD
+>>>>>>> b3866dea1b4967d2be1db28f419cc517d1689b23
+=======
 >>>>>>> b3866dea1b4967d2be1db28f419cc517d1689b23
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable-v24/bg_grey_corner_10.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/huutinh/AndroidStudioProjects/ScannerCheck/app/src/main/res/drawable-v24/bg_white_corner_border_grey.xml" value="0.19583333333333333" />
