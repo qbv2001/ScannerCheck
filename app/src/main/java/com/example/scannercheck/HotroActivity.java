@@ -25,7 +25,7 @@ public class HotroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hotro);
         
-        initUi();
+//        initUi();
 
         
     }
