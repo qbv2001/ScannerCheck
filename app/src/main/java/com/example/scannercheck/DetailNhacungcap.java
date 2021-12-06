@@ -12,7 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -62,7 +64,8 @@ public class DetailNhacungcap extends AppCompatActivity {
     Button btnsuaNCC,btnxoaNCC;
     Nhacungcap nhacungcap;
     ProgressDialog progressDialog;
-
+    AlertDialog.Builder builder;
+    AlertDialog alertDialog;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private DatabaseReference datanhacungcap;
@@ -199,6 +202,40 @@ public class DetailNhacungcap extends AppCompatActivity {
         });
     }
 
+    private void xacnhan(){
+        builder = new AlertDialog.Builder(DetailNhacungcap.this);
+        // Set Title and Message:
+        builder.setTitle("Confirmation").setMessage("Do you want to close this app?");
+
+        //
+        builder.setCancelable(true);
+//        builder.setIcon(R.drawable.icon_title);
+
+        // Create "Yes" button with OnClickListener.
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(DetailNhacungcap.this,"You choose Yes button",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+//        final Drawable positiveIcon = context.getResources().getDrawable(R.drawable.icon_positive);
+//        builder.setPositiveButtonIcon(positiveIcon);
+
+        // Create "No" button with OnClickListener.
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(DetailNhacungcap.this,"You choose No button",
+                        Toast.LENGTH_SHORT).show();
+                //  Cancel
+                dialog.cancel();
+            }
+        });
+
+        // Create AlertDialog:
+        alertDialog = builder.create();
+        alertDialog.show();
+    }
     private void onclickUpdateNCC(){
         btnsuaNCC.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,7 +303,7 @@ public class DetailNhacungcap extends AppCompatActivity {
                         String MaNCC = nhacungcap.getId();
 
                         Nhacungcap suanhacungcap = new Nhacungcap(MaNCC, TenNCC, mota, DiachiNCC, SdtNCC, imageUrl,"image"+calendar.getTimeInMillis()+".jpg");
-                        datanhacungcap.child("MatHang").child(user.getUid()).child(MaNCC).setValue(suanhacungcap, new DatabaseReference.CompletionListener() {
+                        datanhacungcap.child("NhaCungCap").child(user.getUid()).child(MaNCC).setValue(suanhacungcap, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 //Xóa ảnh cũ
