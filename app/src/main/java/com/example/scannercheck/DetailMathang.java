@@ -311,6 +311,7 @@ public class DetailMathang extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception exception) {
                                         progressDialog.dismiss();
+                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                                         // Uh-oh, an error occurred!
                                     }
                                 });

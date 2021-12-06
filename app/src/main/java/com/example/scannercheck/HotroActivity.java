@@ -30,48 +30,48 @@ public class HotroActivity extends AppCompatActivity {
         
     }
 
-    private void initUi() {
-        edtCode = findViewById(R.id.edtCode);
-        taocode = findViewById(R.id.taocode);
-        qr_code = findViewById(R.id.qr_code);
-        mavach_code = findViewById(R.id.mavach_code);
-
-        // onclick
-        taocode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getCode();
-            }
-        });
-    }
-
-    private void getCode() {
-        try {
-            qrcode();
-            barcode();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    // tao ham qrcode
-    MultiFormatWriter multiFormatWriter= new MultiFormatWriter();
-
-    public void qrcode() throws WriterException {
-
-        BitMatrix bitMatrix = multiFormatWriter.encode(edtCode.getText().toString(), BarcodeFormat.QR_CODE, 350, 300);
-        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-        qr_code.setImageBitmap(bitmap);
-    }
-
-    private void barcode() throws WriterException {
-        BitMatrix bitMatrix = multiFormatWriter.encode(edtCode.getText().toString(), BarcodeFormat.CODE_128, 400, 170,null);
-        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-        mavach_code.setImageBitmap(bitmap);
-    }
+//    private void initUi() {
+//        edtCode = findViewById(R.id.edtCode);
+//        taocode = findViewById(R.id.taocode);
+//        qr_code = findViewById(R.id.qr_code);
+//        mavach_code = findViewById(R.id.mavach_code);
+//
+//        // onclick
+//        taocode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                getCode();
+//            }
+//        });
+//    }
+//
+//    private void getCode() {
+//        try {
+//            qrcode();
+//            barcode();
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    // tao ham qrcode
+//    MultiFormatWriter multiFormatWriter= new MultiFormatWriter();
+//
+//    public void qrcode() throws WriterException {
+//
+//        BitMatrix bitMatrix = multiFormatWriter.encode(edtCode.getText().toString(), BarcodeFormat.QR_CODE, 350, 300);
+//        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+//        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+//        qr_code.setImageBitmap(bitmap);
+//    }
+//
+//    private void barcode() throws WriterException {
+//        BitMatrix bitMatrix = multiFormatWriter.encode(edtCode.getText().toString(), BarcodeFormat.CODE_128, 400, 170,null);
+//        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+//        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+//        mavach_code.setImageBitmap(bitmap);
+//    }
 
 
 }
