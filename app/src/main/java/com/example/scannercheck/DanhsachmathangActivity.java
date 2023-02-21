@@ -127,7 +127,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachmathang);
-        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
         storageRef = storage.getReference();
 
         progressDialog = new ProgressDialog(this);

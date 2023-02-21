@@ -123,7 +123,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         datanhacungap = FirebaseDatabase.getInstance().getReference();
 
-        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
         storageRef = storage.getReference();
 
         progressDialog = new ProgressDialog(this);

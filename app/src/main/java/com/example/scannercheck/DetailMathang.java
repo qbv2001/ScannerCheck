@@ -120,7 +120,7 @@ public class DetailMathang extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        storage = FirebaseStorage.getInstance("gs://scanner-check-27051.appspot.com");
+        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
         storageRef = storage.getReference();
 
         initUi();
