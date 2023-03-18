@@ -1,6 +1,7 @@
 package com.example.scannercheck;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     NavigationView mNavigationView;
 
-    CircleImageView imgprofilepic;
+    static CircleImageView imgprofilepic;
     TextView tvname;
     TextView tvuseremail;
 
@@ -67,10 +68,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         thongtin.setOnClickListener(this);
         hotro.setOnClickListener(this);
 
-
-        // sidebar
+        //sidebar
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,47 +81,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        showUserInfo();
-        readDatabase();
-
-        mNavigationView.setNavigationItemSelectedListener(item -> {
-            Intent i1;
-            int id = item.getItemId();
-            drawerLayout.closeDrawer(GravityCompat.START);
-            switch (id)
-            {
-                case R.id.nav_home:
-                    break;
-                case R.id.nav_dsmh:
-                    i1 = new Intent(this, DanhsachmathangActivity.class);startActivity(i1);
-                    break;
-                case R.id.nav_dsncc:
-                    i1 = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i1);
-                    break;
-                case R.id.nav_thongke:
-                    i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
-                    break;
-                case R.id.nav_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(HomeActivity.this,LoginActivity.class));
-                    Toast.makeText(HomeActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                case R.id.nav_hotro:
-                    i1 = new Intent(this, HotroActivity.class);startActivity(i1);
-                    break;
-                case R.id.nav_ttud:
-                    i1 = new Intent(this, ThongtinungdungActivity.class);startActivity(i1);
-                    break;
-                case R.id.nav_ttcn:
-                    i1 = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i1);
-                    break;
-                default:
-                    return true;
-
-            }
-            return true;
-        });
+        sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
 
     }
 
@@ -166,22 +127,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
     }
 
-    private void readDatabase() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
+    public static void sidebar(Context activity, NavigationView mNavigationView, TextView tvname, TextView tvuseremail, FirebaseUser user, DatabaseReference dataUser, DrawerLayout drawerLayout) {
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-    }
-
-    private void showUserInfo(){
+        // showuserinfo
         if(user==null){
             return;
         }
@@ -197,8 +145,100 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
+        Glide.with(activity).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
+        // Read from the database
+        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // showuserinfo
+                if(user==null){
+                    return;
+                }
+                String name = user.getDisplayName();
+                String email = user.getEmail();
+                Uri photoUrl = user.getPhotoUrl();
+
+                if (name == null){
+                    tvname.setVisibility(View.GONE);
+                }else{
+                    tvname.setVisibility(View.VISIBLE);
+                    tvname.setText(name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+            }
+        });
+
+        //select item
+        mNavigationView.setNavigationItemSelectedListener(item -> {
+            Intent i1;
+            int id = item.getItemId();
+            drawerLayout.closeDrawer(GravityCompat.START);
+            switch (id)
+            {
+                case R.id.nav_home:
+                    if (activity.equals(HomeActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, HomeActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_dsmh:
+                    if (activity.equals(DanhsachmathangActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, DanhsachmathangActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_dsncc:
+                    if (activity.equals(DanhsachnhacungcapActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, DanhsachnhacungcapActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_thongke:
+                    if (activity.equals(ThongkeActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, ThongkeActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_logout:
+                    FirebaseAuth.getInstance().signOut();
+                    activity.startActivity(new Intent(activity,LoginActivity.class));
+                    Toast.makeText(activity, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
+                    break;
+                case R.id.nav_hotro:
+                    if (activity.equals(HotroActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, HotroActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_ttud:
+                    if (activity.equals(ThongtinungdungActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, ThongtinungdungActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                case R.id.nav_ttcn:
+                    if (activity.equals(ThongtinungdungActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, ThongtintaikhoanActivity.class);activity.startActivity(i1);
+                        break;
+                    }
+                default:
+                    return true;
+
+            }
+            return true;
+        });
     }
-
 }

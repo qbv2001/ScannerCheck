@@ -139,8 +139,19 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         datamathang = FirebaseDatabase.getInstance().getReference();
 
         initUi();
-        showUserInfo();
-        readDatabaseUser();
+        // sidebar
+        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                drawerLayout.openDrawer(GravityCompat.START);
+
+            }
+        });
+        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
         readDatabase("");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -169,67 +180,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             public void onClick(View view) {
                 openFeedbackDialog(Gravity.CENTER);
             }
-        });
-
-        // sidebar
-        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                drawerLayout.openDrawer(GravityCompat.START);
-
-            }
-        });
-        navigationView.setNavigationItemSelectedListener(item -> {
-            Intent i1;
-            int id = item.getItemId();
-            drawerLayout.closeDrawer(GravityCompat.START);
-            switch (id)
-            {
-                case R.id.nav_home:
-                    i1 = new Intent(this, HomeActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_dsmh:
-                    break;
-                case R.id.nav_dsncc:
-                    i1 = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_thongke:
-                    i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(DanhsachmathangActivity.this,LoginActivity.class));
-                    Toast.makeText(DanhsachmathangActivity.this, "Đã đăng xuất",Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                case R.id.nav_hotro:
-                    i1 = new Intent(this, HotroActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_ttud:
-                    i1 = new Intent(this, ThongtinungdungActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_scanner:
-                    i1 = new Intent(this, ScannerActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                case R.id.nav_ttcn:
-                    i1 = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i1);
-                    finish();
-                    break;
-                default:
-                    return true;
-
-            }
-            return true;
         });
 
 
@@ -541,38 +491,5 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     }
 
-    private void readDatabaseUser() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-    }
-    private void showUserInfo(){
-        if(user==null){
-            return;
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        if (name == null){
-            tvname.setVisibility(View.GONE);
-        }else{
-            tvname.setVisibility(View.VISIBLE);
-            tvname.setText(name);
-        }
-
-        tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
-
-    }
 
 }
