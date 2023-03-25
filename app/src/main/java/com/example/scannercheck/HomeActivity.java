@@ -92,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.scanner_card:
                 i = new Intent(this, ScannerActivity.class);startActivity(i);
                 break;
-            case R.id.dsmh_card:_card:
+            case R.id.dsmh_card:
                 i = new Intent(this, DanhsachmathangActivity.class);startActivity(i);
                 break;
             case R.id.dsncc_card:
@@ -145,7 +145,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         tvuseremail.setText(email);
-        Glide.with(activity).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
+//        Glide.with(activity).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
         // Read from the database
         dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {

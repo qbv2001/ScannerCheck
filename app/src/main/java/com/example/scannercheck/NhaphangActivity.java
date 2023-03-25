@@ -149,7 +149,7 @@ public class NhaphangActivity extends AppCompatActivity {
 
             }
         });
-//        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
         readDatabase("");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
