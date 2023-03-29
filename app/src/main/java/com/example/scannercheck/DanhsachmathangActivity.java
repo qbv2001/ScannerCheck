@@ -89,9 +89,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private DatabaseReference dataUser;
 
     NavigationView mNavigationView;
-    CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
 
     List<Mathang> mathangs;
     private CircleImageView edtAnhMH;
@@ -151,7 +148,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
             }
         });
-        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
         readDatabase("");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -474,10 +471,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     private void initUi(){
         mNavigationView = findViewById(R.id.navigation_view);
-        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
-        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
-        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
-
         searchView = findViewById(R.id.search_view);
     }
     private void initUiDialog(){

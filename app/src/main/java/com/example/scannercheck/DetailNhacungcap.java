@@ -73,9 +73,6 @@ public class DetailNhacungcap extends AppCompatActivity {
     private DatabaseReference dataUser;
 
     NavigationView mNavigationView;
-    CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
 
     private Uri uri;
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -130,8 +127,6 @@ public class DetailNhacungcap extends AppCompatActivity {
         Picasso.with(DetailNhacungcap.this).load(nhacungcap.getImage()).into(imgNCC);
 
         tenanh = nhacungcap.getTenimage();
-        showUserInfo();
-        readDatabaseUser();
 
         onclickUpdateAnh();
         onclickUpdateNCC();
@@ -150,7 +145,7 @@ public class DetailNhacungcap extends AppCompatActivity {
 
             }
         });
-        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
     }
 
     private void xacnhan(){
@@ -320,9 +315,6 @@ public class DetailNhacungcap extends AppCompatActivity {
 
     private void initUi(){
         mNavigationView = findViewById(R.id.navigation_view);
-        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
-        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
-        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         btnsuaNCC = findViewById(R.id.suanhacungcap);
         btnxoaNCC = findViewById(R.id.xoanhacungap);
@@ -334,40 +326,6 @@ public class DetailNhacungcap extends AppCompatActivity {
         edtSdtNCC = findViewById(R.id.edtSdtNCC);
         edtMotaNCC = findViewById(R.id.edtMotaNCC);
     }
-    private void readDatabaseUser() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-    }
-    private void showUserInfo(){
-        if(user==null){
-            return;
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        if (name == null){
-            tvname.setVisibility(View.GONE);
-        }else{
-            tvname.setVisibility(View.VISIBLE);
-            tvname.setText(name);
-        }
-
-        tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
-
-    }
-
     private void onclickUpdateAnh(){
         imgNCC.setOnClickListener(new View.OnClickListener() {
             @Override

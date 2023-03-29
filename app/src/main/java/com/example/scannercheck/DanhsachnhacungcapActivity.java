@@ -86,9 +86,6 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
     private DatabaseReference dataUser;
 
     NavigationView mNavigationView;
-    CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
     private List<Nhacungcap> nhacungcaps;
     private EditText etMaNCC,etTenNCC,etDiachiNCC,etSdtNCC,etMota;
 
@@ -132,9 +129,6 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         nhacungcaps = new ArrayList<>();
 
         initUi();
-        showUserInfo();
-        readDatabaseUser();
-
         readDatabase("");
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -178,7 +172,7 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
             }
         });
 
-        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
 
     }
 
@@ -381,9 +375,6 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
 
     private void initUi(){
         mNavigationView = findViewById(R.id.navigation_view);
-        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
-        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
-        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
 
         searchView = findViewById(R.id.search_view);
     }
@@ -393,40 +384,6 @@ public class DanhsachnhacungcapActivity extends AppCompatActivity {
         etDiachiNCC = dialog.findViewById(R.id.etDiachiNCC);
         etSdtNCC = dialog.findViewById(R.id.etSdtNCC);
         etMota = dialog.findViewById(R.id.etMotaNCC);
-    }
-
-    private void readDatabaseUser() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-    }
-    private void showUserInfo(){
-        if(user==null){
-            return;
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        if (name == null){
-            tvname.setVisibility(View.GONE);
-        }else{
-            tvname.setVisibility(View.VISIBLE);
-            tvname.setText(name);
-        }
-
-        tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
-
     }
 
 }

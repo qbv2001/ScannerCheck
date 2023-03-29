@@ -33,9 +33,6 @@ public class ThongkeActivity extends AppCompatActivity {
     private DatabaseReference dataUser;
     private DatabaseReference data;
     NavigationView mNavigationView;
-    CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
 
     TextView thongkeMH;
     TextView thongkeNCC;
@@ -53,8 +50,6 @@ public class ThongkeActivity extends AppCompatActivity {
         initUi();
         tongMH = 0;
         tongNCC = 0;
-        showUserInfo();
-        readDatabaseUser();
         readDatabaseNCC();
         readDatabaseMH();
 
@@ -72,7 +67,7 @@ public class ThongkeActivity extends AppCompatActivity {
 
             }
         });
-        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
     }
 
     private void readDatabaseMH() {
@@ -126,42 +121,5 @@ public class ThongkeActivity extends AppCompatActivity {
         thongkeNCC = findViewById(R.id.thongkenhacungcap);
 
         mNavigationView = findViewById(R.id.navigation_view);
-        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
-        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
-        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
-    }
-
-    private void readDatabaseUser() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
-    }
-    private void showUserInfo(){
-        if(user==null){
-            return;
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        if (name == null){
-            tvname.setVisibility(View.GONE);
-        }else{
-            tvname.setVisibility(View.VISIBLE);
-            tvname.setText(name);
-        }
-
-        tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
-
     }
 }

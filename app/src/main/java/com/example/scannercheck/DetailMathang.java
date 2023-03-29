@@ -80,9 +80,6 @@ public class DetailMathang extends AppCompatActivity {
     private DatabaseReference dataUser;
 
     NavigationView mNavigationView;
-    CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
 
     private Uri uri;
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -141,8 +138,6 @@ public class DetailMathang extends AppCompatActivity {
         idnccdau = mathang.getNhacc();
 
         getNCC();
-        showUserInfo();
-        readDatabaseUser();
         onclickUpdateAnh();
         onclickUpdateMH();
         onclickDeleteMH();
@@ -160,7 +155,7 @@ public class DetailMathang extends AppCompatActivity {
 
             }
         });
-        HomeActivity.sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
 
     }
 
@@ -312,10 +307,6 @@ public class DetailMathang extends AppCompatActivity {
 
     private void initUi(){
         mNavigationView = findViewById(R.id.navigation_view);
-        imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
-        tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
-        tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
-
         btnsuaMH = findViewById(R.id.suamathang);
         btnxoaMH = findViewById(R.id.xoamathang);
 
@@ -326,21 +317,6 @@ public class DetailMathang extends AppCompatActivity {
         edtDongiaMH = findViewById(R.id.edtDongiaMH);
         edtMotaMH = findViewById(R.id.edtMotaMH);
         imgMH = findViewById(R.id.imgMH);
-    }
-
-    private void readDatabaseUser() {
-        // Read from the database
-        dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                showUserInfo();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
     }
 
     private void getNCC() {
@@ -393,26 +369,6 @@ public class DetailMathang extends AppCompatActivity {
                 Toast.makeText(DetailMathang.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
-
-    }
-
-    private void showUserInfo(){
-        if(user==null){
-            return;
-        }
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        if (name == null){
-            tvname.setVisibility(View.GONE);
-        }else{
-            tvname.setVisibility(View.VISIBLE);
-            tvname.setText(name);
-        }
-
-        tvuseremail.setText(email);
-        Glide.with(this).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
     }
 

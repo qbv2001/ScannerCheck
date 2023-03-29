@@ -34,10 +34,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     NavigationView mNavigationView;
 
-    static CircleImageView imgprofilepic;
-    TextView tvname;
-    TextView tvuseremail;
-
     private FirebaseUser user;
     private DatabaseReference dataUser;
 
@@ -81,7 +77,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        sidebar(this, mNavigationView, tvname, tvuseremail, user, dataUser, drawerLayout);
+        sidebar(this, mNavigationView, user, dataUser, drawerLayout);
 
     }
 
@@ -122,12 +118,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initUI(){
         mNavigationView = findViewById(R.id.navigation_view);
+    }
+
+    public static void sidebar(Context activity, NavigationView mNavigationView, FirebaseUser user, DatabaseReference dataUser, DrawerLayout drawerLayout) {
+        TextView tvname,tvuseremail;
+        CircleImageView imgprofilepic;
         imgprofilepic = mNavigationView.getHeaderView(0).findViewById(R.id.profilepic);
         tvname = mNavigationView.getHeaderView(0).findViewById(R.id.name);
         tvuseremail = mNavigationView.getHeaderView(0).findViewById(R.id.useremail);
-    }
-
-    public static void sidebar(Context activity, NavigationView mNavigationView, TextView tvname, TextView tvuseremail, FirebaseUser user, DatabaseReference dataUser, DrawerLayout drawerLayout) {
 
         // showuserinfo
         if(user==null){
@@ -145,7 +143,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         tvuseremail.setText(email);
-//        Glide.with(activity).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
+
+        Glide.with(activity).load(photoUrl).error(R.drawable.profilepic).into(imgprofilepic);
 
         // Read from the database
         dataUser.child(user.getUid()).addValueEventListener(new ValueEventListener() {
