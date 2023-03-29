@@ -1,42 +1,70 @@
 {
   "project_info": {
-    "project_number": "822800347872",
-    "firebase_url": "https://android-b22a3-default-rtdb.firebaseio.com",
-    "project_id": "android-b22a3",
-    "storage_bucket": "android-b22a3.appspot.com"
+    "project_number": "396177047702",
+    "project_id": "boreal-card-286308",
+    "storage_bucket": "boreal-card-286308.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:822800347872:android:5035704370c7dde5951685",
+        "mobilesdk_app_id": "1:396177047702:android:73c1b34e81affdd63742b7",
         "android_client_info": {
           "package_name": "com.example.scannercheck"
         }
       },
       "oauth_client": [
         {
-          "client_id": "822800347872-992gqma1sl8v3v6fd2v505lvnv65eosi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.scannercheck",
-            "certificate_hash": "fd6b2878489ec765bbed4640aae2f5b18882aa34"
-          }
-        },
-        {
-          "client_id": "822800347872-h3ctgt9c07b5sgv1ugpk2ivnjhg52a7g.apps.googleusercontent.com",
+          "client_id": "396177047702-8fo0efk8ioei45ej002j17c03e5mel91.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB4R7_K4lYcm2RD-E_fFFRzGhW6TivVh4U"
+          "current_key": "AIzaSyD5P8phaJsWj1ofOQdNplbf4JWUHo0Ng34"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "822800347872-h3ctgt9c07b5sgv1ugpk2ivnjhg52a7g.apps.googleusercontent.com",
+              "client_id": "396177047702-8fo0efk8ioei45ej002j17c03e5mel91.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:396177047702:android:07617187798f8b013742b7",
+        "android_client_info": {
+          "package_name": "com.example.scannercheckapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "396177047702-mbtq325ck09j7htitdcdttkil7hs45tt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.scannercheckapp",
+            "certificate_hash": "fd6b2878489ec765bbed4640aae2f5b18882aa34"
+          }
+        },
+        {
+          "client_id": "396177047702-8fo0efk8ioei45ej002j17c03e5mel91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5P8phaJsWj1ofOQdNplbf4JWUHo0Ng34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "396177047702-8fo0efk8ioei45ej002j17c03e5mel91.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
