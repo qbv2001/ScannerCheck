@@ -69,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog.show();
         FirebaseAuth auth = FirebaseAuth.getInstance();
+        Toast.makeText(LoginActivity.this, "Đăng nhập.",
+                Toast.LENGTH_SHORT).show();
         auth.signInWithEmailAndPassword(strEmail, strPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
