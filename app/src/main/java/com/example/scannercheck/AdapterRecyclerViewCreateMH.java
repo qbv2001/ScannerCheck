@@ -49,21 +49,11 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
 //        holder.tvTenMH.setText(id);
         String tenmh = mathangs.get(position).getName();
         holder.tvTenMH.setText(tenmh);
-        int soluongmh = mathangs.get(position).getSoluong();
-        String textSoluong = "Số lượng: "+soluongmh;
-        holder.tvSoluongMH.setText(textSoluong);
 
         // Dung picasso để load ảnh
         String image = mathangs.get(position).getImage();
         Picasso.with(context).load(image).into(holder.imgMH);
         holder.imgMH.setVisibility(View.VISIBLE);
-
-        String datetime = mathangs.get(position).getDateTime();
-        String textDate = "Ngày cập nhật: ";
-        if(datetime!=null){
-            textDate += datetime;
-        }
-        holder.tvDateTime.setText(textDate);
 
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override

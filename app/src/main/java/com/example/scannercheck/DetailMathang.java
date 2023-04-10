@@ -129,13 +129,10 @@ public class DetailMathang extends AppCompatActivity {
         tvTenMH.setText(mathang.getName());
         edtTenMH.setText(mathang.getName());
         edtDonvitinhMH.setText(mathang.getDvt());
-        edtSoluongMH.setText(""+mathang.getSoluong());
         edtDongiaMH.setText(""+mathang.getDongia());
-        edtMotaMH.setText(mathang.getMota());
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
         tenanh = mathang.getName();
-        idnccdau = mathang.getNhacc();
 
         getNCC();
         onclickUpdateAnh();
@@ -239,7 +236,7 @@ public class DetailMathang extends AppCompatActivity {
                         String imageUrl = uri.toString();
                         String MaMH = mathang.getId();
 
-                        Mathang suamathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
+                        Mathang suamathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(suamathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

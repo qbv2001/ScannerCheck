@@ -113,10 +113,10 @@ public class ThongtintaikhoanActivity extends AppCompatActivity {
                     i1 = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i1);
                     finish();
                     break;
-                case R.id.nav_thongke:
-                    i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
-                    finish();
-                    break;
+//                case R.id.nav_thongke:
+//                    i1 = new Intent(this, ThongkeActivity.class);startActivity(i1);
+//                    finish();
+//                    break;
                 case R.id.nav_logout:
                     FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(ThongtintaikhoanActivity.this,LoginActivity.class));

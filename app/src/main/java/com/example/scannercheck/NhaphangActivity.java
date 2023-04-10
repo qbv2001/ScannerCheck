@@ -335,7 +335,7 @@ public class NhaphangActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
 
-                        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
+                        Mathang mathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

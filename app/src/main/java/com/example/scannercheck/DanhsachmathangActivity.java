@@ -78,8 +78,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
     private RecyclerView rvItems;
     private SearchView searchView;
-    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etMotaMH;
-    private String tenncc;
+    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH;
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
 
@@ -207,43 +206,43 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
-        List<Category> list = new ArrayList<>();
-        list.add(new Category("1","Chọn nhà cung cấp"));
-
-        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
-        // Read from the database
-        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Nhacungcap value = new Nhacungcap();
-                for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Nhacungcap.class);
-                    list.add(new Category(value.getId(),value.getName()));
-                }
-                spnCategory = dialog.findViewById(R.id.spn_category);
-                categoryAdapter = new CategoryAdapter(DanhsachmathangActivity.this,R.layout.item_selected,list);
-                spnCategory.setAdapter(categoryAdapter);
-                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        tenncc = categoryAdapter.getItem(i).getId();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        List<Category> list = new ArrayList<>();
+//        list.add(new Category("1","Chọn nhà cung cấp"));
+//
+//        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+//        // Read from the database
+//        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                Nhacungcap value = new Nhacungcap();
+//                for (DataSnapshot unit : dataSnapshot.getChildren()){
+//                    value = unit.getValue(Nhacungcap.class);
+//                    list.add(new Category(value.getId(),value.getName()));
+//                }
+//                spnCategory = dialog.findViewById(R.id.spn_category);
+//                categoryAdapter = new CategoryAdapter(DanhsachmathangActivity.this,R.layout.item_selected,list);
+//                spnCategory.setAdapter(categoryAdapter);
+//                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                        tenncc = categoryAdapter.getItem(i).getId();
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                    }
+//                });
+//
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         initUiDialog();
         clickquetma();
@@ -268,10 +267,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        String NhaccMH = tenncc;
-        Date date = new Date();
-        String datetime = ""+date;
-        String mota = etMotaMH.getText().toString().trim();
 
         //Check them mat hang
         if(MaMH.equalsIgnoreCase("")){
@@ -290,21 +285,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
             Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập đơn giá", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(etSoluongMH.getText().toString().trim().equalsIgnoreCase("")){
-            Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(NhaccMH.equalsIgnoreCase("")||NhaccMH.equalsIgnoreCase("1")){
-            Toast.makeText(DanhsachmathangActivity.this, "Vui lòng chọn nhà cung cấp", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(mota.equalsIgnoreCase("")){
-            Toast.makeText(DanhsachmathangActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
 
         progressDialog.show();
         // Get the data from an ImageView as bytes
@@ -338,7 +320,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
 
-                        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH, mota, NhaccMH);
+                        Mathang mathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
@@ -479,8 +461,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
-        etSoluongMH = dialog.findViewById(R.id.etSoluongMH);
-        etMotaMH = dialog.findViewById(R.id.etMotaMH);
 
     }
 

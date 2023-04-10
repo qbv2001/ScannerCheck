@@ -323,10 +323,6 @@ public class ScannerActivity extends AppCompatActivity {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        String NhaccMH = tenncc;
-        Date date = new Date();
-        String datetime = "" + date;
-        String mota = etMotaMH.getText().toString().trim();
         // Check mh
         //Check them mat hang
         if(MaMH.equalsIgnoreCase("")){
@@ -345,21 +341,8 @@ public class ScannerActivity extends AppCompatActivity {
             Toast.makeText(ScannerActivity.this, "Vui lòng nhập đơn giá", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(etSoluongMH.getText().toString().trim().equalsIgnoreCase("")){
-            Toast.makeText(ScannerActivity.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(NhaccMH.equalsIgnoreCase("")||NhaccMH.equalsIgnoreCase("1")){
-            Toast.makeText(ScannerActivity.this, "Vui lòng chọn nhà cung cấp", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(mota.equalsIgnoreCase("")){
-            Toast.makeText(ScannerActivity.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(etSoluongMH.getText().toString().trim());
 
         progressDialog.show();
 
@@ -394,7 +377,7 @@ public class ScannerActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
 
-                        Mathang mathang = new Mathang(MaMH, TenMH, SoluongMH, DongiaMH, datetime, imageUrl, "image" + calendar.getTimeInMillis() + ".jpg", DonvitinhMH, mota, NhaccMH);
+                        Mathang mathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl, "image" + calendar.getTimeInMillis() + ".jpg", DonvitinhMH);
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
