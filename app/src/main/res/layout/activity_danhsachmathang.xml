@@ -33,11 +33,19 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
+            <Button
+                android:id="@+id/btnkhacdvt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/topAppBar1"
+                android:text="+ Thêm mặt hàng khác đơn vị tính"
+                android:background="@drawable/bg_yellow_corner_10"/>
+
             <SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/topAppBar1"
+                android:layout_below="@id/btnkhacdvt"
                 android:layout_marginStart="10.00dp"
                 android:layout_marginTop="10.00dp"
                 android:layout_marginEnd="10.00dp"

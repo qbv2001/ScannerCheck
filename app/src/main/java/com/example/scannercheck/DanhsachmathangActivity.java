@@ -79,8 +79,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private RecyclerView rvItems;
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH;
-    private Spinner spnCategory;
-    private CategoryAdapter categoryAdapter;
 
     private Dialog dialog;
     private DatabaseReference datamathang;
@@ -123,7 +121,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_danhsachmathang);
-        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
+        storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
         progressDialog = new ProgressDialog(this);
@@ -174,17 +172,30 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         floating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFeedbackDialog(Gravity.CENTER);
+                openFeedbackDialog(Gravity.CENTER,"themmh");
             }
         });
 
+        // tao mat hang khac don vi
+        Button btnkhacdvt = findViewById(R.id.btnkhacdvt);
+        btnkhacdvt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFeedbackDialog(Gravity.CENTER,"khacdvt");
+            }
+        });
 
     }
 
-    private void openFeedbackDialog(int gravity){
+    private void openFeedbackDialog(int gravity, String button){
         dialog = new Dialog(DanhsachmathangActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dsmh_createmh);
+
+        if(button == "khacdvt"){
+            dialog.setContentView(R.layout.dsmh_createmhkhacdvt);
+        }else {
+            dialog.setContentView(R.layout.dsmh_createmh);
+        }
 
         Window window = dialog.getWindow();
         if(window==null){
@@ -206,44 +217,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
-//        List<Category> list = new ArrayList<>();
-//        list.add(new Category("1","Chọn nhà cung cấp"));
-//
-//        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
-//        // Read from the database
-//        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                Nhacungcap value = new Nhacungcap();
-//                for (DataSnapshot unit : dataSnapshot.getChildren()){
-//                    value = unit.getValue(Nhacungcap.class);
-//                    list.add(new Category(value.getId(),value.getName()));
-//                }
-//                spnCategory = dialog.findViewById(R.id.spn_category);
-//                categoryAdapter = new CategoryAdapter(DanhsachmathangActivity.this,R.layout.item_selected,list);
-//                spnCategory.setAdapter(categoryAdapter);
-//                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                        tenncc = categoryAdapter.getItem(i).getId();
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                    }
-//                });
-//
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         initUiDialog();
         clickquetma();
         clickchonanh();
@@ -256,13 +229,18 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickPushData();
+                if(button == "khacdvt"){
+                    onClickPushData(button);
+                }else {
+                    onClickPushData(button);
+                }
             }
         });
         dialog.show();
     }
 
-    private void onClickPushData() {
+
+    private void onClickPushData(String chosedialog) {
 
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();

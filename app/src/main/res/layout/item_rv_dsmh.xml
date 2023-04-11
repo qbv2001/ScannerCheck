@@ -44,11 +44,11 @@
                 android:textColor="@color/colorWhite"/>
 
             <TextView
-                android:id="@+id/tvSoluongMH"
+                android:id="@+id/tvDvtMH"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="11sp"
-                android:text="Số lượng"
+                android:text="Đơn vị tính"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -59,11 +59,11 @@
                 android:textColor="@color/colorWhite"/>
 
             <TextView
-                android:id="@+id/tvDateTime"
+                android:id="@+id/tvGiaMH"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="11sp"
-                android:text="Ngày cập nhật"
+                android:text="Giá bán"
                 android:paddingStart="10dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="5dp"

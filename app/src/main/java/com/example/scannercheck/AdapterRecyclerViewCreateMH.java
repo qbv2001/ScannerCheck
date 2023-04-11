@@ -50,6 +50,12 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
         String tenmh = mathangs.get(position).getName();
         holder.tvTenMH.setText(tenmh);
 
+        String dvt = mathangs.get(position).getDvt();
+        holder.tvDvtMH.setText("Đơn vị tính: " + dvt);
+
+        Float giamh = mathangs.get(position).getDongia();
+        holder.tvGiaMH.setText("Giá bán: " + giamh.toString());
+
         // Dung picasso để load ảnh
         String image = mathangs.get(position).getImage();
         Picasso.with(context).load(image).into(holder.imgMH);
@@ -78,17 +84,17 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
     public static class DataViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvTenMH;
-        private TextView tvSoluongMH;
+        private TextView tvDvtMH;
         private RoundedImageView imgMH;
-        private TextView tvDateTime;
+        private TextView tvGiaMH;
         private LinearLayout layoutItem;
         public DataViewHolder(View itemView) {
             super(itemView);
 
             tvTenMH =  itemView.findViewById(R.id.tvTenMH);
-            tvSoluongMH =  itemView.findViewById(R.id.tvSoluongMH);
+            tvDvtMH =  itemView.findViewById(R.id.tvDvtMH);
             imgMH   = itemView.findViewById(R.id.imgMH);
-            tvDateTime = itemView.findViewById(R.id.tvDateTime);
+            tvGiaMH = itemView.findViewById(R.id.tvGiaMH);
             layoutItem = itemView.findViewById(R.id.layoutMathang);
         }
     }
