@@ -15,7 +15,7 @@
             android:padding="12dp"
             android:textSize="16sp"
             android:textColor="@color/colorBlack"
-            android:text="Thêm mặt hàng mới"
+            android:text="Thêm mặt hàng khác đơn vị tính"
             android:background="@drawable/bg_yellow_topleft_topright"
             android:gravity="center"/>
 
@@ -35,27 +35,6 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:orientation="vertical">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:gravity="left"
-                        android:text="Ảnh:"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="14sp" />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/etAnhMH"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
-                            android:layout_margin="10dp"
-                            android:src="@drawable/no_image"
-                            android:visibility="visible" />
-                    </LinearLayout>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -98,12 +77,30 @@
 
                     <EditText
                         android:id="@+id/etTenMH"
-                        android:background="@drawable/bg_white_corner_border_grey"
+                        android:background="@drawable/bg_grey_corner_10"
+                        android:enabled="false"
+                        android:textColorHint="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="12dp"
                         android:layout_marginTop="5dp"
                         android:hint="Nhập tên mặt hàng"/>
+                    <TextView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Đơn vị tính mới:"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="left"/>
+                    <EditText
+                        android:id="@+id/etDonvitinhMH"
+                        android:background="@drawable/bg_white_corner_border_grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_marginTop="5dp"
+                        android:hint="Nhập đơn vị tính"/>
                     <TextView
                         android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
@@ -125,20 +122,32 @@
                         android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Đơn vị tính:"
+                        android:text="Giá trị quy đổi:"
                         android:textSize="14sp"
                         android:textColor="@color/colorBlack"
                         android:gravity="left"/>
 
-                    <EditText
-                        android:id="@+id/etDonvitinhMH"
-                        android:background="@drawable/bg_white_corner_border_grey"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="Nhập đơn vị tính"/>
-
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/etGiatriquydoi"
+                            android:background="@drawable/bg_white_corner_border_grey"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="12dp"
+                            android:layout_marginTop="5dp"
+                            android:hint="Nhập giá trị"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="1 lóc = 4 hộp"
+                            android:layout_weight="1"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorBlack"
+                            android:gravity="left"/>
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

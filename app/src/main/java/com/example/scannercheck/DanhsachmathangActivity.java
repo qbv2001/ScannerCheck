@@ -218,8 +218,12 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
         initUiDialog();
+
+        if(button == "khacdvt"){
+        }else {
+            clickchonanh();
+        }
         clickquetma();
-        clickchonanh();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
