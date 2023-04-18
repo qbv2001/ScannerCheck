@@ -208,6 +208,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
                             android:text="Thêm"
+                            android:textColor="@color/white"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/bg_blue_corner_10"/>
                         <Button
@@ -218,14 +219,41 @@
                             android:text="Sửa"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/bg_yellow_corner_10"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/xoadvtmathang"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="Xóa đơn vị tính này"
+                            android:textColor="@color/white"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/bg_grey_corner_10" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/xoamathang"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="Xóa"
+                            android:text="Xóa toàn bộ mặt hàng này"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/bg_grey_corner_10" />
+                            android:background="@drawable/red_bg" />
 
                     </LinearLayout>
                 </LinearLayout>

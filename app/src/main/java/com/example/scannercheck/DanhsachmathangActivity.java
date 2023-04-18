@@ -174,30 +174,17 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         floating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openFeedbackDialog(Gravity.CENTER,"themmh");
-            }
-        });
-
-        // tao mat hang khac don vi
-        Button btnkhacdvt = findViewById(R.id.btnkhacdvt);
-        btnkhacdvt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openFeedbackDialog(Gravity.CENTER,"khacdvt");
+                openFeedbackDialog(Gravity.CENTER);
             }
         });
 
     }
 
-    private void openFeedbackDialog(int gravity, String button){
+    private void openFeedbackDialog(int gravity){
         dialog = new Dialog(DanhsachmathangActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        if(button == "khacdvt"){
-            dialog.setContentView(R.layout.dsmh_createmhkhacdvt);
-        }else {
-            dialog.setContentView(R.layout.dsmh_createmh);
-        }
+        dialog.setContentView(R.layout.dsmh_createmh);
 
         Window window = dialog.getWindow();
         if(window==null){
@@ -221,10 +208,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
 
         initUiDialog();
 
-        if(button == "khacdvt"){
-        }else {
-            clickchonanh();
-        }
+        clickchonanh();
         clickquetma();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,18 +219,14 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         dongy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(button == "khacdvt"){
-                    onClickPushData(button);
-                }else {
-                    onClickPushData(button);
-                }
+                onClickPushData();
             }
         });
         dialog.show();
     }
 
 
-    private void onClickPushData(String chosedialog) {
+    private void onClickPushData() {
 
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
