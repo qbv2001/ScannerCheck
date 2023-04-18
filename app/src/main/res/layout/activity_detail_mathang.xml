@@ -113,9 +113,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Nhà cung cấp"
+                            android:text="Đơn vị tính"
                             android:textColor="@android:color/black"
-                            android:textSize="17sp"
+                            android:textSize="20sp"
                             android:layout_marginLeft="5dp"
                             android:textStyle="bold"/>
                         <Spinner
@@ -131,7 +131,6 @@
                         android:layout_height="0.5dp"
                         android:background="@android:color/darker_gray"
                         android:layout_marginTop="10dp"/>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -143,19 +142,19 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đơn vị tính"
+                            android:text="Giá trị quy đổi"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:layout_marginLeft="5dp"
                             android:textStyle="bold"/>
                         <EditText
-                            android:id="@+id/edtDonvitinhMH"
+                            android:id="@+id/edtQuydoi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Đơn vị tính"
+                            android:hint="GT quy đổi"
                             android:textColor="@color/bgblack"
                             android:textSize="18sp"
-                            android:layout_marginLeft="51dp"/>
+                            android:layout_marginLeft="24dp"/>
 
                     </LinearLayout>
                     <View
@@ -164,37 +163,6 @@
                         android:background="@android:color/darker_gray"
                         android:layout_marginTop="10dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Số lượng"
-                            android:textColor="@android:color/black"
-                            android:textSize="20sp"
-                            android:layout_marginLeft="5dp"
-                            android:textStyle="bold"/>
-                        <EditText
-                            android:id="@+id/edtSoluongMH"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Số lượng"
-                            android:textColor="@color/bgblack"
-                            android:textSize="18sp"
-                            android:layout_marginLeft="68dp"/>
-
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@android:color/darker_gray"
-                        android:layout_marginTop="10dp"/>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -234,43 +202,20 @@
                         android:layout_marginTop="20dp"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <Button
+                            android:id="@+id/themmhkhacdvt"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Mô tả"
-                            android:textColor="@android:color/black"
-                            android:textSize="20sp"
-                            android:layout_marginLeft="5dp"
-                            android:textStyle="bold"/>
-                        <EditText
-                            android:id="@+id/edtMotaMH"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="Mô tả"
-                            android:textColor="@color/bgblack"
-                            android:textSize="18sp"
-                            android:layout_marginLeft="97dp"/>
-
-                    </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:background="@android:color/darker_gray"
-                        android:layout_marginTop="10dp"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
+                            android:layout_weight="3"
+                            android:text="Thêm"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/bg_blue_corner_10"/>
                         <Button
                             android:id="@+id/suamathang"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="3"
-                            android:text="Sửa mặt hàng"
+                            android:text="Sửa"
                             android:layout_marginRight="20dp"
                             android:background="@drawable/bg_yellow_corner_10"/>
                         <androidx.appcompat.widget.AppCompatButton
@@ -278,7 +223,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="Xóa mặt hàng"
+                            android:text="Xóa"
                             android:layout_marginEnd="10dp"
                             android:background="@drawable/bg_grey_corner_10" />
 

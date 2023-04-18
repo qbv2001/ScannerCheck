@@ -50,11 +50,14 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
         String tenmh = mathangs.get(position).getName();
         holder.tvTenMH.setText(tenmh);
 
-        String dvt = mathangs.get(position).getDvt();
-        holder.tvDvtMH.setText("Đơn vị tính: " + dvt);
+        List<Donvitinh> donvitinhs = mathangs.get(position).getDonvitinhs();
 
-        Float giamh = mathangs.get(position).getDongia();
-        holder.tvGiaMH.setText("Giá bán: " + giamh.toString());
+        for(Donvitinh donvitinh : donvitinhs) {
+            if(donvitinh.getQuydoi()==1){
+                holder.tvDvtMH.setText("Đơn vị tính: " + donvitinh.getTendvt());
+                holder.tvGiaMH.setText("Giá bán: " + donvitinh.getDongia());
+            }
+        }
 
         // Dung picasso để load ảnh
         String image = mathangs.get(position).getImage();

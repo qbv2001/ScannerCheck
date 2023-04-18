@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -60,17 +61,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DetailMathang extends AppCompatActivity {
     public static final int ANHMH_VIEW = 0x23;
     TextView tvTenMH;
-    EditText edtTenMH,edtDonvitinhMH,edtSoluongMH,edtDongiaMH,edtMotaMH;
+    EditText edtTenMH,edtQuydoi,edtDongiaMH,edtMotaMH;
     Button btnsuaMH,btnxoaMH;
     Mathang mathang;
     ImageView imgMH;
 
     private String tenanh;
     ProgressDialog progressDialog;
-    private String idnccdau;
+    private String ma_dvt;
 
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
+    List<Donvitinh> donvitinhs;
 
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -117,7 +119,7 @@ public class DetailMathang extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
+        storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
         initUi();
@@ -128,13 +130,13 @@ public class DetailMathang extends AppCompatActivity {
         mathang = (Mathang) bundle.get("object_mathang");
         tvTenMH.setText(mathang.getName());
         edtTenMH.setText(mathang.getName());
-        edtDonvitinhMH.setText(mathang.getDvt());
-        edtDongiaMH.setText(""+mathang.getDongia());
+//        edtQuydoi.setText(mathang.getDvt());
+//        edtDongiaMH.setText(""+mathang.getDongia());
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
         tenanh = mathang.getName();
 
-        getNCC();
+        getDVT(mathang.getId());
         onclickUpdateAnh();
         onclickUpdateMH();
         onclickDeleteMH();
@@ -168,8 +170,8 @@ public class DetailMathang extends AppCompatActivity {
     private void UpdateData() {
 
         String TenMH = edtTenMH.getText().toString().trim();
-        String DonvitinhMH = edtDonvitinhMH.getText().toString().trim();
-        String NhaccMH = idnccdau;
+        String DonvitinhMH = edtQuydoi.getText().toString().trim();
+        String NhaccMH = ma_dvt;
         Date now = new Date();
         String datetime = ""+now;
         String mota = edtMotaMH.getText().toString().trim();
@@ -187,10 +189,6 @@ public class DetailMathang extends AppCompatActivity {
             Toast.makeText(DetailMathang.this, "Vui lòng nhập đơn giá", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(edtSoluongMH.getText().toString().trim().equalsIgnoreCase("")){
-            Toast.makeText(DetailMathang.this, "Vui lòng nhập số lượng", Toast.LENGTH_SHORT).show();
-            return;
-        }
         if(NhaccMH.equalsIgnoreCase("")||NhaccMH.equalsIgnoreCase("1")){
             Toast.makeText(DetailMathang.this, "Vui lòng chọn nhà cung cấp", Toast.LENGTH_SHORT).show();
             return;
@@ -199,9 +197,6 @@ public class DetailMathang extends AppCompatActivity {
             Toast.makeText(DetailMathang.this, "Vui lòng nhập mô tả", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        float DongiaMH = Float.parseFloat(edtDongiaMH.getText().toString().trim());
-        int SoluongMH = Integer.parseInt(edtSoluongMH.getText().toString().trim());
 
         progressDialog.show();
 
@@ -236,30 +231,30 @@ public class DetailMathang extends AppCompatActivity {
                         String imageUrl = uri.toString();
                         String MaMH = mathang.getId();
 
-                        Mathang suamathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
-                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(suamathang, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                //Xóa ảnh cũ
-                                storageRef.child(tenanh).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        tenanh = suamathang.getTenimage();
-                                        tvTenMH.setText(TenMH);
-                                        progressDialog.dismiss();
-                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                        // File deleted successfully
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        progressDialog.dismiss();
-                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                                        // Uh-oh, an error occurred!
-                                    }
-                                });
-                            }
-                        });
+//                        Mathang suamathang = new Mathang(MaMH, TenMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg");
+//                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(suamathang, new DatabaseReference.CompletionListener() {
+//                            @Override
+//                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+//                                //Xóa ảnh cũ
+//                                storageRef.child(tenanh).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void aVoid) {
+//                                        tenanh = suamathang.getTenimage();
+//                                        tvTenMH.setText(TenMH);
+//                                        progressDialog.dismiss();
+//                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+//                                        // File deleted successfully
+//                                    }
+//                                }).addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception exception) {
+//                                        progressDialog.dismiss();
+//                                        Toast.makeText(DetailMathang.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+//                                        // Uh-oh, an error occurred!
+//                                    }
+//                                });
+//                            }
+//                        });
 
                     }
                 });
@@ -309,40 +304,42 @@ public class DetailMathang extends AppCompatActivity {
 
         tvTenMH = findViewById(R.id.tvTenMH);
         edtTenMH = findViewById(R.id.edtTenMH);
-        edtDonvitinhMH = findViewById(R.id.edtDonvitinhMH);
-        edtSoluongMH = findViewById(R.id.edtSoluongMH);
+        edtQuydoi = findViewById(R.id.edtQuydoi);
         edtDongiaMH = findViewById(R.id.edtDongiaMH);
-        edtMotaMH = findViewById(R.id.edtMotaMH);
         imgMH = findViewById(R.id.imgMH);
     }
 
-    private void getNCC() {
+    private void getDVT(String id_mh) {
 
         List<Category> list = new ArrayList<>();
 
-        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference dataDVT = FirebaseDatabase.getInstance().getReference();
         // Read from the database
-        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        dataDVT.child("MatHang").child(user.getUid()).child(id_mh).child("donvitinhs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Nhacungcap value = new Nhacungcap();
-                int dem = 0;
+
+                list.clear();
+                donvitinhs = new ArrayList<>();
+                Donvitinh value = new Donvitinh();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Nhacungcap.class);
-                    if(value.getId().equalsIgnoreCase(idnccdau)){
-                        dem=1;
-                        list.add(new Category(value.getId(),value.getName()));
+                    value = unit.getValue(Donvitinh.class);
+                    if(value.getQuydoi()==1){
+                        ma_dvt=value.getId();
+                        list.add(new Category(value.getId(),value.getTendvt()));
+                        donvitinhs.add(value);
                     }
                 }
-                if(dem==0){
-                    list.add(new Category("1","Chọn nhà cung cấp"));
+                if(ma_dvt==""){
+                    list.add(new Category("1","Chọn đơn vị tính"));
                 }
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Nhacungcap.class);
-                    if(!value.getId().equalsIgnoreCase(idnccdau)){
-                        list.add(new Category(value.getId(),value.getName()));
+                    value = unit.getValue(Donvitinh.class);
+                    if(!value.getId().equalsIgnoreCase(ma_dvt)){
+                        list.add(new Category(value.getId(),value.getTendvt()));
+                        donvitinhs.add(value);
                     }
                 }
                 spnCategory = findViewById(R.id.spn_category);
@@ -351,7 +348,15 @@ public class DetailMathang extends AppCompatActivity {
                 spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        idnccdau = categoryAdapter.getItem(i).getId();
+                        ma_dvt = categoryAdapter.getItem(i).getId();
+                        donvitinhs.forEach(dvt-> {
+                            if(dvt.getId().compareTo(ma_dvt)==0){
+                                Float dongia =  dvt.getDongia();
+                                String quydoi = String.valueOf(dvt.getQuydoi());
+                                edtDongiaMH.setText(dongia.toString());
+                                edtQuydoi.setText(quydoi);
+                            }
+                        });
                     }
 
                     @Override

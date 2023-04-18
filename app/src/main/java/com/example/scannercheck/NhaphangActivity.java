@@ -335,15 +335,15 @@ public class NhaphangActivity extends AppCompatActivity {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
 
-                        Mathang mathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
-                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                progressDialog.dismiss();
-                                dialog.dismiss();
-                                Toast.makeText(NhaphangActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+//                        Mathang mathang = new Mathang(MaMH, TenMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg");
+//                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+//                            @Override
+//                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+//                                progressDialog.dismiss();
+//                                dialog.dismiss();
+//                                Toast.makeText(NhaphangActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
                     }
                 });
 

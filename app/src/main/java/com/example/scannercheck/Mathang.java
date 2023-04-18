@@ -2,22 +2,23 @@ package com.example.scannercheck;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Mathang implements Serializable {
     private String id;
-    private String tenmh, dvt,image,tenimage;
-    private float dongia;
+    private String tenmh, image, tenimage, dvt;
+    private Float dongia;
+    private List<Donvitinh> donvitinhs;
     public Mathang(){
 
     }
 
-    public Mathang(String id, String name, float dongia, String image,String tenimage, String dvt){
+    public Mathang(String id, String name, String image,String tenimage, List<Donvitinh> donvitinhs){
         this.id = id;
         this.tenmh = name;
         this.image = image;
-        this.dvt = dvt;
-        this.dongia = dongia;
         this.tenimage = tenimage;
+        this.donvitinhs = donvitinhs;
     }
 
 
@@ -45,6 +46,13 @@ public class Mathang implements Serializable {
         this.image = image;
     }
 
+    public String getTenimage() {
+        return tenimage;
+    }
+
+    public void setTenimage(String tenimage) {
+        this.tenimage = tenimage;
+    }
 
     public String getDvt() {
         return dvt;
@@ -54,20 +62,20 @@ public class Mathang implements Serializable {
         this.dvt = dvt;
     }
 
-    public float getDongia() {
+    public Float getDongia() {
         return dongia;
     }
 
-    public void setDongia(float dongia) {
+    public void setDongia(Float dongia) {
         this.dongia = dongia;
     }
 
-    public String getTenimage() {
-        return tenimage;
+    public List<Donvitinh> getDonvitinhs() {
+        return donvitinhs;
     }
 
-    public void setTenimage(String tenimage) {
-        this.tenimage = tenimage;
+    public void setDonvitinhs(List<Donvitinh> donvitinhs) {
+        this.donvitinhs = donvitinhs;
     }
 
     @Override
@@ -75,9 +83,7 @@ public class Mathang implements Serializable {
         return "Mathang{" +
                 "id='" + id + '\'' +
                 ", tenmh='" + tenmh + '\'' +
-                ", dvt='" + dvt + '\'' +
                 ", image=" + image +
-                ", dongia=" + dongia +
                 '}';
     }
 }

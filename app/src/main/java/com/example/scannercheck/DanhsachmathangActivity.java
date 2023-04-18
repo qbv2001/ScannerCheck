@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -88,6 +89,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     NavigationView mNavigationView;
 
     List<Mathang> mathangs;
+
     private CircleImageView edtAnhMH;
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -301,8 +303,15 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
+                        String madvt = "dvt"+calendar.getTimeInMillis();
 
-                        Mathang mathang = new Mathang(MaMH, TenMH, DongiaMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", DonvitinhMH);
+                        List<Donvitinh> donvitinhs = new ArrayList<>() ;
+                        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,1);
+
+                        donvitinhs.add(donvitinh);
+
+                        Mathang mathang = new Mathang(MaMH, TenMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", donvitinhs);
+
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
@@ -321,18 +330,21 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private void readDatabase(String keyword){
 
         // Read from the database
+
         datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Mathang value = new Mathang();
+                Mathang mathang = new Mathang();
                 mathangs.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Mathang.class);
-                    if(value.getName().contains(keyword)){
-                        mathangs.add(value);
+                    mathang = unit.getValue(Mathang.class);
+
+                    if(mathang.getName().contains(keyword)){
+                        mathangs.add(mathang);
                     }
+
                 }
 
                 rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,mathangs));
@@ -344,6 +356,11 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private Donvitinh readdonvitinh(){
+        Donvitinh donvitinh = new Donvitinh();
+        return donvitinh;
     }
 
     private void clickquetma(){
