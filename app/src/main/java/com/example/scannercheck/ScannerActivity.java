@@ -70,10 +70,6 @@ public class ScannerActivity extends AppCompatActivity {
 
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH,etSoluongMH,etMotaMH;
 
-    private String tenncc;
-    private Spinner spnCategory;
-    private CategoryAdapter categoryAdapter;
-
     private ImageView edtAnhMH;
     private Dialog dialog;
     private DatabaseReference datamathang;
@@ -115,7 +111,7 @@ public class ScannerActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
+        storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -224,44 +220,6 @@ public class ScannerActivity extends AppCompatActivity {
         Button dongy      = dialog.findViewById(R.id.dongy);
 
 
-        List<Category> list = new ArrayList<>();
-        list.add(new Category("1","Chọn nhà cung cấp"));
-
-        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
-        // Read from the database
-        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Nhacungcap value = new Nhacungcap();
-                for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Nhacungcap.class);
-                    list.add(new Category(value.getId(),value.getName()));
-                }
-                spnCategory = dialog.findViewById(R.id.spn_category);
-                categoryAdapter = new CategoryAdapter(ScannerActivity.this,R.layout.item_selected,list);
-                spnCategory.setAdapter(categoryAdapter);
-                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        tenncc = categoryAdapter.getItem(i).getId();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(ScannerActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         initUiDialog();
         etMaMH.setText(mamh);
         clickquetma();
@@ -323,7 +281,7 @@ public class ScannerActivity extends AppCompatActivity {
         String MaMH = etMaMH.getText().toString().trim();
         String TenMH = etTenMH.getText().toString().trim();
         String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
-        // Check mh
+
         //Check them mat hang
         if(MaMH.equalsIgnoreCase("")){
             Toast.makeText(ScannerActivity.this, "Vui lòng nhập mã mặt hàng", Toast.LENGTH_SHORT).show();
@@ -345,7 +303,6 @@ public class ScannerActivity extends AppCompatActivity {
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
 
         progressDialog.show();
-
         // Get the data from an ImageView as bytes
         edtAnhMH.setDrawingCacheEnabled(true);
         edtAnhMH.buildDrawingCache();
@@ -355,7 +312,7 @@ public class ScannerActivity extends AppCompatActivity {
         byte[] data = baos.toByteArray();
 
         Calendar calendar = Calendar.getInstance();
-        StorageReference mountainsRef = storageRef.child("image" + calendar.getTimeInMillis() + ".jpg");
+        StorageReference mountainsRef = storageRef.child("image"+calendar.getTimeInMillis()+".jpg");
 
         UploadTask uploadTask = mountainsRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -376,15 +333,23 @@ public class ScannerActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // khi upload ảnh thành công
                         String imageUrl = uri.toString();
+                        String madvt = "dvt"+calendar.getTimeInMillis();
 
-//                        Mathang mathang = new Mathang(MaMH, TenMH, imageUrl, "image" + calendar.getTimeInMillis() + ".jpg");
-//                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
-//                            @Override
-//                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-//                                dialog.dismiss();
-//                                Toast.makeText(ScannerActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
+                        List<Donvitinh> donvitinhs = new ArrayList<>() ;
+                        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,1);
+
+                        donvitinhs.add(donvitinh);
+
+                        Mathang mathang = new Mathang(MaMH, TenMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", donvitinhs);
+
+                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                progressDialog.dismiss();
+                                dialog.dismiss();
+                                Toast.makeText(ScannerActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
 
@@ -393,21 +358,6 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private void initUiDialog(){
-        spnCategory = dialog.findViewById(R.id.spn_category);
-        categoryAdapter = new CategoryAdapter(this,R.layout.item_selected,getListCategory());
-        spnCategory.setAdapter(categoryAdapter);
-        spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tenncc = categoryAdapter.getItem(i).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
         edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
@@ -416,32 +366,4 @@ public class ScannerActivity extends AppCompatActivity {
         etSoluongMH = dialog.findViewById(R.id.etSoluongMH);
         etMotaMH = dialog.findViewById(R.id.etMotaMH);
     }
-
-    private List<Category> getListCategory(){
-
-        List<Category> list = new ArrayList<>();
-        list.add(new Category("1","Chọn nhà cung cấp"));
-
-        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
-        // Read from the database
-        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Nhacungcap value = new Nhacungcap();
-                for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    value = unit.getValue(Nhacungcap.class);
-                    list.add(new Category(value.getId(),value.getName()));
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Toast.makeText(ScannerActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        return list;
-    }
-
 }
