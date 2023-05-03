@@ -30,7 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private CardView scanner,dsmh,dsncc,thongke,profile,logout,thongtin,hotro;
+    private CardView scanner,dsmh,dsncc,thongke,profile,logout,thongtin,hotro,import_product,export_product;
 
     NavigationView mNavigationView;
 
@@ -54,6 +54,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         logout     = findViewById(R.id.logout_card);
         thongtin     = findViewById(R.id.thongtin_card);
         hotro     = findViewById(R.id.hotro_card);
+        import_product     = findViewById(R.id.dsimport_card);
+        export_product     = findViewById(R.id.dsexport_card);
         //nghe homeview
         scanner.setOnClickListener(this);
         dsmh.setOnClickListener(this);
@@ -63,6 +65,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         logout.setOnClickListener(this);
         thongtin.setOnClickListener(this);
         hotro.setOnClickListener(this);
+        import_product.setOnClickListener(this);
+        export_product.setOnClickListener(this);
 
         //sidebar
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
@@ -105,6 +109,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.hotro_card:
                 i = new Intent(this, HotroActivity.class);startActivity(i);
+                break;
+                case R.id.dsimport_card:
+                i = new Intent(this, ImportActivity.class);startActivity(i);
+                break;
+                case R.id.dsexport_card:
+                i = new Intent(this, ExportActivity.class);startActivity(i);
                 break;
             case R.id.logout_card:
                 FirebaseAuth.getInstance().signOut();
