@@ -122,7 +122,7 @@ public class ExportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_danhsachmathang);
+        setContentView(R.layout.activity_danhsachxuatmathang);
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
@@ -170,7 +170,7 @@ public class ExportActivity extends AppCompatActivity {
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
 
         // createmh
-        FloatingActionButton floating = findViewById(R.id.fabBtnCreateMH);
+        FloatingActionButton floating = findViewById(R.id.fabBtnCreateXMH);
         floating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,7 +184,7 @@ public class ExportActivity extends AppCompatActivity {
         dialog = new Dialog(ExportActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        dialog.setContentView(R.layout.dsmh_createmh);
+        dialog.setContentView(R.layout.dsmh_exportmh);
 
         Window window = dialog.getWindow();
         if(window==null){

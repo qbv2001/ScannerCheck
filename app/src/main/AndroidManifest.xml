@@ -40,6 +40,12 @@
             android:name=".DanhsachnhacungcapActivity"
             android:exported="true" />
         <activity
+            android:name=".ImportActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ExportActivity"
+            android:exported="true" />
+        <activity
             android:name=".DanhsachmathangActivity"
             android:exported="true">
 
