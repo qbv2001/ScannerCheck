@@ -90,34 +90,9 @@ public class ImportActivity extends AppCompatActivity {
 
     List<Mathang> mathangs;
 
-    private CircleImageView edtAnhMH;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private Uri uri;
-
-    final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if (result.getResultCode() == RESULT_OK){
-                Intent intent = result.getData();
-                if (intent == null){
-                    return;
-                }
-                uri = intent.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                    setBitmapImageView(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    });
-
-    public void setBitmapImageView(Bitmap bitmapImageView){
-        edtAnhMH.setImageBitmap(bitmapImageView);
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,9 +181,46 @@ public class ImportActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
+//        List<Category> list = new ArrayList<>();
+//        list.add(new Category("1","Chọn nhà cung cấp"));
+//
+//        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+//        // Read from the database
+//        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+//                Nhacungcap value = new Nhacungcap();
+//                for (DataSnapshot unit : dataSnapshot.getChildren()){
+//                    value = unit.getValue(Nhacungcap.class);
+//                    list.add(new Category(value.getId(),value.getName()));
+//                }
+//                spnCategory = dialog.findViewById(R.id.spn_category);
+//                categoryAdapter = new CategoryAdapter(NhaphangActivity.this,R.layout.item_selected,list);
+//                spnCategory.setAdapter(categoryAdapter);
+//                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                        tenncc = categoryAdapter.getItem(i).getId();
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//                    }
+//                });
+//
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                Toast.makeText(ImportActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         initUiDialog();
 
-        clickchonanh();
         clickquetma();
         trolai.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,58 +265,6 @@ public class ImportActivity extends AppCompatActivity {
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
 
         progressDialog.show();
-        // Get the data from an ImageView as bytes
-        edtAnhMH.setDrawingCacheEnabled(true);
-        edtAnhMH.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) edtAnhMH.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        Calendar calendar = Calendar.getInstance();
-        StorageReference mountainsRef = storageRef.child("image"+calendar.getTimeInMillis()+".jpg");
-
-        UploadTask uploadTask = mountainsRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                progressDialog.dismiss();
-                Toast.makeText(ImportActivity.this, "Upload ảnh lỗi", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                // Khi upload ảnh thành công
-                Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
-                result.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // khi upload ảnh thành công
-                        String imageUrl = uri.toString();
-                        String madvt = "dvt"+calendar.getTimeInMillis();
-
-                        List<Donvitinh> donvitinhs = new ArrayList<>() ;
-                        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,1);
-
-                        donvitinhs.add(donvitinh);
-
-                        Mathang mathang = new Mathang(MaMH, TenMH, imageUrl,"image"+calendar.getTimeInMillis()+".jpg", donvitinhs);
-
-                        datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(mathang, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                progressDialog.dismiss();
-                                dialog.dismiss();
-                                Toast.makeText(ImportActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-
-            }
-        });
 
     }
     private void readDatabase(String keyword){
@@ -337,12 +297,6 @@ public class ImportActivity extends AppCompatActivity {
             }
         });
     }
-
-    private Donvitinh readdonvitinh(){
-        Donvitinh donvitinh = new Donvitinh();
-        return donvitinh;
-    }
-
     private void clickquetma(){
         Button    quetma   = dialog.findViewById(R.id.quetma_createmh);
         quetma.setOnClickListener(new View.OnClickListener() {
@@ -353,29 +307,11 @@ public class ImportActivity extends AppCompatActivity {
         });
     }
 
-    private void clickchonanh(){
-        CircleImageView    chonanh   = dialog.findViewById(R.id.etAnhMH);
-        chonanh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                newViewchonanhclick();
-            }
-        });
-    }
-
     private void newViewBtnClick() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.requestPermissions(
                     new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
                     DEFAULT_VIEW);
-        }
-    }
-
-    private void newViewchonanhclick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            this.requestPermissions(
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE},
-                    ANHMH_VIEW);
         }
     }
 
@@ -425,8 +361,6 @@ public class ImportActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
-        mActivityResultLauncher.launch(Intent.createChooser(intent,"Select Piture"));
-
     }
 
 
@@ -435,7 +369,6 @@ public class ImportActivity extends AppCompatActivity {
         searchView = findViewById(R.id.search_view);
     }
     private void initUiDialog(){
-        edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);

@@ -364,6 +364,5 @@ public class ScannerActivity extends AppCompatActivity {
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
         etSoluongMH = dialog.findViewById(R.id.etSoluongMH);
-        etMotaMH = dialog.findViewById(R.id.etMotaMH);
     }
 }
