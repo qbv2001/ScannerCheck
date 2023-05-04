@@ -18,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRecyclerViewCreateMH.DataViewHolder> {
 
     private List<Mathang> mathangs;
@@ -88,7 +90,7 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
 
         private TextView tvTenMH;
         private TextView tvDvtMH;
-        private RoundedImageView imgMH;
+        private CircleImageView imgMH;
         private TextView tvGiaMH;
         private LinearLayout layoutItem;
         public DataViewHolder(View itemView) {
