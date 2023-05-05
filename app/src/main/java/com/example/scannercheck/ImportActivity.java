@@ -249,7 +249,9 @@ public class ImportActivity extends AppCompatActivity {
                 Log.d("EditText", "After text changed: " + s.toString());
 
                 String mamhcannhap = s.toString();
-                geDvtDialog(mamhcannhap);
+                if (!mamhcannhap.isEmpty()){
+                    geDvtDialog(mamhcannhap);
+                }
             }
         });
 
@@ -418,8 +420,6 @@ public class ImportActivity extends AppCompatActivity {
         DatabaseReference data = FirebaseDatabase.getInstance().getReference();
 
         List<Category> listdvt = new ArrayList<>();
-        listdvt.add(new Category("1","Chọn đơn vị tính"));
-
         // Read from the database
 
         data.child("MatHang").child(user.getUid()).child(mamhcannhap).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -428,6 +428,7 @@ public class ImportActivity extends AppCompatActivity {
                 Mathang mathang = new Mathang();
                 mathang = dataSnapshot.getValue(Mathang.class);
                 if (mathang!=null){
+                    listdvt.add(new Category("1","Chọn đơn vị tính"));
                     etTenMH.setText(mathang.getName());
                     for (Donvitinh unit : mathang.getDonvitinhs()){
                         listdvt.add(new Category(unit.getId(),unit.getTendvt()));
@@ -447,6 +448,11 @@ public class ImportActivity extends AppCompatActivity {
                         }
                     });
 
+                }else {
+                    etTenMH.setText(null);
+                    spnCategorydvt = dialog.findViewById(R.id.spn_categorydvt);
+                    categoryAdapter = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
+                    spnCategorydvt.setAdapter(categoryAdapter);
                 }
             }
             @Override
