@@ -27,7 +27,7 @@
                     android:id="@+id/topAppBar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    app:title="Danh sách Nhập mặt hàng"
+                    app:title="Danh sách kho hàng"
                     app:navigationIcon="@drawable/ic_baseline_menu_24"
                     android:background="@color/white" />
 

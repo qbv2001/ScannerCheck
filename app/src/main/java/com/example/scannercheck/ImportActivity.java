@@ -13,7 +13,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -77,9 +79,16 @@ public class ImportActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
 
+    private Spinner spnCategory;
+    private Spinner spnCategorydvt;
+    private CategoryAdapter categoryAdapter;
+    List<Nhacungcap> nhacungcaps;
+    String mancc;
+    String madvt;
+
     private RecyclerView rvItems;
     private SearchView searchView;
-    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH;
+    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH, etSoluong;
 
     private Dialog dialog;
     private DatabaseReference datamathang;
@@ -139,7 +148,7 @@ public class ImportActivity extends AppCompatActivity {
         });
 
         rvItems = findViewById(R.id.recycler_view);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rvItems.setLayoutManager(layoutManager);
         rvItems.setHasFixedSize(true);
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
@@ -181,45 +190,69 @@ public class ImportActivity extends AppCompatActivity {
         TextView    trolai   = dialog.findViewById(R.id.trolai);
         Button      dongy      = dialog.findViewById(R.id.dongy);
 
-//        List<Category> list = new ArrayList<>();
-//        list.add(new Category("1","Chọn nhà cung cấp"));
-//
-//        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
-//        // Read from the database
-//        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                Nhacungcap value = new Nhacungcap();
-//                for (DataSnapshot unit : dataSnapshot.getChildren()){
-//                    value = unit.getValue(Nhacungcap.class);
-//                    list.add(new Category(value.getId(),value.getName()));
-//                }
-//                spnCategory = dialog.findViewById(R.id.spn_category);
-//                categoryAdapter = new CategoryAdapter(NhaphangActivity.this,R.layout.item_selected,list);
-//                spnCategory.setAdapter(categoryAdapter);
-//                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                        tenncc = categoryAdapter.getItem(i).getId();
-//                    }
-//
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//                    }
-//                });
-//
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Toast.makeText(ImportActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        List<Category> list = new ArrayList<>();
+        list.add(new Category("1","Chọn nhà cung cấp"));
+
+        DatabaseReference datanhacungap = FirebaseDatabase.getInstance().getReference();
+        // Read from the database
+        datanhacungap.child("NhaCungCap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Nhacungcap value = new Nhacungcap();
+                for (DataSnapshot unit : dataSnapshot.getChildren()){
+                    value = unit.getValue(Nhacungcap.class);
+                    list.add(new Category(value.getId(),value.getName()));
+                }
+                spnCategory = dialog.findViewById(R.id.spn_category);
+                categoryAdapter = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,list);
+                spnCategory.setAdapter(categoryAdapter);
+                spnCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        mancc = categoryAdapter.getItem(i).getId();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(ImportActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         initUiDialog();
+
+        String MaMH = etMaMH.getText().toString().trim();
+
+        etMaMH.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Trước khi ký tự thay đổi
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Khi ký tự thay đổi
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Sau khi ký tự thay đổi
+                Log.d("EditText", "After text changed: " + s.toString());
+
+                String mamhcannhap = s.toString();
+                geDvtDialog(mamhcannhap);
+            }
+        });
+
 
         clickquetma();
         trolai.setOnClickListener(new View.OnClickListener() {
@@ -239,22 +272,11 @@ public class ImportActivity extends AppCompatActivity {
 
 
     private void onClickPushData() {
-
         String MaMH = etMaMH.getText().toString().trim();
-        String TenMH = etTenMH.getText().toString().trim();
-        String DonvitinhMH = etDonvitinhMH.getText().toString().trim();
 
         //Check them mat hang
         if(MaMH.equalsIgnoreCase("")){
             Toast.makeText(ImportActivity.this, "Vui lòng nhập mã mặt hàng", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TenMH.equalsIgnoreCase("")){
-            Toast.makeText(ImportActivity.this, "Vui lòng nhập tên mặt hàng", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(DonvitinhMH.equalsIgnoreCase("")){
-            Toast.makeText(ImportActivity.this, "Vui lòng nhập đơn vị tính", Toast.LENGTH_SHORT).show();
             return;
         }
         if(etDongiaMH.getText().toString().trim().equalsIgnoreCase("")){
@@ -263,8 +285,22 @@ public class ImportActivity extends AppCompatActivity {
         }
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
+        Integer soluong = Integer.parseInt(etSoluong.getText().toString());
 
         progressDialog.show();
+        Calendar calendar = Calendar.getInstance();
+        String maphieu = "maphieu"+calendar;
+        PhieuNhap phieunhap = new PhieuNhap(maphieu, MaMH, mancc, madvt, soluong, DongiaMH);
+
+        datamathang.child("PhieuNhap").child(user.getUid()).child(MaMH).setValue(phieunhap, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                progressDialog.dismiss();
+                dialog.dismiss();
+                Toast.makeText(ImportActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
     private void readDatabase(String keyword){
@@ -345,6 +381,7 @@ public class ImportActivity extends AppCompatActivity {
             if (obj instanceof HmsScan) {
                 if (!TextUtils.isEmpty(((HmsScan) obj).getOriginalValue())) {
                     etMaMH.setText(((HmsScan) obj).getOriginalValue());
+                    geDvtDialog(((HmsScan) obj).getOriginalValue());
                     Toast.makeText(this, ((HmsScan) obj).getOriginalValue(), Toast.LENGTH_SHORT).show();
                 }
                 return;
@@ -373,7 +410,51 @@ public class ImportActivity extends AppCompatActivity {
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
+        etSoluong = dialog.findViewById(R.id.etSoluongMH);
 
+    }
+
+    public void geDvtDialog(String mamhcannhap){
+        DatabaseReference data = FirebaseDatabase.getInstance().getReference();
+
+        List<Category> listdvt = new ArrayList<>();
+        listdvt.add(new Category("1","Chọn đơn vị tính"));
+
+        // Read from the database
+
+        data.child("MatHang").child(user.getUid()).child(mamhcannhap).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Mathang mathang = new Mathang();
+                mathang = dataSnapshot.getValue(Mathang.class);
+                if (mathang!=null){
+                    etTenMH.setText(mathang.getName());
+                    for (Donvitinh unit : mathang.getDonvitinhs()){
+                        listdvt.add(new Category(unit.getId(),unit.getTendvt()));
+                    }
+                    spnCategorydvt = dialog.findViewById(R.id.spn_categorydvt);
+                    categoryAdapter = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
+                    spnCategorydvt.setAdapter(categoryAdapter);
+                    spnCategorydvt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            madvt = categoryAdapter.getItem(i).getId();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(ImportActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

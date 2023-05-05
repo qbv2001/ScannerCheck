@@ -77,12 +77,15 @@
 
                     <EditText
                         android:id="@+id/etTenMH"
-                        android:background="@drawable/bg_white_corner_border_grey"
+                        android:background="@drawable/bg_grey_corner_10"
+                        android:enabled="false"
+                        android:textColorHint="@color/white"
+                        android:textColor="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="12dp"
                         android:layout_marginTop="5dp"
-                        android:hint="Nhập tên mặt hàng"/>
+                        android:hint="Tên mặt hàng"/>
 
                     <TextView
                         android:layout_marginTop="5dp"
@@ -93,14 +96,12 @@
                         android:textColor="@color/colorBlack"
                         android:gravity="left"/>
 
-                    <EditText
-                        android:id="@+id/etDonvitinhMH"
-                        android:background="@drawable/bg_white_corner_border_grey"
+                    <Spinner
+                        android:id="@+id/spn_categorydvt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
-                        android:layout_marginTop="5dp"
-                        android:hint="Nhập đơn vị tính"/>
+                        android:background="@android:color/transparent"
+                        />
 
                     <TextView
                         android:layout_marginTop="5dp"

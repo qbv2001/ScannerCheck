@@ -50,6 +50,7 @@
                         android:background="@drawable/bg_grey_corner_10"
                         android:enabled="false"
                         android:textColorHint="@color/white"
+                        android:textColor="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="12dp"
