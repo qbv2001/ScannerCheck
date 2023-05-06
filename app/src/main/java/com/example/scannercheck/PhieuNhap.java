@@ -4,9 +4,9 @@ package com.example.scannercheck;
 import java.io.Serializable;
 
 public class PhieuNhap implements Serializable {
-    private String maphieu, mamh, mancc, madvt;
+    private String maphieu, mamh, mancc, madvt, ngaynhap;
     private Integer soluong;
-    private Float dongia;
+    private Float dongia,thanhtien;
     public PhieuNhap(){
 
     }

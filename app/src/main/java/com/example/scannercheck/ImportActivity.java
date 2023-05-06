@@ -88,7 +88,7 @@ public class ImportActivity extends AppCompatActivity {
 
     private RecyclerView rvItems;
     private SearchView searchView;
-    private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH, etSoluong;
+    private EditText etMaMH,etTenMH,etDongiaMH, etSoluong, etThanhtien;
 
     private Dialog dialog;
     private DatabaseReference datamathang;
@@ -228,7 +228,34 @@ public class ImportActivity extends AppCompatActivity {
             }
         });
 
-        initUiDialog();
+        initUiDialog();;
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String dongia = etDongiaMH.getText().toString().trim();
+                String soluong = etSoluong.getText().toString().trim();
+
+                if (dongia.isEmpty()||soluong.isEmpty()) {
+                    etDongiaMH.setError("Nhập đơn giá");
+                } else {
+                    etDongiaMH.setError(null);
+                    Float thanhtien = Integer.parseInt(dongia)*Float.parseFloat(soluong);
+                    etThanhtien.setText(thanhtien.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        etSoluong.addTextChangedListener(textWatcher);
+        etDongiaMH.addTextChangedListener(textWatcher);
 
         String MaMH = etMaMH.getText().toString().trim();
 
@@ -411,8 +438,8 @@ public class ImportActivity extends AppCompatActivity {
         etMaMH = dialog.findViewById(R.id.etMaMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etDongiaMH = dialog.findViewById(R.id.etDongiaMH);
-        etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
         etSoluong = dialog.findViewById(R.id.etSoluongMH);
+        etThanhtien = dialog.findViewById(R.id.etThanhtien);
 
     }
 
