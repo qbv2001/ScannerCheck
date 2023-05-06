@@ -4,20 +4,25 @@ package com.example.scannercheck;
 import java.io.Serializable;
 
 public class PhieuNhap implements Serializable {
-    private String maphieu, mamh, mancc, madvt, ngaynhap;
+    private String maphieu, mamh, tenmh, mancc, tenncc, madvt, tendvt, ngaynhap;
     private Integer soluong;
     private Float dongia,thanhtien;
     public PhieuNhap(){
 
     }
 
-    public PhieuNhap(String maphieu, String mamh, String mancc, String madvt, Integer soluong, Float dongia){
+    public PhieuNhap(String maphieu, String mamh, String tenmh, String mancc, String tenncc, String madvt, String tendvt, Integer soluong, Float dongia, Float thanhtien, String ngaynhap){
         this.maphieu = maphieu;
         this.mamh = mamh;
         this.mancc = mancc;
         this.madvt = madvt;
         this.soluong = soluong;
         this.dongia = dongia;
+        this.thanhtien = thanhtien;
+        this.ngaynhap = ngaynhap;
+        this.tendvt = tendvt;
+        this.tenncc = tenncc;
+        this.tenmh = tenmh;
     }
 
     public String getMaphieu() {
@@ -66,5 +71,45 @@ public class PhieuNhap implements Serializable {
 
     public void setDongia(Float dongia) {
         this.dongia = dongia;
+    }
+
+    public String getNgaynhap() {
+        return ngaynhap;
+    }
+
+    public void setNgaynhap(String ngaynhap) {
+        this.ngaynhap = ngaynhap;
+    }
+
+    public Float getThanhtien() {
+        return thanhtien;
+    }
+
+    public void setThanhtien(Float thanhtien) {
+        this.thanhtien = thanhtien;
+    }
+
+    public String getTenmh() {
+        return tenmh;
+    }
+
+    public void setTenmh(String tenmh) {
+        this.tenmh = tenmh;
+    }
+
+    public String getTenncc() {
+        return tenncc;
+    }
+
+    public void setTenncc(String tenncc) {
+        this.tenncc = tenncc;
+    }
+
+    public String getTendvt() {
+        return tendvt;
+    }
+
+    public void setTendvt(String tendvt) {
+        this.tendvt = tendvt;
     }
 }

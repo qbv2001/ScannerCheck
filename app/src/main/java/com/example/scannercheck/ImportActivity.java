@@ -82,9 +82,9 @@ public class ImportActivity extends AppCompatActivity {
     private Spinner spnCategory;
     private Spinner spnCategorydvt;
     private CategoryAdapter categoryAdapter;
-    List<Nhacungcap> nhacungcaps;
-    String mancc;
-    String madvt;
+    List<PhieuNhap> phieuNhaps;
+    String mancc, tenncc;
+    String madvt, tendvt;
 
     private RecyclerView rvItems;
     private SearchView searchView;
@@ -96,8 +96,6 @@ public class ImportActivity extends AppCompatActivity {
     private DatabaseReference dataUser;
 
     NavigationView mNavigationView;
-
-    List<Mathang> mathangs;
 
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -112,7 +110,7 @@ public class ImportActivity extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         // list view
-        mathangs = new ArrayList<>();
+        phieuNhaps = new ArrayList<>();
 
         dataUser = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -151,7 +149,7 @@ public class ImportActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rvItems.setLayoutManager(layoutManager);
         rvItems.setHasFixedSize(true);
-        rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
+        rvItems.setAdapter(new AdapterRecyclerViewCreatePN(this,phieuNhaps));
 
         // createmh
         FloatingActionButton floating = findViewById(R.id.fabBtnCreateNMH);
@@ -212,6 +210,7 @@ public class ImportActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         mancc = categoryAdapter.getItem(i).getId();
+                        tenncc = categoryAdapter.getItem(i).getName();
                     }
 
                     @Override
@@ -315,13 +314,26 @@ public class ImportActivity extends AppCompatActivity {
 
         float DongiaMH = Float.parseFloat(etDongiaMH.getText().toString().trim());
         Integer soluong = Integer.parseInt(etSoluong.getText().toString());
+        float ThanhtienMH = Float.parseFloat(etThanhtien.getText().toString().trim());
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+
+        String currentTime = hour + ":" + minute + ":" + second;
+
+        String ngaynhap = day + "/" + (month + 1) + "/" + year;
 
         progressDialog.show();
-        Calendar calendar = Calendar.getInstance();
-        String maphieu = "maphieu"+calendar;
-        PhieuNhap phieunhap = new PhieuNhap(maphieu, MaMH, mancc, madvt, soluong, DongiaMH);
+        String maphieu = "maphieu"+currentTime;
 
-        datamathang.child("PhieuNhap").child(user.getUid()).child(MaMH).setValue(phieunhap, new DatabaseReference.CompletionListener() {
+        PhieuNhap phieunhap = new PhieuNhap(maphieu, MaMH, etTenMH.getText().toString(), mancc, tenncc, madvt, tendvt, soluong, DongiaMH,ThanhtienMH, ngaynhap);
+
+        datamathang.child("PhieuNhap").child(user.getUid()).child(maphieu).setValue(phieunhap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 progressDialog.dismiss();
@@ -336,23 +348,23 @@ public class ImportActivity extends AppCompatActivity {
 
         // Read from the database
 
-        datamathang.child("MatHang").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        datamathang.child("PhieuNhap").child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Mathang mathang = new Mathang();
-                mathangs.clear();
+                PhieuNhap phieunhap = new PhieuNhap();
+                phieuNhaps.clear();
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
-                    mathang = unit.getValue(Mathang.class);
+                    phieunhap = unit.getValue(PhieuNhap.class);
 
-                    if(mathang.getName().contains(keyword)){
-                        mathangs.add(mathang);
+                    if(phieunhap.getMamh().contains(keyword)){
+                        phieuNhaps.add(phieunhap);
                     }
 
                 }
 
-                rvItems.setAdapter(new AdapterRecyclerViewCreateMH(ImportActivity.this,mathangs));
+                rvItems.setAdapter(new AdapterRecyclerViewCreatePN(ImportActivity.this,phieuNhaps));
             }
 
             @Override
@@ -467,6 +479,7 @@ public class ImportActivity extends AppCompatActivity {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             madvt = categoryAdapter.getItem(i).getId();
+                            tendvt = categoryAdapter.getItem(i).getName();
                         }
 
                         @Override
