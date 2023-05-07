@@ -4,14 +4,15 @@ package com.example.scannercheck;
 import java.io.Serializable;
 
 public class PhieuNhap implements Serializable {
-    private String maphieu, mamh, tenmh, mancc, tenncc, madvt, tendvt, ngaynhap;
+    private String maphieu, mamh, tenmh, mancc, tenncc, madvt, tendvt;
     private Integer soluong;
+    Long ngaynhap;
     private Float dongia,thanhtien;
     public PhieuNhap(){
 
     }
 
-    public PhieuNhap(String maphieu, String mamh, String tenmh, String mancc, String tenncc, String madvt, String tendvt, Integer soluong, Float dongia, Float thanhtien, String ngaynhap){
+    public PhieuNhap(String maphieu, String mamh, String tenmh, String mancc, String tenncc, String madvt, String tendvt, Integer soluong, Float dongia, Float thanhtien, Long ngaynhap){
         this.maphieu = maphieu;
         this.mamh = mamh;
         this.mancc = mancc;
@@ -73,11 +74,11 @@ public class PhieuNhap implements Serializable {
         this.dongia = dongia;
     }
 
-    public String getNgaynhap() {
+    public Long getNgaynhap() {
         return ngaynhap;
     }
 
-    public void setNgaynhap(String ngaynhap) {
+    public void setNgaynhap(Long ngaynhap) {
         this.ngaynhap = ngaynhap;
     }
 

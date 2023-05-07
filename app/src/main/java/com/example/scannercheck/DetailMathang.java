@@ -333,6 +333,10 @@ public class DetailMathang extends AppCompatActivity {
         btnxoadvtMH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(Integer.parseInt(edtQuydoi.getText().toString()) == 1){
+                    Toast.makeText(DetailMathang.this, "Không thể xóa đơn vị tính cơ bản", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 progressDialog.show();
                 datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).child("donvitinhs").removeValue(new DatabaseReference.CompletionListener() {
                     @Override
@@ -546,6 +550,11 @@ public class DetailMathang extends AppCompatActivity {
                                 String quydoi = String.valueOf(dvt.getQuydoi());
                                 edtDongiaMH.setText(String.format("%.0f", dongia));
                                 edtQuydoi.setText(quydoi);
+                                if(dvt.getQuydoi() == 1){
+                                    edtQuydoi.setEnabled(false);
+                                }else {
+                                    edtQuydoi.setEnabled(true);
+                                }
                                 edtSoluongMH.setText(String.valueOf(dvt.getSoluong()));
                             }
                         });

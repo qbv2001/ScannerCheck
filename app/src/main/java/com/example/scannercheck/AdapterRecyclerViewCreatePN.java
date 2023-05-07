@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,7 +51,18 @@ public class AdapterRecyclerViewCreatePN extends RecyclerView.Adapter<AdapterRec
         String tenmh = phieuNhap.getTenmh();
         holder.tvTenMH.setText(tenmh);
 
-        holder.tvDvtMH.setText("Ngày nhập: " + phieuNhap.getNgaynhap()+"  Nhà cung cấp: " + phieuNhap.getTenncc());
+        // Tạo đối tượng Calendar và thiết lập thời gian
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(phieuNhap.getNgaynhap());
+
+        // Tạo định dạng ngày tháng năm
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Chuyển đổi đối tượng Calendar sang chuỗi định dạng ngày tháng năm
+                String date = sdf.format(calendar.getTime());
+
+
+        holder.tvDvtMH.setText("Ngày nhập: " + date +"  Nhà cung cấp: " + phieuNhap.getTenncc());
         holder.tvGiaMH.setText("Đvt: "+ phieuNhap.getTendvt() + "  Giá nhập: " + String.format("%.0f", phieuNhap.getDongia())+"  Số lượng: "+ phieuNhap.getSoluong() + "  Thành tiền: "+String.format("%.0f", phieuNhap.getThanhtien()));
 
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {

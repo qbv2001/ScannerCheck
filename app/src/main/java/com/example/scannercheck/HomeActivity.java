@@ -98,9 +98,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.dsncc_card:
                 i = new Intent(this, DanhsachnhacungcapActivity.class);startActivity(i);
                 break;
-//            case R.id.thongke_card:
-//                i = new Intent(this, ThongkeActivity.class);startActivity(i);
-//                break;
+            case R.id.thongke_card:
+                i = new Intent(this, ThongkeActivity.class);startActivity(i);
+                break;
             case R.id.profile_card:
                 i = new Intent(this, ThongtintaikhoanActivity.class);startActivity(i);
                 break;
@@ -210,13 +210,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         i1 = new Intent(activity, DanhsachnhacungcapActivity.class);activity.startActivity(i1);
                         break;
                     }
-//                case R.id.nav_thongke:
-//                    if (activity.equals(ThongkeActivity.class))
-//                        break;
-//                    else {
-//                        i1 = new Intent(activity, ThongkeActivity.class);activity.startActivity(i1);
-//                        break;
-//                    }
+                case R.id.nav_thongke:
+                    if (activity.equals(ThongkeActivity.class))
+                        break;
+                    else {
+                        i1 = new Intent(activity, ThongkeActivity.class);activity.startActivity(i1);
+                        break;
+                    }
                 case R.id.nav_logout:
                     FirebaseAuth.getInstance().signOut();
                     activity.startActivity(new Intent(activity,LoginActivity.class));

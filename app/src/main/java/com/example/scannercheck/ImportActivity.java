@@ -246,7 +246,7 @@ public class ImportActivity extends AppCompatActivity {
                 } else {
                     etDongiaMH.setError(null);
                     Float thanhtien = Integer.parseInt(dongia)*Float.parseFloat(soluong);
-                    etThanhtien.setText(String.format("%.0f", thanhtien.toString()));
+                    etThanhtien.setText(String.format("%.0f", thanhtien));
                 }
             }
 
@@ -322,18 +322,12 @@ public class ImportActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
-
-        String currentTime = hour + ":" + minute + ":" + second;
-
         String ngaynhap = day + "/" + (month + 1) + "/" + year;
 
         progressDialog.show();
-        String maphieu = "maphieu"+currentTime;
+        String maphieu = "maphieu"+calendar.getTimeInMillis();
 
-        PhieuNhap phieunhap = new PhieuNhap(maphieu, MaMH, etTenMH.getText().toString(), mancc, tenncc, madvt, tendvt, soluong, DongiaMH,ThanhtienMH, ngaynhap);
+        PhieuNhap phieunhap = new PhieuNhap(maphieu, MaMH, etTenMH.getText().toString(), mancc, tenncc, madvt, tendvt, soluong, DongiaMH,ThanhtienMH, calendar.getTimeInMillis());
 
         datamathang.child("PhieuNhap").child(user.getUid()).child(maphieu).setValue(phieunhap, new DatabaseReference.CompletionListener() {
             @Override
