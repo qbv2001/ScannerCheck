@@ -46,6 +46,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo" />
 
+<!--    <ImageView-->
+<!--        android:id="@+id/imgShowHidePassword"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_vertical|end"-->
+<!--        android:background="@drawable/ic_eye_on"-->
+<!--        android:textOff=""-->
+<!--        android:textOn=""-->
+<!--        tools:ignore="MissingConstraints"-->
+<!--        app:layout_constraintRight_toLeftOf="@+id/inputEmail"/>-->
+
     <EditText
         android:id="@+id/inputPassword"
         android:layout_width="0dp"

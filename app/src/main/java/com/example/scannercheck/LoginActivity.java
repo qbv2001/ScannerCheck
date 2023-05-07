@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,11 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtEmail,edtPassword;
 
     ProgressDialog progressDialog;
+
+    ImageView imgShowHidePassword;
+
+    private int failedAttempts = 0; // Khởi tạo biến đếm
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         initUI();
         signupclick();
         signinclick();
-
+//        showpasswordclick();
     }
 
     private void initUI(){
@@ -40,6 +48,28 @@ public class LoginActivity extends AppCompatActivity {
         btnlogin = findViewById(R.id.btnlogin);
         btn = findViewById(R.id.textViewSignUp);
 
+    }
+
+    private void showpasswordclick(){
+        imgShowHidePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showpassword();
+            }
+        });
+    }
+
+    private void showpassword(){
+        if (edtPassword.getInputType() == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            // Nếu đang hiển thị mật khẩu, thì đổi lại về dạng ẩn mật khẩu
+            edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            imgShowHidePassword.setImageResource(R.drawable.ic_eye_on);
+        } else {
+            // Nếu đang ẩn mật khẩu, thì đổi lại về dạng hiển thị mật khẩu
+            edtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            imgShowHidePassword.setImageResource(R.drawable.ic_eye_off);
+        }
+        edtPassword.setSelection(edtPassword.getText().length()); // Đặt con trỏ nhập vào về cuối
     }
 
     private void signinclick() {
@@ -69,23 +99,46 @@ public class LoginActivity extends AppCompatActivity {
 
         progressDialog.show();
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Toast.makeText(LoginActivity.this, "Đăng nhập.",
-                Toast.LENGTH_SHORT).show();
         auth.signInWithEmailAndPassword(strEmail, strPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
+                            // Đăng nhập thành công, đặt lại giá trị của biến đếm
+                            failedAttempts = 0;
+
                             // Sign in success, update UI with the signed-in user's information
                             startActivity(new Intent(LoginActivity.this,HomeActivity.class));
                             Toast.makeText(LoginActivity.this, "Đăng nhập thành công.",
                                     Toast.LENGTH_SHORT).show();
                             finishAffinity();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại.",
-                                    Toast.LENGTH_SHORT).show();
+//                            failedAttempts++;
+//                            // Kiểm tra nếu giá trị của biến đếm đạt đến giới hạn
+//                            if (failedAttempts >= 5) {
+//                                // Hiển thị thông báo yêu cầu người dùng đợi
+//                                Toast.makeText(LoginActivity.this, "Bạn đã đăng nhập sai quá số lần cho phép. Vui lòng thử lại sau.", Toast.LENGTH_SHORT).show();
+//                                // Khóa nút đăng nhập để ngăn người dùng đăng nhập trong một khoảng thời gian nhất định
+//                                btnlogin.setEnabled(false);
+//                                // Khởi động một luồng đếm ngược
+//                                new CountDownTimer(60000, 1000) {
+//                                    public void onTick(long millisUntilFinished) {
+//                                        // Hiển thị thời gian còn lại trên giao diện
+//                                        btnlogin.setText("Thử lại sau " + millisUntilFinished / 1000 + " giây");
+//                                    }
+//                                    public void onFinish() {
+//                                        // Đếm ngược kết thúc, đặt lại giá trị của biến đếm và mở khóa nút đăng nhập
+//                                        failedAttempts = 0;
+//                                        btnlogin.setEnabled(true);
+//                                        btnlogin.setText("LOGIN");
+//                                    }
+//                                }.start();
+//                            } else {
+//                                // Hiển thị thông báo đăng nhập thất bại
+//                                Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+//                            }
+                                    Toast.makeText(LoginActivity.this, "Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
