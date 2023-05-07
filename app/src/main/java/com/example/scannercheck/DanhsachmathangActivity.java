@@ -81,6 +81,8 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private SearchView searchView;
     private EditText etMaMH,etTenMH,etDongiaMH,etDonvitinhMH;
 
+    private EditText dongiaa,dongiab;
+    private Button loc;
     private Dialog dialog;
     private DatabaseReference datamathang;
     private FirebaseUser user;
@@ -150,6 +152,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         HomeActivity.sidebar(this, mNavigationView, user, dataUser, drawerLayout);
         readDatabase("");
 
+        //tìm kiếm
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -433,7 +436,59 @@ public class DanhsachmathangActivity extends AppCompatActivity {
     private void initUi(){
         mNavigationView = findViewById(R.id.navigation_view);
         searchView = findViewById(R.id.search_view);
+
+
+//        dongiaa = findViewById(R.id.dongiaa);
+//        dongiab = findViewById(R.id.dongiab);
+//        loc = findViewById(R.id.loc);
+//
+//        loc.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                loctheogia();
+//            }
+//        });
+
     }
+
+    
+//    private void loctheogia() {
+//        List<Mathang> sapxep = new ArrayList<Mathang>();
+//        float dongiatua = 0;
+//        float dongiatub = 0;
+//        if(!dongiaa.getText().toString().trim().equalsIgnoreCase("")){
+//            dongiatua = Float.parseFloat(dongiaa.getText().toString().trim());
+//        }
+//        if(!dongiab.getText().toString().trim().equalsIgnoreCase("")){
+//            dongiatub = Float.parseFloat(dongiab.getText().toString().trim());
+//        }
+//
+//        if( dongiatua!=0 && dongiatub ==0 ) dongiatub = 1000000000;
+//
+//        sapxep.clear();
+//        for (Mathang unit : mathangs){
+//            List<Donvitinh> donvitinhs = new ArrayList<>();
+//            donvitinhs = unit.getDonvitinhs();
+//            if(dongiatub ==0 && dongiatua==0){
+//                readDatabase("");
+//            }else{
+//                for (Donvitinh unit2 : donvitinhs){
+//                    if(unit2.getQuydoi()==1){
+//                        if(unit2.getDongia()<=dongiatub && unit2.getDongia()>=dongiatua){
+//                            sapxep.add(unit);
+//                        }
+//                    }
+//
+//                }
+//
+//            }
+//        }
+//        rvItems.setAdapter(new AdapterRecyclerViewCreateMH(DanhsachmathangActivity.this,sapxep));
+//
+//    }
+
+
+
     private void initUiDialog(){
         edtAnhMH = dialog.findViewById(R.id.etAnhMH);
         etMaMH = dialog.findViewById(R.id.etMaMH);
@@ -442,6 +497,5 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
 
     }
-
 
 }

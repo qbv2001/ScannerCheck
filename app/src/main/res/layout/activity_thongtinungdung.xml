@@ -138,7 +138,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="Mã sinh viên: 19A10010205"
+                                android:text="Mã sinh viên: 19A10010105"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -186,14 +186,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="Nguyễn Đình Văn"
+                                android:text="Nguyễn Anh Núi"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="6dp"
-                                android:text="Mã sinh viên: 19A10010205"
+                                android:text="Mã sinh viên: 19A10010195"
                                 android:textStyle="bold" />
 
                             <TextView

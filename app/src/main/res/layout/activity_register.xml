@@ -93,6 +93,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/btn_bg"
         android:text="Register"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/inputConfirmPassword"
         app:layout_constraintStart_toStartOf="@+id/inputConfirmPassword"
         app:layout_constraintTop_toBottomOf="@+id/inputConfirmPassword" />

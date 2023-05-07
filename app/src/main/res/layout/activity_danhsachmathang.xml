@@ -50,10 +50,49 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+
+            <LinearLayout
+                android:id="@+id/locmh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/search_view">
+                <EditText
+                    android:id="@+id/dongiaa"
+                    android:background="@drawable/bg_white_corner_border_grey"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="12dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Từ"/>
+                <EditText
+                    android:id="@+id/dongiab"
+                    android:background="@drawable/bg_white_corner_border_grey"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="12dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="Đến"/>
+                <Button
+                    android:id="@+id/loc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tìm"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/black_bg" />
+
+            </LinearLayout>
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/search_view">
+                android:layout_below="@id/locmh">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
