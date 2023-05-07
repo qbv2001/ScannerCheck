@@ -82,6 +82,7 @@ public class ImportActivity extends AppCompatActivity {
     private Spinner spnCategory;
     private Spinner spnCategorydvt;
     private CategoryAdapter categoryAdapter;
+    private CategoryAdapter categoryAdapterdvt;
     List<PhieuNhap> phieuNhaps;
     List<Donvitinh> donvitinhs;
     String mancc, tenncc;
@@ -245,7 +246,7 @@ public class ImportActivity extends AppCompatActivity {
                 } else {
                     etDongiaMH.setError(null);
                     Float thanhtien = Integer.parseInt(dongia)*Float.parseFloat(soluong);
-                    etThanhtien.setText(thanhtien.toString());
+                    etThanhtien.setText(String.format("%.0f", thanhtien.toString()));
                 }
             }
 
@@ -374,7 +375,7 @@ public class ImportActivity extends AppCompatActivity {
                 for (DataSnapshot unit : dataSnapshot.getChildren()){
                     phieunhap = unit.getValue(PhieuNhap.class);
 
-                    if(phieunhap.getMamh().contains(keyword)){
+                    if(phieunhap.getTenmh().contains(keyword)){
                         phieuNhaps.add(phieunhap);
                     }
 
@@ -490,13 +491,13 @@ public class ImportActivity extends AppCompatActivity {
                         listdvt.add(new Category(unit.getId(),unit.getTendvt()));
                     }
                     spnCategorydvt = dialog.findViewById(R.id.spn_categorydvt);
-                    categoryAdapter = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
-                    spnCategorydvt.setAdapter(categoryAdapter);
+                    categoryAdapterdvt = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
+                    spnCategorydvt.setAdapter(categoryAdapterdvt);
                     spnCategorydvt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            madvt = categoryAdapter.getItem(i).getId();
-                            tendvt = categoryAdapter.getItem(i).getName();
+                            madvt = categoryAdapterdvt.getItem(i).getId();
+                            tendvt = categoryAdapterdvt.getItem(i).getName();
                         }
 
                         @Override
@@ -508,8 +509,8 @@ public class ImportActivity extends AppCompatActivity {
                 }else {
                     etTenMH.setText(null);
                     spnCategorydvt = dialog.findViewById(R.id.spn_categorydvt);
-                    categoryAdapter = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
-                    spnCategorydvt.setAdapter(categoryAdapter);
+                    categoryAdapterdvt = new CategoryAdapter(ImportActivity.this,R.layout.item_selected,listdvt);
+                    spnCategorydvt.setAdapter(categoryAdapterdvt);
                 }
             }
             @Override

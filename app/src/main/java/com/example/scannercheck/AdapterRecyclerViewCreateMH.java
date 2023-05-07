@@ -57,7 +57,7 @@ public class AdapterRecyclerViewCreateMH extends RecyclerView.Adapter<AdapterRec
         for(Donvitinh donvitinh : donvitinhs) {
             if(donvitinh.getQuydoi()==1){
                 holder.tvDvtMH.setText("Đơn vị tính: " + donvitinh.getTendvt());
-                holder.tvGiaMH.setText("Giá bán: " + donvitinh.getDongia());
+                holder.tvGiaMH.setText("Giá bán: " + String.format("%.0f", donvitinh.getDongia()));
             }
         }
 

@@ -150,14 +150,15 @@
                             android:textSize="20sp"
                             android:layout_marginLeft="5dp"
                             android:textStyle="bold"/>
+
                         <EditText
                             android:id="@+id/edtSdtNCC"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Đơn giá"
+                            android:layout_marginLeft="25dp"
+                            android:hint="Số điện thoại"
                             android:textColor="@color/bgblack"
-                            android:textSize="18sp"
-                            android:layout_marginLeft="25dp"/>
+                            android:textSize="18sp" />
 
                     </LinearLayout>
                     <View

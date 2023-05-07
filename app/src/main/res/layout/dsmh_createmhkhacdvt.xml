@@ -111,12 +111,14 @@
                             android:layout_marginTop="5dp"
                             android:hint="Nhập giá trị"/>
                         <TextView
+                            android:id="@+id/tvquydoi"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="1 lóc = 4 hộp"
+                            android:text=""
                             android:layout_weight="1"
                             android:textSize="14sp"
                             android:textColor="@color/colorBlack"
+                            android:padding="12dp"
                             android:gravity="left"/>
                     </LinearLayout>
                     <LinearLayout

@@ -151,7 +151,15 @@
                             android:id="@+id/edtQuydoi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="GT quy đổi"
+                            android:hint="Gía trị"
+                            android:textColor="@color/bgblack"
+                            android:textSize="18sp"
+                            android:layout_marginLeft="24dp"/>
+                        <TextView
+                            android:id="@+id/tvdoi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="đv cơ bản"
                             android:textColor="@color/bgblack"
                             android:textSize="18sp"
                             android:layout_marginLeft="24dp"/>
@@ -174,7 +182,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Đơn giá"
+                            android:text="Giá bán"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:layout_marginLeft="5dp"
@@ -183,7 +191,7 @@
                             android:id="@+id/edtDongiaMH"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Đơn giá"
+                            android:hint="Giá bán"
                             android:textColor="@color/bgblack"
                             android:textSize="18sp"
                             android:layout_marginLeft="80dp"/>

@@ -50,7 +50,7 @@ public class AdapterRecyclerViewCreatePN extends RecyclerView.Adapter<AdapterRec
         holder.tvTenMH.setText(tenmh);
 
         holder.tvDvtMH.setText("Ngày nhập: " + phieuNhap.getNgaynhap()+"  Nhà cung cấp: " + phieuNhap.getTenncc());
-        holder.tvGiaMH.setText("Đơn vị tính: "+ phieuNhap.getTendvt() + "  Giá nhập: " + phieuNhap.getDongia()+"  Số lượng: "+ phieuNhap.getSoluong() + "  Thành tiền: "+phieuNhap.getThanhtien());
+        holder.tvGiaMH.setText("Đvt: "+ phieuNhap.getTendvt() + "  Giá nhập: " + String.format("%.0f", phieuNhap.getDongia())+"  Số lượng: "+ phieuNhap.getSoluong() + "  Thành tiền: "+String.format("%.0f", phieuNhap.getThanhtien()));
 
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override

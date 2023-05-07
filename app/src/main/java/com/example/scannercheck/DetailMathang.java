@@ -16,6 +16,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -70,7 +72,7 @@ public class DetailMathang extends AppCompatActivity {
     public static final int ANHMH_VIEW = 0x23;
     Button btnthemdvt;
 
-    TextView tvTenMH;
+    TextView tvTenMH,tvdoi,tvquydoi;
     EditText edtTenMH,edtQuydoi,edtDongiaMH, edtSoluongMH;
     EditText etDongiaMH,etDonvitinhMH,etQuydoi, etTenMH;
     Button btnsuaMH,btnxoaMH, btnxoadvtMH;
@@ -81,7 +83,7 @@ public class DetailMathang extends AppCompatActivity {
 
     private String tenanh;
     ProgressDialog progressDialog;
-    private String ma_dvt;
+    private String ma_dvt, dvtcoban;
 
     private Spinner spnCategory;
     private CategoryAdapter categoryAdapter;
@@ -143,6 +145,19 @@ public class DetailMathang extends AppCompatActivity {
         mathang = (Mathang) bundle.get("object_mathang");
         tvTenMH.setText(mathang.getName());
         edtTenMH.setText(mathang.getName());
+
+        for(int i = 0; i < mathang.getDonvitinhs().size(); i++)
+        {
+            Donvitinh obj = mathang.getDonvitinhs().get(i);
+
+            if(obj.getQuydoi()==1){
+                dvtcoban = obj.getTendvt();
+                tvdoi.setText(dvtcoban);
+                break;
+            }
+
+        }
+
         Picasso.with(DetailMathang.this).load(mathang.getImage()).into(imgMH);
 
         tenanh = mathang.getName();
@@ -383,6 +398,28 @@ public class DetailMathang extends AppCompatActivity {
 
         initUiDialog();
 
+        etQuydoi.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Trước khi ký tự thay đổi
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Khi ký tự thay đổi
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Sau khi ký tự thay đổi
+
+                String quidoi = s.toString();
+                if (!quidoi.isEmpty()){
+                    tvquydoi.setText("1 "+ etDonvitinhMH.getText().toString()+" = "+quidoi + " "+ dvtcoban);
+                }
+            }
+        });
+
         etTenMH.setText(mathang.getName());
 
         TextView    trolai   = dialog.findViewById(R.id.trolai);
@@ -444,6 +481,7 @@ public class DetailMathang extends AppCompatActivity {
         etDonvitinhMH = dialog.findViewById(R.id.etDonvitinhMH);
         etTenMH = dialog.findViewById(R.id.etTenMH);
         etQuydoi = dialog.findViewById(R.id.etGiatriquydoi);
+        tvquydoi = dialog.findViewById(R.id.tvquydoi);
 
     }
 
@@ -458,7 +496,7 @@ public class DetailMathang extends AppCompatActivity {
         edtQuydoi = findViewById(R.id.edtQuydoi);
         edtDongiaMH = findViewById(R.id.edtDongiaMH);
         edtSoluongMH = findViewById(R.id.edtSoluongMH);
-
+        tvdoi = findViewById(R.id.tvdoi);
         imgMH = findViewById(R.id.imgMH);
     }
 
@@ -506,7 +544,7 @@ public class DetailMathang extends AppCompatActivity {
                             if(dvt.getId().compareTo(ma_dvt)==0){
                                 Float dongia =  dvt.getDongia();
                                 String quydoi = String.valueOf(dvt.getQuydoi());
-                                edtDongiaMH.setText(dongia.toString());
+                                edtDongiaMH.setText(String.format("%.0f", dongia));
                                 edtQuydoi.setText(quydoi);
                                 edtSoluongMH.setText(String.valueOf(dvt.getSoluong()));
                             }

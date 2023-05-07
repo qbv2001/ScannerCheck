@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         thongtin     = findViewById(R.id.thongtin_card);
         hotro     = findViewById(R.id.hotro_card);
         import_product     = findViewById(R.id.dsimport_card);
-        export_product     = findViewById(R.id.dsexport_card);
+//        export_product     = findViewById(R.id.dsexport_card);
         //nghe homeview
         scanner.setOnClickListener(this);
         dsmh.setOnClickListener(this);
@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         thongtin.setOnClickListener(this);
         hotro.setOnClickListener(this);
         import_product.setOnClickListener(this);
-        export_product.setOnClickListener(this);
+//        export_product.setOnClickListener(this);
 
         //sidebar
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
@@ -110,12 +110,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.hotro_card:
                 i = new Intent(this, HotroActivity.class);startActivity(i);
                 break;
-                case R.id.dsimport_card:
+            case R.id.dsimport_card:
                 i = new Intent(this, ImportActivity.class);startActivity(i);
                 break;
-                case R.id.dsexport_card:
-                i = new Intent(this, ExportActivity.class);startActivity(i);
-                break;
+//                case R.id.dsexport_card:
+//                i = new Intent(this, ExportActivity.class);startActivity(i);
+//                break;
             case R.id.logout_card:
                 FirebaseAuth.getInstance().signOut();
                 i = new Intent(this, LoginActivity.class);startActivity(i);
