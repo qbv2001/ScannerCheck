@@ -110,7 +110,7 @@ public class DetailNhacungcap extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
 
-        storage = FirebaseStorage.getInstance("gs://android-b22a3.appspot.com");
+        storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
         initUi();
