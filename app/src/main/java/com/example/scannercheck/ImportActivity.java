@@ -83,6 +83,7 @@ public class ImportActivity extends AppCompatActivity {
     private Spinner spnCategorydvt;
     private CategoryAdapter categoryAdapter;
     List<PhieuNhap> phieuNhaps;
+    List<Donvitinh> donvitinhs;
     String mancc, tenncc;
     String madvt, tendvt;
 
@@ -339,6 +340,21 @@ public class ImportActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 dialog.dismiss();
                 Toast.makeText(ImportActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                donvitinhs.forEach(dvt->{
+                    if (dvt.getId().compareTo(madvt)==0){
+                        int soluongmoi = dvt.getSoluong() + soluong;
+                        dvt.setSoluong(soluongmoi);
+                    }
+                });
+
+                datamathang.child("MatHang").child(user.getUid()).child(MaMH).child("donvitinhs").setValue(donvitinhs, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        Toast.makeText(ImportActivity.this, "Cập nhật số lượng trong kho thành công", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
         });
 
@@ -469,6 +485,7 @@ public class ImportActivity extends AppCompatActivity {
                 if (mathang!=null){
                     listdvt.add(new Category("1","Chọn đơn vị tính"));
                     etTenMH.setText(mathang.getName());
+                    donvitinhs = mathang.getDonvitinhs();
                     for (Donvitinh unit : mathang.getDonvitinhs()){
                         listdvt.add(new Category(unit.getId(),unit.getTendvt()));
                     }

@@ -7,17 +7,18 @@ public class Donvitinh implements Serializable {
     private String id, ma_mh;
     private String tendvt;
     private float dongia;
-    private int quydoi;
+    private int quydoi,soluong;
 
     public Donvitinh(){
 
     }
 
-    public Donvitinh(String id, String tendvt, float dongia, int quydoi){
+    public Donvitinh(String id, String tendvt, float dongia, int quydoi, int soluong){
         this.id = id;
         this.tendvt = tendvt;
         this.dongia = dongia;
         this.quydoi = quydoi;
+        this.soluong = soluong;
     }
 
 
@@ -51,6 +52,14 @@ public class Donvitinh implements Serializable {
 
     public void setQuydoi(int quydoi) {
         this.quydoi = quydoi;
+    }
+
+    public int getSoluong() {
+        return soluong;
+    }
+
+    public void setSoluong(int soluong) {
+        this.soluong = soluong;
     }
 
     @Override

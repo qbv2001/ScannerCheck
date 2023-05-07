@@ -71,7 +71,7 @@ public class DetailMathang extends AppCompatActivity {
     Button btnthemdvt;
 
     TextView tvTenMH;
-    EditText edtTenMH,edtQuydoi,edtDongiaMH;
+    EditText edtTenMH,edtQuydoi,edtDongiaMH, edtSoluongMH;
     EditText etDongiaMH,etDonvitinhMH,etQuydoi, etTenMH;
     Button btnsuaMH,btnxoaMH, btnxoadvtMH;
     Mathang mathang;
@@ -246,6 +246,7 @@ public class DetailMathang extends AppCompatActivity {
                             if (dvt.getId().compareTo(ma_dvt)==0){
                                 dvt.setDongia(DongiaMH);
                                 dvt.setQuydoi(Quydoi);
+                                dvt.setSoluong(Integer.parseInt(String.valueOf(edtSoluongMH.getText())));
                             }
                         });
                         datamathang.child("MatHang").child(user.getUid()).child(MaMH).setValue(suamathang, new DatabaseReference.CompletionListener() {
@@ -425,7 +426,7 @@ public class DetailMathang extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         String madvt = "dvt"+calendar.getTimeInMillis();
 
-        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,Integer.parseInt(Quydoidialog));
+        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,Integer.parseInt(Quydoidialog),0);
 
         datamathang.child("MatHang").child(user.getUid()).child(mathang.getId()).child("donvitinhs").child(String.valueOf(donvitinhs.size())).setValue(donvitinh, new DatabaseReference.CompletionListener() {
             @Override
@@ -456,6 +457,8 @@ public class DetailMathang extends AppCompatActivity {
         edtTenMH = findViewById(R.id.edtTenMH);
         edtQuydoi = findViewById(R.id.edtQuydoi);
         edtDongiaMH = findViewById(R.id.edtDongiaMH);
+        edtSoluongMH = findViewById(R.id.edtSoluongMH);
+
         imgMH = findViewById(R.id.imgMH);
     }
 
@@ -505,6 +508,7 @@ public class DetailMathang extends AppCompatActivity {
                                 String quydoi = String.valueOf(dvt.getQuydoi());
                                 edtDongiaMH.setText(dongia.toString());
                                 edtQuydoi.setText(quydoi);
+                                edtSoluongMH.setText(String.valueOf(dvt.getSoluong()));
                             }
                         });
                     }

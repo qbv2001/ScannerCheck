@@ -35,7 +35,7 @@ public class AdapterRecyclerViewCreatePN extends RecyclerView.Adapter<AdapterRec
     @Override
     public AdapterRecyclerViewCreatePN.DataViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_dsmh, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rv_dsnhaphang, parent, false);
 
 
         return new DataViewHolder(itemView);
@@ -49,10 +49,8 @@ public class AdapterRecyclerViewCreatePN extends RecyclerView.Adapter<AdapterRec
         String tenmh = phieuNhap.getTenmh();
         holder.tvTenMH.setText(tenmh);
 
-        String donvitinh = phieuNhaps.get(position).getTendvt();
-
-        holder.tvDvtMH.setText("Đơn vị tính: " + donvitinh);
-        holder.tvGiaMH.setText("Giá nhập: " + phieuNhap.getDongia()+"  Số lượng: "+ phieuNhap.getSoluong() + "  Thành tiền: "+phieuNhap.getThanhtien());
+        holder.tvDvtMH.setText("Ngày nhập: " + phieuNhap.getNgaynhap()+"  Nhà cung cấp: " + phieuNhap.getTenncc());
+        holder.tvGiaMH.setText("Đơn vị tính: "+ phieuNhap.getTendvt() + "  Giá nhập: " + phieuNhap.getDongia()+"  Số lượng: "+ phieuNhap.getSoluong() + "  Thành tiền: "+phieuNhap.getThanhtien());
 
         holder.layoutItem.setOnClickListener(new View.OnClickListener() {
             @Override

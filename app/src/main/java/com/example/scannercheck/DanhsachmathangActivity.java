@@ -286,7 +286,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                         String madvt = "dvt"+calendar.getTimeInMillis();
 
                         List<Donvitinh> donvitinhs = new ArrayList<>() ;
-                        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,1);
+                        Donvitinh donvitinh = new Donvitinh(madvt, DonvitinhMH, DongiaMH,1, 0);
 
                         donvitinhs.add(donvitinh);
 
