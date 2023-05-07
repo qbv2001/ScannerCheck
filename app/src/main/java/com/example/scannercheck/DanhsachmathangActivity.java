@@ -164,7 +164,7 @@ public class DanhsachmathangActivity extends AppCompatActivity {
         });
 
         rvItems = findViewById(R.id.recycler_view);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.HORIZONTAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rvItems.setLayoutManager(layoutManager);
         rvItems.setHasFixedSize(true);
         rvItems.setAdapter(new AdapterRecyclerViewCreateMH(this,mathangs));
@@ -336,11 +336,6 @@ public class DanhsachmathangActivity extends AppCompatActivity {
                 Toast.makeText(DanhsachmathangActivity.this, "Đọc thất bại!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private Donvitinh readdonvitinh(){
-        Donvitinh donvitinh = new Donvitinh();
-        return donvitinh;
     }
 
     private void clickquetma(){
